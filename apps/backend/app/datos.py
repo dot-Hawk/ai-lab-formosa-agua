@@ -102,3 +102,23 @@ def lluvia_previa(fecha: str, dias: int = 30) -> float | None:
     from datetime import date, timedelta
 
     return lluvia_entre((date.fromisoformat(fecha) - timedelta(days=dias)).isoformat(), fecha)
+
+
+# --- Agua de siempre: Global Surface Water (JRC), recortada a la grilla de las escenas ------------
+
+GSW_NPZ = DATA_DIR / "gsw_zona.npz"
+GSW_JSON = DATA_DIR / "gsw_zona.json"
+
+
+@lru_cache
+def gsw_ocurrencia() -> np.ndarray | None:
+    """% de tiempo con agua entre 1984 y 2021 por píxel, o None si no se descargó la capa."""
+    if not GSW_NPZ.exists():
+        return None
+    with np.load(GSW_NPZ) as z:
+        return z["occurrence"]
+
+
+@lru_cache
+def gsw_metadatos() -> dict:
+    return json.loads(GSW_JSON.read_text(encoding="utf-8")) if GSW_JSON.exists() else {}

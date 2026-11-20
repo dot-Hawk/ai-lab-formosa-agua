@@ -1,0 +1,33 @@
+{
+  "fuente": "Global Surface Water v1.4 (JRC, Comisión Europea), Pekel et al. 2016, Nature 540",
+  "urls": [
+    "https://storage.googleapis.com/global-surface-water/downloads2021/occurrence/occurrence_60W_20Sv1_4_2021.tif",
+    "https://storage.googleapis.com/global-surface-water/downloads2021/seasonality/seasonality_60W_20Sv1_4_2021.tif"
+  ],
+  "periodo": "1984-2021",
+  "resolucion_original_m": 30,
+  "resolucion_grilla_m": 10,
+  "licencia": "CC BY 4.0",
+  "categoria": "Observado (derivado de Landsat)",
+  "consultado": "2026-11-20",
+  "bbox": [
+    -58.18,
+    -26.24,
+    -58.11,
+    -26.17
+  ],
+  "bounds": [
+    [
+      -26.240068565045473,
+      -58.18000000000001
+    ],
+    [
+      -26.17,
+      -58.109914534595774
+    ]
+  ],
+  "forma": [
+    780,
+    700
+  ]
+}

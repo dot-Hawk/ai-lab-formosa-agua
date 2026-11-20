@@ -17,7 +17,7 @@ from PIL import Image
 from pydantic import BaseModel, Field
 
 from app import confianza, datos
-from app.cambio import AGUA_NUEVA, AGUA_PERDIDA, area_hectareas, detectar_cambio, ndwi
+from app.cambio import AGUA_NUEVA, AGUA_PERDIDA, area_hectareas, detectar_cambio, ndwi, separar_agua_nueva
 
 LEYENDA = "PROTOTIPO · AI LAB Misión: Código Formosa · no es una herramienta oficial"
 ADVERTENCIA = (
@@ -48,6 +48,9 @@ class PedidoComparar(BaseModel):
     escena_a: str = Field(description="id de la escena 'antes'")
     escena_b: str = Field(description="id de la escena 'después'")
     umbral_agua: float = Field(0.0, ge=-1, le=1, description="NDWI mínimo para considerar agua")
+    umbral_habitual_pct: float = Field(
+        50, ge=1, le=100, description="% de tiempo con agua (1984-2021) desde el que un píxel es 'agua de siempre'"
+    )
 
 
 @app.get("/api/salud")
@@ -68,6 +71,37 @@ def _overlay_png(mascara: np.ndarray) -> str:
     buf = io.BytesIO()
     Image.fromarray(rgba, "RGBA").save(buf, format="PNG")
     return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+def _png(rgba: np.ndarray) -> str:
+    buf = io.BytesIO()
+    Image.fromarray(rgba, "RGBA").save(buf, format="PNG")
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+def _agua_habitual(mascara: np.ndarray, umbral_pct: float, res: float) -> dict | None:
+    """Separa el agua nueva en habitual e inusual con Global Surface Water. None si no hay capa."""
+    ocurrencia = datos.gsw_ocurrencia()
+    if ocurrencia is None or ocurrencia.shape != mascara.shape:
+        return None
+    inusual, habitual = separar_agua_nueva(mascara, ocurrencia, umbral_pct)
+    solo_inusual = np.where(mascara == AGUA_NUEVA, 0, mascara)
+    solo_inusual[inusual] = AGUA_NUEVA
+    capa_siempre = np.zeros((*mascara.shape, 4), dtype="uint8")
+    capa_siempre[ocurrencia >= umbral_pct] = (70, 90, 110, 120)
+    meta = datos.gsw_metadatos()
+    return {
+        "umbral_pct": umbral_pct,
+        "area_agua_nueva_inusual_ha": round(area_hectareas(int(inusual.sum()), res), 2),
+        "area_agua_nueva_habitual_ha": round(area_hectareas(int(habitual.sum()), res), 2),
+        "overlay_inusual_png": _overlay_png(solo_inusual),
+        "agua_de_siempre_png": _png(capa_siempre),
+        "fuente": meta.get("fuente", "Global Surface Water (JRC)"),
+        "periodo": meta.get("periodo", "1984-2021"),
+        "resolucion_original_m": meta.get("resolucion_original_m", 30),
+        "categoria": "Observado (derivado de Landsat)",
+        "nota": "El agua de siempre es un promedio de 1984 a 2021 con 30 m de resolución: los bordes son aproximados.",
+    }
 
 
 def _publica(e: dict) -> dict:
@@ -146,6 +180,7 @@ def comparar(pedido: PedidoComparar):
             "umbrales": {"aguas_bajas": k3["aguas_bajas"], "alerta": k3["alerta"], "evacuacion": k3["evacuacion"]},
             "fuente": "INA · K1 (serie limpiada por el equipo) y K3 · Dato observado",
         },
+        "agua_habitual": _agua_habitual(mascara, pedido.umbral_habitual_pct, res),
         "region": _region(a, b),
         "lluvia": _lluvia(a, b),
         "confianza": confianza.evaluar(a, b),

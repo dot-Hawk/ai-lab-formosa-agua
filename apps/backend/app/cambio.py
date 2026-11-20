@@ -39,3 +39,16 @@ def detectar_cambio(ndwi_antes: np.ndarray, ndwi_despues: np.ndarray, umbral_agu
 def area_hectareas(pixeles: int, resolucion_m: float) -> float:
     """Convierte cantidad de píxeles a hectáreas (1 ha = 10.000 m²)."""
     return pixeles * resolucion_m * resolucion_m / 10_000
+
+
+def separar_agua_nueva(mascara: np.ndarray, ocurrencia: np.ndarray, umbral_pct: float) -> tuple[np.ndarray, np.ndarray]:
+    """Divide el agua nueva según el "agua de siempre" (Global Surface Water).
+
+    `ocurrencia` es el % de tiempo con agua entre 1984 y 2021 (0 a 100). Devuelve dos máscaras:
+    (agua nueva donde normalmente no hay agua, agua nueva donde suele haber agua).
+    """
+    if mascara.shape != ocurrencia.shape:
+        raise ValueError("La capa de agua de siempre no tiene el tamaño de las escenas.")
+    nueva = mascara == AGUA_NUEVA
+    habitual = ocurrencia >= umbral_pct
+    return nueva & ~habitual, nueva & habitual
