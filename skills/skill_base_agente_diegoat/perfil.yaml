@@ -1,0 +1,87 @@
+integrante:
+  id: "PENDIENTE"       # No asignado en el registro del equipo
+  alias: "Diegoat"
+  nombre_real: "Diego"
+
+agente:
+  id: "PENDIENTE"       # No asignado en el registro del equipo
+  skill: "skill_base_agente_diegoat"
+  runtime: "Antigravity CLI (Claude Opus 4.6 Thinking)"
+  soporte_subagentes: true
+  subagentes_disponibles:
+    - nombre: "research"
+      modo: "solo lectura"
+      descripcion: "Exploración de codebase, búsqueda web, lectura de archivos"
+    - nombre: "self"
+      modo: "hereda configuración completa"
+      descripcion: "Tarea en contexto separado con mismas capacidades"
+    - nombre: "image-generator"
+      modo: "generación de imágenes"
+      descripcion: "Genera o edita imágenes"
+
+git:
+  rama_desarrollo: "dev-Diego"
+  rama_base: "main"
+  commit_base: "c3d5b943c72ab761879a36b7c44f8601e17495ad"
+  remoto: "origin"
+  url_remoto: "https://github.com/dot-Hawk/ai-lab-formosa-agua.git"
+  rama_integracion: "PENDIENTE"   # No definida por el equipo
+
+skill_general:
+  archivo: "SKILL_BASE.md"
+  version: "0.4.0"
+  commit_referencia: "c3d5b943c72ab761879a36b7c44f8601e17495ad"
+  plantillas: "PLANTILLAS.md"
+
+responsabilidades:
+  modulos: []                     # PENDIENTE — sin asignación
+  directorios_autorizados:
+    - "skills/skill_base_agente_diegoat/"
+  archivos_compartidos:
+    - "SKILL_BASE.md"
+    - "PLANTILLAS.md"
+  limites:
+    - "No modificar archivos compartidos sin aprobación"
+    - "No modificar ramas ajenas"
+    - "No cambiar arquitectura general sin autorización"
+    - "No ejecutar push --force"
+    - "No integrar a main sin autorización"
+
+tareas:
+  - id: "TASK-SETUP-DIEGOAT"
+    titulo: "Crear skill personal del agente Diegoat"
+    responsable: "Diego / Diegoat"
+    estado: "EN_CURSO"
+    dependencias: []
+    criterios_de_aceptacion:
+      - "Rama dev-Diego creada desde main más reciente"
+      - "SKILL.md completo y coherente con skill general v0.4.0"
+      - "perfil.yaml válido y sin datos inventados"
+      - "README.md descriptivo"
+      - "Matriz de compatibilidad con cobertura de requisitos"
+      - "Sin modificaciones a SKILL_BASE.md ni PLANTILLAS.md"
+    pruebas_requeridas:
+      - "Validación de sintaxis YAML"
+      - "Coherencia entre archivos de la skill"
+
+coordinacion:
+  protocolo_revision: "VCPD"
+  revision_antes_de_cada_bloque_de_cambios: true
+  responsable_revision: "PENDIENTE"       # No definido por el equipo
+  responsable_integracion: "PENDIENTE"    # No definido por el equipo
+  canal_comunicacion: "PENDIENTE"         # No definido por el equipo
+
+desarrollo:
+  gestor_paquetes: "PENDIENTE"            # No detectado en el monorepo
+  versiones_tecnologicas: {}              # No hay código fuente aún
+  comandos:
+    instalacion: "PENDIENTE"
+    desarrollo: "PENDIENTE"
+    pruebas: "PENDIENTE"
+    lint: "PENDIENTE"
+    tipos: "PENDIENTE"
+    compilacion: "PENDIENTE"
+
+integracion:
+  estrategia: "PENDIENTE"                # No definida por el equipo
+  aprobaciones_requeridas: []             # No definidas por el equipo
