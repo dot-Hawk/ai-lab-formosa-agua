@@ -1,44 +1,102 @@
 [
   {
-    "id": "demo-2026-10-01",
-    "fecha": "2026-10-01",
-    "fuente": "SIMULADO · generado por scripts/generar_demo.py (reemplazar por Sentinel-2 L2A)",
+    "id": "s2-2019-06-21",
+    "fecha": "2019-06-21",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2B_21JUM_20190621_1_L2A, vía Earth Search (AWS Open Data)",
     "satelite": "Sentinel-2",
-    "producto": "L2A (simulado)",
+    "producto": "L2A, Sentinel-2B, tile 21JUM",
     "resolucion_m": 10,
-    "nubes_pct": 4.0,
-    "categoria": "Simulado",
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.0,
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_21JUM_20190621_1_L2A",
+    "consultado": "2026-11-20",
     "bounds": [
       [
-        -26.2,
-        -58.18
+        -26.240068565045473,
+        -58.18000000000001
       ],
       [
-        -26.182,
-        -58.16
+        -26.17,
+        -58.109914534595774
       ]
     ],
-    "archivo": "demo-2026-10-01.npz"
+    "archivo": "s2-2019-06-21.npz"
   },
   {
-    "id": "demo-2026-10-31",
-    "fecha": "2026-10-31",
-    "fuente": "SIMULADO · generado por scripts/generar_demo.py (reemplazar por Sentinel-2 L2A)",
+    "id": "s2-2024-11-13",
+    "fecha": "2024-11-13",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2A_21JUM_20241113_0_L2A, vía Earth Search (AWS Open Data)",
     "satelite": "Sentinel-2",
-    "producto": "L2A (simulado)",
+    "producto": "L2A, Sentinel-2A, tile 21JUM",
     "resolucion_m": 10,
-    "nubes_pct": 12.0,
-    "categoria": "Simulado",
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.1,
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_21JUM_20241113_0_L2A",
+    "consultado": "2026-11-20",
     "bounds": [
       [
-        -26.2,
-        -58.18
+        -26.240068565045473,
+        -58.18000000000001
       ],
       [
-        -26.182,
-        -58.16
+        -26.17,
+        -58.109914534595774
       ]
     ],
-    "archivo": "demo-2026-10-31.npz"
+    "archivo": "s2-2024-11-13.npz"
+  },
+  {
+    "id": "s2-2026-10-02",
+    "fecha": "2026-10-02",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2B_21JUM_20261002_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2B, tile 21JUM",
+    "resolucion_m": 10,
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.0,
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_21JUM_20261002_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -26.240068565045473,
+        -58.18000000000001
+      ],
+      [
+        -26.17,
+        -58.109914534595774
+      ]
+    ],
+    "archivo": "s2-2026-10-02.npz"
+  },
+  {
+    "id": "s2-2026-10-26",
+    "fecha": "2026-10-26",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2A_21JUM_20261026_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2A, tile 21JUM",
+    "resolucion_m": 10,
+    "nubes_pct": 20.1,
+    "nubes_escena_pct": 9.2,
+    "sin_dato_pct": 25.2,
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_21JUM_20261026_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -26.240068565045473,
+        -58.18000000000001
+      ],
+      [
+        -26.17,
+        -58.109914534595774
+      ]
+    ],
+    "archivo": "s2-2026-10-26.npz"
   }
 ]
