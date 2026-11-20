@@ -4,6 +4,7 @@ Contrato documentado en docs/CONTRATO_API.md.
 """
 
 import base64
+from datetime import date
 import datetime
 import io
 import os
@@ -68,6 +69,12 @@ class PedidoComparar(BaseModel):
 @app.get("/api/salud")
 def salud():
     return {"estado": "ok", "leyenda": LEYENDA}
+
+
+@app.get("/api/rio")
+def rio(desde: date | None = None):
+    """Series diarias de altura de las escalas del río Paraguay en la región (hasta el 31/10/2026)."""
+    return {"estaciones": datos.estaciones_rio(desde.isoformat() if desde else ""), "unidad": "m"}
 
 
 @app.get("/api/escenas")

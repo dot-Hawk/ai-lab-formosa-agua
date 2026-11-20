@@ -160,3 +160,42 @@ def cargar_radar(pasada: dict) -> np.ndarray:
 def radar_validacion() -> dict:
     ruta = RADAR_DIR / "validacion.json"
     return json.loads(ruta.read_text(encoding="utf-8")) if ruta.exists() else {}
+
+
+# --- Series de altura para la vista "Río" ------------------------------------------------------
+
+@lru_cache
+def _serie_formosa() -> tuple[tuple[str, float], ...]:
+    if not NIVELES_CSV.exists():
+        return ()
+    with NIVELES_CSV.open(encoding="utf-8") as f:
+        return tuple((r["fecha"], float(r["altura_m"])) for r in csv.DictReader(f))
+
+
+def estaciones_rio(desde: str = "") -> list[dict]:
+    """Puerto Formosa (serie K1 limpia) y las demás escalas de la región (INA), con umbrales."""
+    k3 = umbrales_k3()["estaciones"]["formosa"]
+    estaciones = [{
+        "nombre": "Puerto Formosa",
+        "lat": k3["lat"],
+        "lon": k3["lon"],
+        "umbrales": {"aguas_bajas": k3["aguas_bajas"], "alerta": k3["alerta"], "evacuacion": k3["evacuacion"]},
+        "fuente": "INA, kit K1 limpiado por el equipo",
+        "serie": [[f, h] for f, h in _serie_formosa() if f >= desde],
+    }]
+    alturas = _alturas_ina()
+    for e in estaciones_region():
+        serie = sorted([f, h] for (codigo, f), h in alturas.items() if codigo == e["sitecode"] and f >= desde)
+        estaciones.append({
+            "nombre": e["nombre"],
+            "lat": e["lat"],
+            "lon": e["lon"],
+            "umbrales": {
+                "aguas_bajas": e.get("nivel_de_aguas_bajas"),
+                "alerta": e.get("nivel_de_alerta"),
+                "evacuacion": e.get("nivel_de_evacuacion"),
+            },
+            "fuente": "INA, API pública del Sistema de Alerta",
+            "serie": serie,
+        })
+    return estaciones
