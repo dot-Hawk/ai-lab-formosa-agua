@@ -1,7 +1,7 @@
 # Prueba desde un clon limpio · Equipo 1
 Responsable: Selena Brítez (rol D) · Fecha: 20/11/2026, UTC−03
 
-La consigna de entrega técnica pide probar el repositorio desde un clonado limpio, siguiendo solo las instrucciones del README. Este registro deja constancia de qué se hizo, qué salió y qué hubo que corregir.
+La consigna de entrega técnica pide probar el repositorio desde un clonado limpio, siguiendo solo las instrucciones del README. Este registro deja constancia de qué se hizo, qué salió y qué hubo que corregir. Se hicieron dos pruebas el mismo día.
 
 ## Entorno
 | Componente | Versión |
@@ -12,42 +12,48 @@ La consigna de entrega técnica pide probar el repositorio desde un clonado limp
 | Node.js | 26.13.0 |
 | npm | 11.20.0 |
 
-## Qué se probó
-Commit probado: rama `dev-Selena-Milagros-Britez` con `dev-Diego` incorporada (merge `8385507`, que incluye `3ff4b86` de Diego). Se clonó en una carpeta temporal vacía, sin `.venv` ni `node_modules`.
+## Prueba 2 (versión con todas las funcionalidades)
+Commit probado: `8303050` de `dev-Selena-Milagros-Britez` (incluye el trabajo de Diego hasta `da8371a`). Clonado en una carpeta temporal vacía.
 
 | Paso | Comando | Directorio | Resultado |
 |---|---|---|---|
 | 1 | `git clone <repo> -b dev-Selena-Milagros-Britez` | carpeta vacía | Correcto |
-| 2 | `uv sync` | `apps/backend` | **Falló.** uv eligió Python 3.15.2 y no hay binarios de `pyyaml` 6.0.3 para esa versión. Intentó compilarlo y pidió Microsoft C++ Build Tools (ver hallazgo 1). |
-| 2b | `uv sync --python 3.14` | `apps/backend` | Correcto |
-| 3 | `uv run pytest -q` | `apps/backend` | **40 pruebas pasaron**, 1 aviso de deprecación de Starlette (no afecta) |
+| 2 | `uv sync` | `apps/backend` | Eligió Python 3.14 gracias a `.python-version`. **Falló** con el error 396 de Windows al vincular archivos de la caché de uv (ver hallazgo 4) |
+| 2b | `UV_LINK_MODE=copy uv sync` | `apps/backend` | Correcto |
+| 3 | `uv run pytest -q` | `apps/backend` | **82 pruebas pasaron** |
 | 4 | `npm ci` | `apps/frontend` | Correcto |
-| 5 | `npm test` | `apps/frontend` | **37 pruebas pasaron** en 5 archivos |
-| 6 | `npm run build` | `apps/frontend` | Correcto (`dist/`, JS de 353,72 kB, 108,64 kB con gzip) |
-| 7 | `uv run uvicorn app.main:app --port 8765` y `GET /api/salud` | `apps/backend` | `{"estado":"ok", ...}` |
-| 8 | `GET /api/escenas` | — | 4 escenas Sentinel-2, categoría Observado |
-| 9 | Flujo principal: `POST /api/comparar` con `s2-2026-10-02` y `s2-2026-10-26` | — | 200 · agua nueva 110,64 ha · agua perdida 43,25 ha · río 2,35 m → 5,44 m |
-| 10 | Caso inválido: misma escena en A y B | — | 400 · `{"detalle":"Elegí dos escenas distintas para comparar."}` |
+| 5 | `npm test` | `apps/frontend` | Primera corrida: 65 de 66 (una prueba superó los 5 s en frío, ver hallazgo 5). Dos corridas más: **66 de 66** |
+| 6 | `npm run build` | `apps/frontend` | Correcto |
+| 7 | `GET /api/salud` y `GET /api/escenas` | API en el puerto 8765 | `ok` · 8 escenas Sentinel-2 |
+| 8 | Flujo principal: 18/01 → 07/02/2021 | API | 200 · 222,88 ha de agua nueva, 86,1 ha inusual · confianza alta · sin radar · 2 escuelas cerca · capas del deslizador |
+| 9 | Flujo con nubes: 02/10 → 26/10/2026 | API | 200 · 110,64 ha (óptico) · confianza baja · **radar: 220,83 ha** · 4 escuelas cerca |
+| 10 | Caso inválido: misma escena en A y B | API | 400 · `{"detalle":"Elegí dos escenas distintas para comparar."}` |
 
-Para la prueba se usó el puerto 8765, para no chocar con otro servicio local; con el 8000 del README se comporta igual.
+La interfaz se recorrió en Edge (automatizado) con el par de 2021 (deslizador, agua de siempre) y el de octubre de 2026 (radar, infraestructura), sin errores en la consola.
 
-Otras comparaciones consultadas para el pitch y la ficha de fuentes:
+## Prueba 1 (versión inicial)
+Commit probado: merge `8385507` (incluye `3ff4b86` de Diego).
 
-| Escena A → Escena B | Agua nueva | Agua que ya no está | Río A → B |
-|---|---|---|---|
-| `s2-2024-11-13` → `s2-2019-06-21` | 1.097,89 ha | 11,47 ha | −0,62 m → 9,08 m |
-| `s2-2024-11-13` → `s2-2026-10-26` | 287,31 ha | 40,58 ha | −0,62 m → 5,44 m |
+| Paso | Comando | Resultado |
+|---|---|---|
+| `uv sync` | `apps/backend` | **Falló:** uv eligió Python 3.15.2, sin binarios de `pyyaml` (hallazgo 1) |
+| `uv sync --python 3.14` y `uv run pytest -q` | `apps/backend` | 40 pruebas pasaron |
+| `npm ci`, `npm test` y `npm run build` | `apps/frontend` | 37 pruebas pasaron; build correcto |
+| Flujo principal y caso inválido | API | 200 (110,64 ha) y 400 |
 
 ## Hallazgos
 
-1. **`uv sync` falla en Windows si uv elige Python 3.15.** `uvicorn[standard]` depende de `pyyaml`, que todavía no publica binarios para 3.15, y compilarlo requiere Visual C++. Con `uv sync --python 3.14` funciona.
-   - *Qué se hizo:* el README pasa a indicar `uv sync --python 3.14`.
-   - *Resuelto:* Diego agregó `apps/backend/.python-version` con `3.14` (commit `a9715e2`), así `uv sync` ya elige la versión correcta sin la nota.
-2. **Los ejemplos de `docs/CONTRATO_API.md` usan IDs que ya no existen** (`demo-2026-10-01`, `demo-2026-10-31`). Con las escenas reales, el `curl` del contrato devuelve 404. Además, la respuesta de `/api/escenas` tiene campos nuevos (`nubes_escena_pct`, `sin_dato_pct`, `url`, `consultado`) que el contrato no documenta.
-   - *Qué se hizo:* se actualizaron los ejemplos y los campos en el contrato, en un commit aparte para que se pueda revisar o revertir solo. Es un archivo compartido, así que **hay que avisar al equipo**.
-3. **El README no menciona `npm run build`** entre las pruebas, pese a que `docs/ROLES.md` lo pide antes de cada merge. Se agregó.
+1. **`uv sync` fallaba en Windows si uv elegía Python 3.15**, porque `pyyaml` (dependencia de `uvicorn[standard]`) no tiene binarios para esa versión.
+   - *Resuelto:* Diego agregó `apps/backend/.python-version` con `3.14` (commit `a9715e2`). En la prueba 2, uv eligió 3.14 solo.
+2. **Los ejemplos de `docs/CONTRATO_API.md` usaban IDs que ya no existían** (`demo-2026-10-01`), y el `curl` devolvía 404.
+   - *Resuelto:* ejemplos y campos actualizados (commit `5d073d5`). Es un archivo compartido: hay que avisar al equipo.
+3. **El README no mencionaba `npm run build`.** Se agregó.
+4. **Error 396 de Windows con uv cuando el repositorio está en OneDrive.** uv vincula archivos de su caché con vínculos duros, y OneDrive no acepta archivos con vínculos incompatibles. No es un error del proyecto.
+   - *Resuelto en el README:* si aparece, usar `UV_LINK_MODE=copy` (en PowerShell: `$env:UV_LINK_MODE="copy"`), o clonar fuera de OneDrive.
+5. **Una prueba del frontend superó los 5 s en la primera corrida**, porque carga Leaflet y React en frío en una máquina con poca memoria. Pasa sola y en las corridas siguientes.
+   - *Resuelto:* `testTimeout` de 15 s en `apps/frontend/vite.config.js`.
 
 ## Qué no se probó
-- La interfaz no se recorrió con un navegador real en esta prueba: el flujo se verificó por la API y con las 37 pruebas del frontend (que incluyen el formulario, la validación de la misma fecha y la lectura de resultados). **Antes del pitch hay que hacer una pasada manual por la interfaz.**
-- La descarga de escenas (`uv sync --group escenas` y `scripts/descargar_escenas.py`) no se ejecutó, porque baja datos de internet y las escenas ya están en el repo.
-- No se probó en Linux ni en macOS.
+- Las descargas (`scripts/descargar_*.py`): bajan datos de internet y los resultados ya están en el repo. Cada script se ejecutó una vez al generar los datos, el 20/11/2026.
+- La imagen Docker de Diego (`Dockerfile`): Docker no está instalado en esta computadora.
+- Linux y macOS.

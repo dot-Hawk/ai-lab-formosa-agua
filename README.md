@@ -18,7 +18,8 @@ docs/            Contrato de API, roles y entregables (fichas, guiones, póster)
 
 ## Requisitos
 - Python 3.11 a 3.14 y [uv](https://docs.astral.sh/uv/) (probado con Python 3.14 y uv 0.12 y 0.13)
-  - **Importante:** si uv elige Python 3.15, `uv sync` falla en Windows porque `pyyaml` todavía no tiene binarios para esa versión. Usá `uv sync --python 3.14` (uv descarga esa versión si no la tenés).
+  - El backend fija Python 3.14 con `apps/backend/.python-version` (con 3.15, `pyyaml` todavía no tiene binarios para Windows). Si tu uv no lo respeta, usá `uv sync --python 3.14`.
+  - Si el repositorio está en **OneDrive** y `uv sync` falla con el error 396 ("vínculos permanentes incompatibles"), usá `UV_LINK_MODE=copy uv sync` (en PowerShell: `$env:UV_LINK_MODE="copy"; uv sync`) o cloná fuera de OneDrive.
 - Node.js ≥ 20 y npm (probado con Node 26)
 
 ## Ejecutar
