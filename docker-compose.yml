@@ -1,0 +1,9 @@
+# Prueba local de la misma imagen que se usa en Kubernetes:
+#   docker compose up --build      -> http://localhost:8080
+services:
+  operacion-agua:
+    build: .
+    image: operacion-agua:local
+    ports:
+      - "8080:8000"
+    restart: unless-stopped

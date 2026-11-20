@@ -1,0 +1,77 @@
+# Operación Agua · despliegue de ejemplo en Kubernetes
+# PROTOTIPO · AI LAB Misión: Código Formosa · no es una herramienta oficial
+#
+#   kubectl apply -f deploy/kubernetes.yaml
+#   kubectl port-forward svc/operacion-agua 8080:80   -> http://localhost:8080
+#
+# Reemplazar `image` por la ubicación donde se publique la imagen.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: operacion-agua
+  labels:
+    app: operacion-agua
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: operacion-agua
+  template:
+    metadata:
+      labels:
+        app: operacion-agua
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+      containers:
+        - name: operacion-agua
+          image: ghcr.io/dot-hawk/ai-lab-formosa-agua:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /api/salud
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/salud
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: operacion-agua
+  labels:
+    app: operacion-agua
+spec:
+  selector:
+    app: operacion-agua
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
