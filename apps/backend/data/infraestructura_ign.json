@@ -1,0 +1,616 @@
+{
+ "fuente": "IGN, Capas SIG (servicio WFS público)",
+ "url": "https://wms.ign.gob.ar/geoserver/ows",
+ "capas": {
+  "educacion": "ign:puntos_de_ciencia_y_educacion_020601",
+  "salud": "ign:salud_020801",
+  "ruta_nacional": "ign:vial_nacional",
+  "ruta_provincial": "ign:vial_provincial",
+  "camino": "ign:vial_terciaria"
+ },
+ "consultado": "2026-11-20",
+ "categoria": "Referencia (cartografía oficial)",
+ "bbox": [
+  -58.18,
+  -26.24,
+  -58.11,
+  -26.17
+ ],
+ "nota": "Solo territorio argentino. Es el estado de la capa a la fecha de consulta.",
+ "puntos": [
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Secundaria Nº 67 Emilio Puchini",
+   "lon": -58.173172,
+   "lat": -26.183929
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 01",
+   "lon": -58.169171,
+   "lat": -26.182872
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Nucleado Nº 6 Armando de Vita y Lacerra EPEP Nº 179",
+   "lon": -58.179404,
+   "lat": -26.193167
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Primaria Nº 66 José Manuel Estrada",
+   "lon": -58.177,
+   "lat": -26.1818
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Centro de Educación Secundaria para Adultos Nº 05",
+   "lon": -58.156985,
+   "lat": -26.201407
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 16",
+   "lon": -58.169171,
+   "lat": -26.183072
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Primaria Nº 2 Sarmiento",
+   "lon": -58.1665,
+   "lat": -26.1829
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Nucleado Nº 4 EPEP Nº 58",
+   "lon": -58.173172,
+   "lat": -26.183929
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Primaria N° 1 General José de San Martín",
+   "lon": -58.171028,
+   "lat": -26.178936
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Instituto Superior de Formación Docente en Educación Física",
+   "lon": -58.17375,
+   "lat": -26.187879
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 01",
+   "lon": -58.16435,
+   "lat": -26.200593
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela de Jardín de Infantes N° 15 Merceditas",
+   "lon": -58.170893,
+   "lat": -26.178557
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Especial Nº 4 Don J. B. Caceres",
+   "lon": -58.175193,
+   "lat": -26.192707
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional N° 29",
+   "lon": -58.1702,
+   "lat": -26.177
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Centro de Educación Secundaria para Adultos Nº 56",
+   "lon": -58.164557,
+   "lat": -26.181672
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 1",
+   "lon": -58.1671,
+   "lat": -26.179493
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 01 Caritas Parroquial",
+   "lon": -58.178593,
+   "lat": -26.173993
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 05 n",
+   "lon": -58.1794,
+   "lat": -26.1948
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 1 Clemente Lio",
+   "lon": -58.171028,
+   "lat": -26.178936
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 04 Laura Martínez de Vonzander Nº 02",
+   "lon": -58.1665,
+   "lat": -26.183
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Centro de Educación Secundaria para Adultos N°56",
+   "lon": -58.1712,
+   "lat": -26.1948
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Técnica Nº 2 Ilda Valentino de Giachero",
+   "lon": -58.1798,
+   "lat": -26.1795
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Centro de Educación Secundaria para Adultos Nº 57",
+   "lon": -58.168775,
+   "lat": -26.171947
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Primaria N° 217 Anexo 1",
+   "lon": -58.149959,
+   "lat": -26.20828
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Instituto Superior de Artes Oscar A. Albertazzi",
+   "lon": -58.1757,
+   "lat": -26.1842
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 16",
+   "lon": -58.176779,
+   "lat": -26.195172
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 01",
+   "lon": -58.1702,
+   "lat": -26.177
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Nucleado Nº 4 Beatriz Molina de Stefanich EPEP Nº 66",
+   "lon": -58.1768,
+   "lat": -26.1823
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Primaria N° 82 Luis Gaspar Ruiz",
+   "lon": -58.1753,
+   "lat": -26.1955
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Primaria Nº 3 Doctor Luis Sáenz Peña",
+   "lon": -58.1697,
+   "lat": -26.1877
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Secundaria N°67 Anexo 2",
+   "lon": -58.160359,
+   "lat": -26.187451
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Centro de Educación Secundaria para Adultos Nº 57",
+   "lon": -58.173179,
+   "lat": -26.182272
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Nucleado Nº 4 EPEP Nº 82",
+   "lon": -58.1752,
+   "lat": -26.1957
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Nucleado Nº 3 EPEP Nº 31",
+   "lon": -58.1602,
+   "lat": -26.1872
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Primaria N° 179 Dr.juan Bautista Alberdi",
+   "lon": -58.179904,
+   "lat": -26.193467
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 04 Unidad Penitenciaria Nº 10",
+   "lon": -58.169171,
+   "lat": -26.183072
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Secundaria N° 67 Anexo 1",
+   "lon": -58.176228,
+   "lat": -26.181979
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Nucleado Nº 5 EPEP Nº 225",
+   "lon": -58.175743,
+   "lat": -26.172872
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Primaria Nº 225 Luisa S. de Castañeda",
+   "lon": -58.175743,
+   "lat": -26.172872
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Primaria Nº 31 General Manuel Belgrano",
+   "lon": -58.159928,
+   "lat": -26.187343
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Normal Superior República del Paraguay",
+   "lon": -58.171379,
+   "lat": -26.194571
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Secundaria Nº 72",
+   "lon": -58.156985,
+   "lat": -26.201507
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 01 Alcaldia de Mujeres",
+   "lon": -58.179921,
+   "lat": -26.187372
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Instituto Superior de Formación Docente y Técnico Félix Atilio Cabrera",
+   "lon": -58.176821,
+   "lat": -26.190393
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Secundaria Nº 54 Gobernador Juan José Silva",
+   "lon": -58.176196,
+   "lat": -26.186709
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 05 EPEP N° 445",
+   "lon": -58.1753,
+   "lat": -26.1956
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 01 Asociación Primavera de Ceibo",
+   "lon": -58.1736,
+   "lat": -26.1757
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Nucleado Nº 3 EPEP Nº 2",
+   "lon": -58.166621,
+   "lat": -26.183164
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Nucleado Nº 3 Latife Manzur de López EPEP Nº 3",
+   "lon": -58.1697,
+   "lat": -26.1877
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Primaria N° 18 Fray Mamerto Esquiú",
+   "lon": -58.1705,
+   "lat": -26.1748
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Primaria N° 58 Presidente Bernardino Rivadavia",
+   "lon": -58.173272,
+   "lat": -26.183829
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Primaria N° 217 Paula Albarracín",
+   "lon": -58.156647,
+   "lat": -26.20136
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Nucleado Nº 4 EPEP Nº 18",
+   "lon": -58.170314,
+   "lat": -26.174721
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Nucleado Nº 3 EPEP Nº 217",
+   "lon": -58.156747,
+   "lat": -26.20136
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Secundaria Nº 56",
+   "lon": -58.169075,
+   "lat": -26.171247
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Instituto Superior de Formación Docente",
+   "lon": -58.1793,
+   "lat": -26.1936
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Secundaria Nº 84",
+   "lon": -58.179704,
+   "lat": -26.193267
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Centro de Educación Secundaria para Adultos Nº 05 Anexo I",
+   "lon": -58.167807,
+   "lat": -26.182729
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Centro de Desarrollo Infantil San Miguel",
+   "lon": -58.175172,
+   "lat": -26.172671
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional N° 31",
+   "lon": -58.17584,
+   "lat": -26.186473
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Núcleo de Educación Permanente y Formación Profesional Nº 31",
+   "lon": -58.17584,
+   "lat": -26.186473
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Centro de Desarrollo Infantil Como en Brazos de Mamá",
+   "lon": -58.17584,
+   "lat": -26.186473
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Provincial de Educación Técnica Nº 10 Anexo 4",
+   "lon": -58.167807,
+   "lat": -26.182729
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Colegio Don Bosco",
+   "lon": -58.173586,
+   "lat": -26.188343
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Instituto Santa Isabel",
+   "lon": -58.170228,
+   "lat": -26.183436
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Evangélica Privada Juan Dring",
+   "lon": -58.170035,
+   "lat": -26.184128
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Colegio Privado Alas",
+   "lon": -58.160578,
+   "lat": -26.18795
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Instituto Privado UPCN",
+   "lon": -58.167195,
+   "lat": -26.177921
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Instituto Superior Privado Santa Rita",
+   "lon": -58.168522,
+   "lat": -26.18552
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes La Hormiguita Viajera",
+   "lon": -58.170513,
+   "lat": -26.185706
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Instituto Superior Formosa",
+   "lon": -58.164317,
+   "lat": -26.18577
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Centro de Apoyo Escolar Madre Micarelli",
+   "lon": -58.165952,
+   "lat": -26.184763
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Colegio Privado Doctor Pedro Maradona",
+   "lon": -58.165545,
+   "lat": -26.183457
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Instituto Superior Jorge Fontana",
+   "lon": -58.163519,
+   "lat": -26.190634
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes San Luis Rey",
+   "lon": -58.163519,
+   "lat": -26.190634
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Instituto Superior de Sanidad Profesor Doctor Ramón Carril",
+   "lon": -58.179686,
+   "lat": -26.182743
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Colegio Privado La Ribera",
+   "lon": -58.177849,
+   "lat": -26.185485
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Escuela Privada San José Obrero",
+   "lon": -58.166346,
+   "lat": -26.195742
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Mickey Mouse",
+   "lon": -58.171537,
+   "lat": -26.18842
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Nueva Vida",
+   "lon": -58.170163,
+   "lat": -26.188759
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes Inmaculada Concepción",
+   "lon": -58.177382,
+   "lat": -26.19832
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Jardín de Infantes La Virgen Niña",
+   "lon": -58.172085,
+   "lat": -26.176063
+  },
+  {
+   "tipo": "educacion",
+   "nombre": "Colegio Privado Espacios",
+   "lon": -58.177777,
+   "lat": -26.184236
+  },
+  {
+   "tipo": "salud",
+   "nombre": "Hospital Central",
+   "lon": -58.168307,
+   "lat": -26.188931
+  },
+  {
+   "tipo": "salud",
+   "nombre": "Hospital Odontológico",
+   "lon": -58.174807,
+   "lat": -26.170758
+  },
+  {
+   "tipo": "salud",
+   "nombre": "Centro de Salud Bernardino Rivadavia",
+   "lon": -58.155183,
+   "lat": -26.200496
+  },
+  {
+   "tipo": "salud",
+   "nombre": "Centro de Salud San José Obrero",
+   "lon": -58.166214,
+   "lat": -26.195658
+  },
+  {
+   "tipo": "salud",
+   "nombre": "Hospital de la Madre y el Niño",
+   "lon": -58.175065,
+   "lat": -26.193125
+  },
+  {
+   "tipo": "salud",
+   "nombre": "Centro de Salud Villa Hermosa",
+   "lon": -58.178796,
+   "lat": -26.195886
+  }
+ ],
+ "lineas": [
+  {
+   "tipo": "camino",
+   "nombre": "Sin nombre",
+   "coords": [
+    [
+     -58.195523,
+     -26.198201
+    ],
+    [
+     -58.190041,
+     -26.198851
+    ],
+    [
+     -58.188381,
+     -26.199395
+    ],
+    [
+     -58.186653,
+     -26.199828
+    ],
+    [
+     -58.185124,
+     -26.2002
+    ],
+    [
+     -58.184681,
+     -26.200442
+    ],
+    [
+     -58.184079,
+     -26.201272
+    ],
+    [
+     -58.183155,
+     -26.202862
+    ],
+    [
+     -58.182305,
+     -26.203992
+    ],
+    [
+     -58.181443,
+     -26.205413
+    ],
+    [
+     -58.180149,
+     -26.206536
+    ],
+    [
+     -58.17886,
+     -26.207492
+    ],
+    [
+     -58.177445,
+     -26.208092
+    ]
+   ]
+  }
+ ]
+}

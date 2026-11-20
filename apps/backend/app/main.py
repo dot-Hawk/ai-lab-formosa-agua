@@ -17,7 +17,7 @@ from fastapi.staticfiles import StaticFiles
 from PIL import Image
 from pydantic import BaseModel, Field
 
-from app import confianza, datos
+from app import confianza, datos, infraestructura
 from app.cambio import (
     AGUA_NUEVA,
     AGUA_PERDIDA,
@@ -57,6 +57,9 @@ class PedidoComparar(BaseModel):
     escena_a: str = Field(description="id de la escena 'antes'")
     escena_b: str = Field(description="id de la escena 'después'")
     umbral_agua: float = Field(0.0, ge=-1, le=1, description="NDWI mínimo para considerar agua")
+    radio_infraestructura_m: float = Field(
+        500, ge=50, le=3000, description="Distancia al agua nueva inusual para contar un establecimiento como expuesto"
+    )
     umbral_habitual_pct: float = Field(
         50, ge=1, le=100, description="% de tiempo con agua (1984-2021) desde el que un píxel es 'agua de siempre'"
     )
@@ -135,6 +138,32 @@ def _radar(a: dict, b: dict) -> dict | None:
         },
         "nota": "El radar confunde agua con superficies muy lisas (pistas, arena húmeda) y puede no ver agua bajo "
                 "vegetación o con viento. Es un indicio, igual que el óptico.",
+    }
+
+
+def _infraestructura(mascara: np.ndarray, escena: dict, umbral_pct: float, radio_m: float) -> dict | None:
+    """Establecimientos y rutas del IGN cerca del agua nueva donde normalmente no hay agua."""
+    infra = datos.infraestructura()
+    if not infra:
+        return None
+    agua = mascara == AGUA_NUEVA
+    ocurrencia = datos.gsw_ocurrencia()
+    con_gsw = ocurrencia is not None and ocurrencia.shape == mascara.shape
+    if con_gsw:
+        agua &= ocurrencia < umbral_pct
+    agua = infraestructura.consolidar(agua)
+    r = infraestructura.evaluar(agua, escena["bounds"], escena["resolucion_m"], radio_m, infra)
+    return {
+        **r,
+        "referencia": ("agua nueva donde normalmente no hay agua" if con_gsw else "agua nueva") +
+                      ", solo manchas consolidadas (más de la mitad de una ventana de 50 x 50 m)",
+        "referencia_ha": round(area_hectareas(int(agua.sum()), escena["resolucion_m"]), 2),
+        "fuente": infra.get("fuente"),
+        "capas": infra.get("capas"),
+        "consultado": infra.get("consultado"),
+        "categoria": infra.get("categoria"),
+        "nota": "Indica exposición posible, no afectación. El IGN cubre solo territorio argentino "
+                "(Alberdi, en Paraguay, queda sin datos) y la distancia es aproximada (±10 %).",
     }
 
 
@@ -252,6 +281,7 @@ def comparar(pedido: PedidoComparar):
             "fuente": "INA · K1 (serie limpiada por el equipo) y K3 · Dato observado",
         },
         "agua_habitual": _agua_habitual(mascara, pedido.umbral_habitual_pct, res),
+        "infraestructura": _infraestructura(mascara, a, pedido.umbral_habitual_pct, pedido.radio_infraestructura_m),
         "region": _region(a, b),
         "lluvia": _lluvia(a, b),
         "confianza": confianza.evaluar(a, b),

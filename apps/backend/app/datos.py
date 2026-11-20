@@ -120,6 +120,13 @@ def gsw_ocurrencia() -> np.ndarray | None:
 
 
 @lru_cache
+def infraestructura() -> dict:
+    """Puntos y líneas del IGN en la zona, o {} si no se descargaron."""
+    ruta = DATA_DIR / "infraestructura_ign.json"
+    return json.loads(ruta.read_text(encoding="utf-8")) if ruta.exists() else {}
+
+
+@lru_cache
 def gsw_metadatos() -> dict:
     return json.loads(GSW_JSON.read_text(encoding="utf-8")) if GSW_JSON.exists() else {}
 
