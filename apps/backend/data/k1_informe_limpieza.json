@@ -1,0 +1,51 @@
+{
+  "registros_originales": 8347,
+  "duplicados_identicos": 12,
+  "centimetros_convertidos": 7,
+  "imposibles": 1,
+  "comas_decimales": 3,
+  "fechas_normalizadas": 40,
+  "pendientes": 1,
+  "registros_finales": 8335,
+  "registros_con_altura": 8334,
+  "maximo_observacion": {
+    "fecha_hora": "2016-01-05 18:00:00",
+    "altura_m": 9.81
+  },
+  "dias_en_serie_diaria": 7478,
+  "dias_sin_dato_por_anio": {
+    "2008": 4,
+    "2011": 20,
+    "2012": 29,
+    "2013": 14,
+    "2016": 25,
+    "2018": 25,
+    "2024": 14
+  },
+  "maximo_diario": {
+    "fecha": "2016-01-06",
+    "altura_m": 9.8
+  },
+  "excluidos": [
+    {
+      "obs_id": "21627965109",
+      "fecha_hora": "2012-07-15 04:00:00",
+      "altura_m": null,
+      "valor_original": "98.1",
+      "unidad_original": "m",
+      "estado": "excluido_imposible",
+      "correcciones": ""
+    }
+  ],
+  "pendientes_verificacion": [
+    {
+      "obs_id": "21627964086",
+      "fecha_hora": "2009-08-14 12:00:00",
+      "altura_m": 3.4,
+      "valor_original": "3.4",
+      "unidad_original": "m",
+      "estado": "pendiente_verificacion",
+      "correcciones": ""
+    }
+  ]
+}

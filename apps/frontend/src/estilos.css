@@ -1,0 +1,468 @@
+/* Operación Agua · estilo de servicio hidrometeorológico.
+   Paleta de carta sinóptica: papel frío, tinta pizarra, azul de río.
+   Ámbar y ladrillo se reservan para los umbrales del INA. */
+
+:root {
+  --papel: #eef2f4;
+  --panel: #f8fafb;
+  --tinta: #1f2d3a;
+  --tinta-suave: #566573;
+  --rejilla: #c9d3da;
+  --rejilla-suave: #dfe6eb;
+  --rio: #2d6a8e;
+  --rio-oscuro: #1f4f6b;
+  --sedimento: #a8742a;
+  --alerta: #c8872b;
+  --evacuacion: #9e3b2c;
+  --bajas: #b9cfdc;
+
+  /* Deben coincidir con los colores del PNG que genera el backend (app/main.py) */
+  --capa-nueva: rgb(30 110 255);
+  --capa-perdida: rgb(255 140 0);
+
+  --texto: "Barlow", system-ui, sans-serif;
+  --cifras: "Barlow Semi Condensed", "Barlow", system-ui, sans-serif;
+
+  /* Escala tipográfica modular (razón 1,2) sobre 15 px */
+  --t-1: 0.8125rem;
+  --t0: 0.9375rem;
+  --t1: 1.125rem;
+  --t2: 1.35rem;
+  --t3: 1.625rem;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--texto);
+  font-size: var(--t0);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, p, dl, dd, figure, ul { margin: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--rio);
+  outline-offset: 2px;
+}
+
+/* ---------- Estructura ---------- */
+
+.app {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  min-height: 100vh;
+}
+
+.prototipo {
+  background: var(--tinta);
+  color: #e6ecf0;
+  font-size: var(--t-1);
+  letter-spacing: 0.02em;
+  padding: 0.35rem 1rem;
+  text-align: center;
+}
+
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1.5rem;
+  padding: 1rem 1.25rem 0.9rem;
+  border-bottom: 1px solid var(--rejilla);
+}
+
+.cabecera h1 {
+  font-family: var(--cifras);
+  font-weight: 600;
+  font-size: var(--t3);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.cabecera p {
+  color: var(--tinta-suave);
+  max-width: 70ch;
+}
+
+.tablero {
+  display: grid;
+  grid-template-columns: minmax(300px, 360px) 1fr minmax(260px, 290px);
+  min-height: 0;
+  height: calc(100vh - 7.5rem);
+}
+
+.panel {
+  background: var(--panel);
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: grid;
+  align-content: start;
+  gap: 1.75rem;
+}
+
+.tablero > .panel:first-child { border-right: 1px solid var(--rejilla); }
+.panel-escala { border-left: 1px solid var(--rejilla); }
+
+h2 {
+  font-family: var(--cifras);
+  font-weight: 600;
+  font-size: var(--t1);
+  margin-bottom: 0.75rem;
+}
+
+.ayuda {
+  color: var(--tinta-suave);
+  font-size: var(--t-1);
+}
+
+.fuente {
+  color: var(--tinta-suave);
+  font-size: var(--t-1);
+  margin-top: 0.5rem;
+}
+
+.cifra {
+  font-family: var(--cifras);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Avisos ---------- */
+
+.aviso {
+  border-left: 3px solid var(--rejilla);
+  padding: 0.55rem 0.75rem;
+  background: #fff;
+  font-size: var(--t-1);
+  margin-top: 0.75rem;
+}
+
+.aviso-error {
+  border-left-color: var(--evacuacion);
+  color: var(--evacuacion);
+}
+
+.aviso-indicio {
+  border-left-color: var(--alerta);
+  color: var(--tinta);
+}
+
+/* ---------- Formulario ---------- */
+
+.consulta {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.campo {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.campo label {
+  font-weight: 600;
+  font-size: var(--t-1);
+}
+
+select, input[type="number"] {
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 1px solid var(--rejilla);
+  border-radius: 3px;
+  padding: 0.45rem 0.55rem;
+  width: 100%;
+}
+
+select:hover, input[type="number"]:hover { border-color: var(--tinta-suave); }
+
+button {
+  font-family: var(--cifras);
+  font-weight: 600;
+  font-size: var(--t0);
+  letter-spacing: 0.01em;
+  color: #fff;
+  background: var(--rio);
+  border: 0;
+  border-radius: 3px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) { background: var(--rio-oscuro); }
+
+button:disabled {
+  background: var(--rejilla);
+  color: var(--tinta-suave);
+  cursor: not-allowed;
+}
+
+/* ---------- Lectura ---------- */
+
+.superficies {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 2px solid var(--tinta);
+  border-bottom: 1px solid var(--rejilla);
+}
+
+.superficie {
+  padding: 0.65rem 0 0.7rem;
+}
+
+.superficie + .superficie {
+  padding-left: 0.9rem;
+  border-left: 1px solid var(--rejilla);
+}
+
+.superficie dt {
+  font-size: var(--t-1);
+  color: var(--tinta-suave);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.superficie dt::before {
+  content: "";
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 1px;
+}
+
+.superficie-nueva dt::before { background: var(--capa-nueva); }
+.superficie-perdida dt::before { background: var(--capa-perdida); }
+
+.superficie dd {
+  font-size: var(--t3);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.lectura > .ayuda { margin: 0.4rem 0 1rem; }
+
+.comparacion {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: var(--t-1);
+}
+
+.comparacion th, .comparacion td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.4rem 0.4rem 0.4rem 0;
+  border-bottom: 1px solid var(--rejilla-suave);
+  overflow-wrap: anywhere;
+}
+
+.comparacion thead th {
+  font-family: var(--cifras);
+  font-weight: 600;
+  font-size: var(--t0);
+  border-bottom: 1px solid var(--tinta);
+}
+
+.comparacion tbody th {
+  font-weight: 500;
+  color: var(--tinta-suave);
+  width: 34%;
+}
+
+.comparacion td .cifra { display: block; font-size: var(--t0); }
+
+.categoria {
+  display: inline-block;
+  padding: 0 0.35rem;
+  border-radius: 2px;
+  font-weight: 500;
+}
+
+.categoria-simulado { background: #f1e3c6; color: #6b4a14; }
+.categoria-observado { background: #d5e6ef; color: var(--rio-oscuro); }
+
+.nivel {
+  display: inline-block;
+  margin-top: 0.15rem;
+  padding: 0 0.35rem;
+  border-radius: 2px;
+  font-size: 0.75rem;
+}
+
+.nivel-normal { background: #e2ebe4; color: #33533b; }
+.nivel-aguas-bajas { background: #dbe7ef; color: var(--rio-oscuro); }
+.nivel-alerta { background: #f3e1c3; color: #7a4e10; }
+.nivel-evacuacion { background: #efd2cc; color: var(--evacuacion); font-weight: 600; }
+.nivel-sin-dato { background: var(--rejilla-suave); color: var(--tinta-suave); }
+
+/* ---------- Mapa ---------- */
+
+.mapa {
+  position: relative;
+  min-height: 0;
+}
+
+.mapa-lienzo {
+  height: 100%;
+  width: 100%;
+  background: #dde4e8;
+}
+
+.marco-escena {
+  stroke: var(--tinta);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+}
+
+.mapa-leyenda {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 1.6rem;
+  z-index: 500;
+  width: 15rem;
+  background: rgb(248 250 251 / 0.96);
+  border: 1px solid var(--rejilla);
+  border-radius: 3px;
+  padding: 0.7rem 0.8rem;
+  font-size: var(--t-1);
+}
+
+.leyenda-titulo {
+  font-family: var(--cifras);
+  font-weight: 600;
+  font-size: var(--t0);
+  margin-bottom: 0.4rem;
+}
+
+.mapa-leyenda ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.2rem;
+  margin-bottom: 0.55rem;
+}
+
+.mapa-leyenda li { display: flex; align-items: center; gap: 0.45rem; }
+
+.muestra { width: 0.9rem; height: 0.9rem; border-radius: 1px; flex: none; }
+.muestra-nueva { background: var(--capa-nueva); opacity: 0.85; }
+.muestra-perdida { background: var(--capa-perdida); opacity: 0.85; }
+.muestra-marco { border: 1.5px dashed var(--tinta); }
+
+.leyenda-controles {
+  display: grid;
+  gap: 0.35rem;
+  border-top: 1px solid var(--rejilla-suave);
+  padding-top: 0.5rem;
+}
+
+.leyenda-controles label { display: flex; align-items: center; gap: 0.45rem; }
+.leyenda-controles input[type="range"] { flex: 1; accent-color: var(--rio); }
+.leyenda-controles input[type="checkbox"] { accent-color: var(--rio); }
+
+.leyenda-simulado {
+  margin-top: 0.55rem;
+  padding: 0.3rem 0.45rem;
+  background: #f1e3c6;
+  color: #6b4a14;
+  border-radius: 2px;
+}
+
+.leaflet-container { font-family: var(--texto); }
+
+/* Fondo en grises para que la capa de cambios sea lo único con color */
+.leaflet-tile-pane { filter: grayscale(0.9) contrast(0.92) brightness(1.04); }
+
+/* ---------- Escala hidrométrica ---------- */
+
+.escala figcaption {
+  display: grid;
+  margin-bottom: 0.75rem;
+}
+
+.escala-titulo {
+  font-family: var(--cifras);
+  font-weight: 600;
+  font-size: var(--t1);
+  line-height: 1.2;
+}
+
+.escala-sub {
+  color: var(--tinta-suave);
+  font-size: var(--t-1);
+}
+
+.escala svg {
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+  font-family: var(--cifras);
+}
+
+.regla { fill: none; stroke: var(--tinta); stroke-width: 1.25; }
+.franja-evacuacion { fill: #e9c9c2; }
+.franja-alerta { fill: #f0dcb8; }
+.franja-bajas { fill: #dbe7ef; }
+
+.graduacion { stroke: var(--tinta); stroke-width: 1; }
+.graduacion-num { fill: var(--tinta-suave); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+.umbral line { stroke-width: 1; stroke-dasharray: 2 2; }
+.umbral text { font-size: 12.5px; font-weight: 600; }
+.umbral-evacuacion line { stroke: var(--evacuacion); }
+.umbral-evacuacion text { fill: var(--evacuacion); }
+.umbral-alerta line { stroke: var(--alerta); }
+.umbral-alerta text { fill: #8a5a12; }
+.umbral-aguas_bajas line { stroke: var(--rio); }
+.umbral-aguas_bajas text { fill: var(--rio-oscuro); }
+
+.maximo line { stroke: var(--tinta); stroke-width: 1.5; }
+.maximo text { fill: var(--tinta-suave); font-size: 11.5px; }
+
+.marca path { fill: var(--rio); }
+.marca line { stroke: var(--rio); stroke-width: 2.5; }
+.marca text { fill: var(--rio-oscuro); font-size: 13.5px; font-weight: 600; }
+
+.escala-faltantes {
+  list-style: none;
+  padding: 0;
+  margin-top: 0.6rem;
+  display: grid;
+  gap: 0.25rem;
+  font-size: var(--t-1);
+  color: var(--tinta-suave);
+}
+
+/* ---------- Pantallas angostas ---------- */
+
+@media (max-width: 1100px) {
+  .tablero {
+    grid-template-columns: minmax(280px, 340px) 1fr;
+    grid-template-rows: minmax(480px, 1fr) auto;
+    height: auto;
+  }
+  .mapa { min-height: 480px; }
+  .panel-escala {
+    grid-column: 1 / -1;
+    border-left: 0;
+    border-top: 1px solid var(--rejilla);
+  }
+}
+
+@media (max-width: 720px) {
+  .tablero { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .tablero > .panel:first-child { border-right: 0; border-bottom: 1px solid var(--rejilla); }
+  .mapa { min-height: 60vh; }
+  .panel { padding: 1rem; }
+  .cabecera { padding: 0.9rem 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leaflet-zoom-anim .leaflet-zoom-animated { transition: none !important; }
+}
