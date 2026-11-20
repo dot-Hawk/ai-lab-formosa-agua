@@ -15,6 +15,8 @@ Todas las escenas comparten satélite (Sentinel-2), producto (L2A), tile (21JUM)
 | Escena 26/10/2026 (bandas B03 y B08) | Nubes en el recorte: 20,1 % (9,2 % en la escena completa) · sin dato: 25,2 % | [S2A_21JUM_20261026_0_L2A](https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_21JUM_20261026_0_L2A) · `s2-2026-10-26.npz` | Observado | 26/10/2026 |
 | Máscara de nubes y sombras | Píxeles excluidos del cálculo | Banda SCL (clasificación de escena) de cada producto L2A | Observado (clasificación de ESA) | Igual que cada escena |
 | Metadatos de cada escena (fecha, satélite, producto, nubes, URL) | Ver filas anteriores | `apps/backend/data/escenas/catalogo.json` | Observado | Consulta del 20/11/2026 |
+| Hora de captura (UTC; en pantalla, hora de Argentina) | 21/06/2019 14:09 · 13/11/2024 13:59 · 02/10/2026 14:09 · 26/10/2026 13:59 (UTC) | Propiedad `datetime` del ítem STAC de cada escena (`scripts/completar_metadatos.py`) | Observado (metadato) | Consulta del 20/11/2026 |
+| Elevación del sol | 34,5° (21/06/2019) · 66,0° (13/11/2024) · 58,6° (02/10/2026) · 63,5° (26/10/2026) | Propiedad `view:sun_elevation` del ítem STAC | Observado (metadato) | Consulta del 20/11/2026 |
 
 ## Resultados calculados por la herramienta
 
@@ -27,6 +29,8 @@ No son datos observados: son estimaciones que la herramienta calcula a partir de
 | Agua nueva / agua que ya no está, 02/10/2026 → 26/10/2026 | 110,64 ha / 43,25 ha | Píxeles que cambian de clase × 0,01 ha (10 m × 10 m) | Estimado (cálculo) | Consulta del 20/11/2026 |
 | Agua nueva / agua que ya no está, 13/11/2024 → 21/06/2019 | 1.097,89 ha / 11,47 ha | Ídem | Estimado (cálculo) | Consulta del 20/11/2026 |
 | Agua nueva / agua que ya no está, 13/11/2024 → 26/10/2026 | 287,31 ha / 40,58 ha | Ídem | Estimado (cálculo) | Consulta del 20/11/2026 |
+| Semáforo de confianza | Alta / media / baja (02/10 → 26/10/2026: baja, por nubes y zona sin dato) | Reglas propuestas por el equipo en `docs/PLAN_DATOS_REALES.md`, aplicadas en `apps/backend/app/confianza.py` | Criterio del equipo (no es un dato ni un umbral oficial) | 20/11/2026 |
+| Aviso de nubes > 20 % | Umbral de 20 % sobre la zona | Criterio del equipo, en `apps/backend/app/confianza.py` | Criterio del equipo | 20/11/2026 |
 
 ## Río Paraguay en Puerto Formosa
 

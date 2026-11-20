@@ -7,8 +7,8 @@ Regla del documento base (p. 4): los datos del kit quedan **congelados al 31/10/
 | # | Funcionalidad | Tipo | Estado |
 |---|---|---|---|
 | 1 | Comparador antes/después con deslizador, capa NDWI y capa de diferencias | Base | Parcial: hay capa de diferencias y opacidad; faltan el deslizador y la capa NDWI |
-| 2 | Elección automática entre óptico y radar si hay más de 20 % de nubes | Base | **Versión mínima en curso:** aviso de nubes > 20 %. Sin radar |
-| 3 | Ficha de confianza: sensor, fecha y hora, resolución, % de nubes sobre la zona y semáforo | Base | **En curso** |
+| 2 | Elección automática entre óptico y radar si hay más de 20 % de nubes | Base | **Versión mínima hecha:** aviso de nubes > 20 %. Sin radar |
+| 3 | Ficha de confianza: sensor, fecha y hora, resolución, % de nubes sobre la zona y semáforo | Base | **Hecha** (commits `d6ebf2a`, `f6c9a1a`, `58a8741`). Las reglas son una propuesta a confirmar |
 | 4 | Agua nueva contra agua de siempre (Global Surface Water) | Diferenciación | Pendiente |
 | 5 | Exposición de infraestructura (capas del IGN) | Diferenciación | Pendiente |
 

@@ -43,7 +43,8 @@ Variables de entorno opcionales: ver `.env.example`.
 ## Probar
 - **Flujo principal:** abrir http://localhost:5173, elegir las dos fechas y presionar *Comparar*. Se superponen en el mapa el agua nueva (azul) y el agua que ya no está (naranja).
 - **Entrada inválida:** elegir la misma fecha en ambos campos. La interfaz muestra *"Elegí dos escenas distintas para comparar."* y se puede seguir trabajando.
-- **Pruebas automáticas:** `cd apps/backend && uv run pytest` (40 pruebas) y `cd apps/frontend && npm test` (37 pruebas)
+- **Ficha de confianza:** junto al resultado aparece un semáforo (alta, media o baja) con sus motivos: nubes, zona sin dato, días entre fechas y altura del sol. Con las escenas incluidas, la comparación 02/10 → 26/10/2026 da **baja** por el 20,1 % de nubes, y lo avisa.
+- **Pruebas automáticas:** `cd apps/backend && uv run pytest` (50 pruebas) y `cd apps/frontend && npm test` (43 pruebas)
 - **Compilación del frontend:** `cd apps/frontend && npm run build`
 - Registro de la última prueba desde un clon limpio: [docs/entregables/prueba_clon_limpio.md](docs/entregables/prueba_clon_limpio.md)
 - Ejemplos con `curl`: [docs/CONTRATO_API.md](docs/CONTRATO_API.md)

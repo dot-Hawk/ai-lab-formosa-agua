@@ -17,17 +17,23 @@ Lo usan los técnicos de la mesa interinstitucional por El Niño que siguen el r
 - Elegir dos de las cuatro escenas Sentinel-2 reales (21/06/2019, 13/11/2024, 02/10/2026 y 26/10/2026) y compararlas.
 - Mapa con el agua nueva en azul y el agua que ya no está en naranja, con opacidad regulable, sobre un recorte de 7 × 7,8 km (Formosa, Alberdi y bañados del sur).
 - Superficie de cada cambio en hectáreas, con un umbral NDWI que se puede ajustar (por defecto 0).
-- Tabla antes/después con fecha de captura, satélite, producto, resolución, cobertura de nubes, fuente y categoría de cada escena.
+- Tabla antes/después con fecha y hora de captura, satélite, producto, resolución, cobertura de nubes, fuente y categoría de cada escena.
+- Semáforo de confianza del resultado (alta, media o baja) con el motivo de cada criterio: nubes y zona sin dato sobre el recorte, días entre fechas y altura del sol. Las reglas están escritas en pantalla.
+- Aviso cuando una escena supera el 20 % de nubes sobre la zona: lo de abajo no se analiza y haría falta radar (Sentinel-1), que no está integrado.
 - Altura del río en Puerto Formosa en cada fecha (serie K1 limpia), sobre una escala con los umbrales del INA: aguas bajas 1,60 m, alerta 7,80 m y evacuación 8,30 m. Si falta el dato, muestra "Sin dato".
 - Píxeles con nube o sombra excluidos del cálculo.
 - Mensajes de carga, catálogo vacío y error. El caso inválido (misma escena dos veces) devuelve *"Elegí dos escenas distintas para comparar."* y se puede seguir trabajando.
 - Leyenda PROTOTIPO y advertencia de que un cambio detectado es un indicio, no una afectación comprobada.
-- 40 pruebas del backend y 37 del frontend, todas pasando en un clon limpio (20/11/2026).
+- 50 pruebas del backend y 43 del frontend, todas pasando (20/11/2026).
 
 ## Qué falta para que la mesa la use
 - **Zonas:** hoy hay un solo recorte. Para elegir cualquier sector de la provincia hay que dibujar el área en el mapa y descargar las escenas al momento (el script ya existe; falta conectarlo a la interfaz). Estimado: 1 a 2 semanas.
 - **Fechas:** solo hay cuatro escenas cargadas. Hay que automatizar la descarga de cada pasada nueva de Sentinel-2 (cada 5 días aproximadamente).
-- **Nubes:** integrar Sentinel-1 (radar), que ve a través de las nubes, para los días de lluvia. Estimado: 2 a 4 semanas.
+- **Nubes:** integrar Sentinel-1 (radar), que ve a través de las nubes, para los días de lluvia. Hoy la herramienta solo avisa cuando hay más de 20 % de nubes. Estimado: 2 a 4 semanas.
+- **Agua de siempre:** restar el agua permanente y estacional (Global Surface Water, JRC) para mostrar solo el agua donde normalmente no hay.
+- **Infraestructura:** cruzar el agua nueva con rutas, escuelas y centros de salud (capas del IGN).
+- **Semáforo:** validar con la mesa las reglas, que hoy son una propuesta del equipo.
+- Plan detallado: [PLAN_DATOS_REALES.md](../PLAN_DATOS_REALES.md).
 - **Validación:** contrastar los cambios con relevamientos en terreno de Defensa Civil o con el Global Surface Water Explorer para ajustar el umbral NDWI.
 - **Río:** conectar la altura del río al servicio del INA en lugar de la serie congelada al 31/10/2026.
 - **Puesta en marcha:** publicar la herramienta en un servidor de la provincia, con acceso para los técnicos.

@@ -24,6 +24,9 @@ Lista de escenas disponibles. `200` →
   "categoria": "Observado | Simulado",
   "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_21JUM_20261026_0_L2A",
   "consultado": "2026-11-20",
+  "captura_utc": "2026-10-26T13:59:57Z",
+  "sol_elevacion_grados": 63.5,
+  "incidencia_grados": 10.9,
   "bounds": [[sur, oeste], [norte, este]]
 }]
 ```
@@ -35,6 +38,9 @@ Lista de escenas disponibles. `200` →
 | `sin_dato_pct` | Porcentaje del recorte excluido del cálculo (nubes, sombras, saturado o sin dato, según la capa SCL) |
 | `url` | Ítem STAC de la escena en Earth Search |
 | `consultado` | Fecha en que se descargó la escena |
+| `captura_utc` | Instante de la toma, en UTC (la interfaz lo muestra en hora de Argentina, UTC−3) |
+| `sol_elevacion_grados` | Altura del sol sobre el horizonte en la toma |
+| `incidencia_grados` | Ángulo de visión del satélite respecto de la vertical; `null` si el catálogo no lo informa |
 
 Escenas cargadas hoy: `s2-2019-06-21`, `s2-2024-11-13`, `s2-2026-10-02` y `s2-2026-10-26`.
 
@@ -62,10 +68,24 @@ Salida `200`:
     "umbrales": {"aguas_bajas": 1.6, "alerta": 7.8, "evacuacion": 8.3},
     "fuente": "INA · K1 (serie limpiada por el equipo) y K3 · Dato observado"
   },
+  "confianza": {
+    "nivel": "baja",                      // alta | media | baja: el peor de los criterios
+    "dias_entre_fechas": 24,
+    "motivos": [
+      {"nivel": "baja", "texto": "Nubes sobre la zona: hasta 20,1 %"},
+      {"nivel": "baja", "texto": "Zona sin dato (nubes, sombras o bordes): hasta 25,2 %"},
+      {"nivel": "alta", "texto": "24 días entre las fechas"},
+      {"nivel": "alta", "texto": "Sol a 58,6° sobre el horizonte"}
+    ],
+    "criterios": "Nubes y píxeles sin dato en la zona: alta < 5 % ..."
+  },
+  "avisos": ["La escena del 26/10/2026 tiene 20,1 % de nubes sobre la zona: ... Sentinel-1 ..."],
   "advertencia": "Un cambio detectado es un indicio, no una afectación comprobada. ...",
   "leyenda": "PROTOTIPO · ..."
 }
 ```
+
+`confianza` sigue las reglas propuestas en [PLAN_DATOS_REALES.md](PLAN_DATOS_REALES.md) (`apps/backend/app/confianza.py`). `avisos` es una lista, vacía si no hay nada que advertir; hoy avisa cuando una escena supera el 20 % de nubes sobre la zona.
 
 Errores:
 | Código | Cuándo |
