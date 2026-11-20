@@ -13,14 +13,16 @@ const y = (m) => MARGEN + posicionEnEscala(m, { max: ESCALA_MAX_M, alto: ALTO })
  * Escala hidrométrica como la de los puertos: una regla graduada de 0 a 10 m con
  * las franjas de referencia del INA y una marca por cada fecha comparada.
  */
-export default function EscalaHidrometrica({ estacion, umbrales, lecturas }) {
+export default function EscalaHidrometrica({ estacion, umbrales, lecturas, maximo = MAXIMO_HISTORICO }) {
+  const hay = (clave) => umbrales[clave] != null;
   const metros = Array.from({ length: ESCALA_MAX_M * 2 + 1 }, (_, i) => i / 2);
   const conDato = lecturas.filter((l) => l.altura != null);
   const sinDato = lecturas.filter((l) => l.altura == null);
 
   const descripcion =
-    `Escala hidrométrica de ${estacion}: aguas bajas ${formatearMetros(umbrales.aguas_bajas)}, ` +
-    `alerta ${formatearMetros(umbrales.alerta)}, evacuación ${formatearMetros(umbrales.evacuacion)}.` +
+    `Escala hidrométrica de ${estacion}:` +
+    (hay("aguas_bajas") ? ` aguas bajas ${formatearMetros(umbrales.aguas_bajas)},` : "") +
+    ` alerta ${formatearMetros(umbrales.alerta)}, evacuación ${formatearMetros(umbrales.evacuacion)}.` +
     conDato.map((l) => ` ${l.etiqueta}: ${formatearMetros(l.altura)}.`).join("");
 
   return (
@@ -36,8 +38,10 @@ export default function EscalaHidrometrica({ estacion, umbrales, lecturas }) {
           height={y(umbrales.evacuacion) - y(ESCALA_MAX_M)} />
         <rect className="franja-alerta" x={X_REGLA} y={y(umbrales.evacuacion)} width={ANCHO_REGLA}
           height={y(umbrales.alerta) - y(umbrales.evacuacion)} />
-        <rect className="franja-bajas" x={X_REGLA} y={y(umbrales.aguas_bajas)} width={ANCHO_REGLA}
-          height={y(0) - y(umbrales.aguas_bajas)} />
+        {hay("aguas_bajas") && (
+          <rect className="franja-bajas" x={X_REGLA} y={y(umbrales.aguas_bajas)} width={ANCHO_REGLA}
+            height={y(0) - y(umbrales.aguas_bajas)} />
+        )}
         <rect className="regla" x={X_REGLA} y={y(ESCALA_MAX_M)} width={ANCHO_REGLA} height={ALTO} />
 
         {/* Graduación: marca larga cada metro, corta cada medio metro */}
@@ -60,7 +64,7 @@ export default function EscalaHidrometrica({ estacion, umbrales, lecturas }) {
           ["evacuacion", `Evacuación ${formatearMetros(umbrales.evacuacion)}`],
           ["alerta", `Alerta ${formatearMetros(umbrales.alerta)}`],
           ["aguas_bajas", `Aguas bajas ${formatearMetros(umbrales.aguas_bajas)}`],
-        ].map(([clave, texto]) => (
+        ].filter(([clave]) => hay(clave)).map(([clave, texto]) => (
           <g key={clave} className={`umbral umbral-${clave}`}>
             <line x1={X_REGLA} x2={X_TEXTO - 2} y1={y(umbrales[clave])} y2={y(umbrales[clave])} />
             <text x={X_TEXTO} y={y(umbrales[clave])} dy={clave === "alerta" ? 12 : -4}>
@@ -70,12 +74,14 @@ export default function EscalaHidrometrica({ estacion, umbrales, lecturas }) {
         ))}
 
         {/* Máximo histórico de la serie */}
-        <g className="maximo">
-          <line x1={X_REGLA - 4} x2={X_REGLA + ANCHO_REGLA + 4} y1={y(MAXIMO_HISTORICO.altura)} y2={y(MAXIMO_HISTORICO.altura)} />
-          <text x={X_TEXTO} y={y(MAXIMO_HISTORICO.altura)} dy={-4}>
-            Máximo {formatearMetros(MAXIMO_HISTORICO.altura)}, {formatearFecha(MAXIMO_HISTORICO.fecha)}
-          </text>
-        </g>
+        {maximo && (
+          <g className="maximo">
+            <line x1={X_REGLA - 4} x2={X_REGLA + ANCHO_REGLA + 4} y1={y(maximo.altura)} y2={y(maximo.altura)} />
+            <text x={X_TEXTO} y={y(maximo.altura)} dy={-4}>
+              Máximo {formatearMetros(maximo.altura)}, {formatearFecha(maximo.fecha)}
+            </text>
+          </g>
+        )}
 
         {/* Lecturas de las fechas comparadas */}
         {conDato.map((l) => (
@@ -99,8 +105,7 @@ export default function EscalaHidrometrica({ estacion, umbrales, lecturas }) {
         </ul>
       )}
       <p className="fuente">
-        Umbrales: INA, kit K3. Máximo: serie INA, {MAXIMO_HISTORICO.contexto}. Las referencias no son una
-        decisión de alerta ni de evacuación.
+        Umbrales: INA.{maximo && ` Máximo: serie INA, ${maximo.contexto}.`}
       </p>
     </figure>
   );

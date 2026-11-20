@@ -37,4 +37,19 @@ describe("EscalaHidrometrica", () => {
     render(<EscalaHidrometrica estacion="Puerto Formosa" umbrales={umbrales} lecturas={[]} />);
     expect(screen.getByRole("img", { name: /Escala hidrométrica de Puerto Formosa/ })).toBeInTheDocument();
   });
+
+  it("omite el máximo histórico de Formosa en otras escalas", () => {
+    render(<EscalaHidrometrica estacion="Puerto Bermejo" umbrales={umbrales} lecturas={[]} maximo={null} />);
+    expect(screen.queryByText(/9,81 m/)).not.toBeInTheDocument();
+  });
+
+  it("no dibuja umbrales que la escala no tiene informados", () => {
+    render(
+      <EscalaHidrometrica estacion="Puerto Bermejo" umbrales={{ aguas_bajas: null, alerta: 6.5, evacuacion: 7 }}
+        lecturas={[]} maximo={null} />,
+    );
+    expect(screen.queryByText(/Aguas bajas/)).not.toBeInTheDocument();
+    expect(screen.getByText("Alerta 6,50 m")).toBeInTheDocument();
+  });
 });
+
