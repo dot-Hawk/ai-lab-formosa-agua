@@ -13,9 +13,38 @@ ESCENAS_DIR = DATA_DIR / "escenas"
 NIVELES_CSV = DATA_DIR / "niveles_formosa_limpio.csv"
 
 
+ZONAS_JSON = DATA_DIR / "zonas.json"
+ZONAS_DIR = DATA_DIR / "zonas"
+ZONA_ORIGINAL = "formosa"
+
+
+@lru_cache
+def zonas() -> list[dict]:
+    """Zonas clave de la provincia (data/zonas.json). Sin el archivo, solo la zona original."""
+    if not ZONAS_JSON.exists():
+        return [{"id": ZONA_ORIGINAL, "nombre": "Zona de estudio", "estacion": "k1_formosa"}]
+    return json.loads(ZONAS_JSON.read_text(encoding="utf-8"))
+
+
+def buscar_zona(zona_id: str) -> dict | None:
+    return next((z for z in zonas() if z["id"] == zona_id), None)
+
+
 @lru_cache
 def catalogo() -> list[dict]:
-    return json.loads((ESCENAS_DIR / "catalogo.json").read_text(encoding="utf-8"))
+    """Escenas de todas las zonas. La zona original está en data/escenas; las demás, en data/zonas/<id>."""
+    salida = [e | {"zona": e.get("zona", ZONA_ORIGINAL), "_carpeta": str(ESCENAS_DIR)}
+              for e in json.loads((ESCENAS_DIR / "catalogo.json").read_text(encoding="utf-8"))]
+    for z in zonas():
+        ruta = ZONAS_DIR / z["id"] / "catalogo.json"
+        if z["id"] != ZONA_ORIGINAL and ruta.exists():
+            salida += [e | {"zona": z["id"], "_carpeta": str(ruta.parent)}
+                       for e in json.loads(ruta.read_text(encoding="utf-8"))]
+    return salida
+
+
+def _ruta(escena: dict) -> Path:
+    return Path(escena.get("_carpeta", ESCENAS_DIR)) / escena["archivo"]
 
 
 def buscar_escena(escena_id: str) -> dict | None:
@@ -28,13 +57,13 @@ def cargar_bandas(escena: dict) -> tuple[np.ndarray, np.ndarray]:
     Formato actual: .npz con arrays 'verde' y 'nir' en valores digitales L2A (÷10000).
     Si el rol A usa GeoTIFF, cambiar solo esta función (p. ej. con rasterio).
     """
-    with np.load(ESCENAS_DIR / escena["archivo"]) as z:
+    with np.load(_ruta(escena)) as z:
         return z["verde"] / 10_000, z["nir"] / 10_000
 
 
 def cargar_banda(escena: dict, nombre: str) -> np.ndarray | None:
     """Una banda como reflectancia 0-1 (NaN = sin dato), o None si la escena no la tiene."""
-    with np.load(ESCENAS_DIR / escena["archivo"]) as z:
+    with np.load(_ruta(escena)) as z:
         if nombre not in z.files:
             return None
         crudo = z[nombre]
@@ -122,18 +151,19 @@ GSW_JSON = DATA_DIR / "gsw_zona.json"
 
 
 @lru_cache
-def gsw_ocurrencia() -> np.ndarray | None:
+def gsw_ocurrencia(zona: str = ZONA_ORIGINAL) -> np.ndarray | None:
     """% de tiempo con agua entre 1984 y 2021 por píxel, o None si no se descargó la capa."""
-    if not GSW_NPZ.exists():
+    ruta = GSW_NPZ if zona == ZONA_ORIGINAL else ZONAS_DIR / zona / "gsw.npz"
+    if not ruta.exists():
         return None
-    with np.load(GSW_NPZ) as z:
+    with np.load(ruta) as z:
         return z["occurrence"]
 
 
 @lru_cache
-def infraestructura() -> dict:
+def infraestructura(zona: str = ZONA_ORIGINAL) -> dict:
     """Puntos y líneas del IGN en la zona, o {} si no se descargaron."""
-    ruta = DATA_DIR / "infraestructura_ign.json"
+    ruta = DATA_DIR / "infraestructura_ign.json" if zona == ZONA_ORIGINAL else ZONAS_DIR / zona / "infraestructura.json"
     return json.loads(ruta.read_text(encoding="utf-8")) if ruta.exists() else {}
 
 
@@ -171,3 +201,21 @@ def cargar_radar(pasada: dict) -> np.ndarray:
 def radar_validacion() -> dict:
     ruta = RADAR_DIR / "validacion.json"
     return json.loads(ruta.read_text(encoding="utf-8")) if ruta.exists() else {}
+
+
+# --- Vista provincial (data/provincia) ------------------------------------------------------------
+
+PROVINCIA_DIR = DATA_DIR / "provincia"
+
+
+@lru_cache
+def provincia() -> dict:
+    """Contorno de Formosa y capa de agua de siempre provincial, o {} si no se descargaron."""
+    ruta = PROVINCIA_DIR / "provincia.json"
+    if not ruta.exists():
+        return {}
+    datos = json.loads(ruta.read_text(encoding="utf-8"))
+    png = (PROVINCIA_DIR / datos["agua_siempre"]["archivo"]).read_bytes()
+    import base64
+    datos["agua_siempre"]["png"] = "data:image/png;base64," + base64.b64encode(png).decode()
+    return datos

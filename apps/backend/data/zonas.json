@@ -1,0 +1,58 @@
+[
+  {
+    "id": "formosa",
+    "nombre": "Formosa capital, Alberdi y bañados del sur",
+    "centro": [-58.145, -26.205],
+    "estacion": "k1_formosa",
+    "descripcion": "Zona de estudio original: costa del río Paraguay, riacho y bañados al sur de la ciudad."
+  },
+  {
+    "id": "clorinda",
+    "nombre": "Clorinda y desembocadura del Pilcomayo",
+    "centro": [-57.68, -25.31],
+    "estacion": "ina_55",
+    "descripcion": "Confluencia del Pilcomayo con el Paraguay, frente a Asunción. Escala de Puerto Pilcomayo."
+  },
+  {
+    "id": "herradura",
+    "nombre": "Herradura y laguna Herradura",
+    "centro": [-58.30, -26.49],
+    "estacion": null,
+    "descripcion": "Laguna y costa del río Paraguay, aguas abajo de Formosa."
+  },
+  {
+    "id": "el_colorado",
+    "nombre": "El Colorado y río Bermejo",
+    "centro": [-59.37, -26.31],
+    "estacion": null,
+    "descripcion": "Valle del río Bermejo, límite con Chaco."
+  },
+  {
+    "id": "pirane",
+    "nombre": "Pirané",
+    "centro": [-59.11, -25.73],
+    "estacion": null,
+    "descripcion": "Centro-este de la provincia: riachos y bañados del interior."
+  },
+  {
+    "id": "las_lomitas",
+    "nombre": "Las Lomitas",
+    "centro": [-60.59, -24.71],
+    "estacion": null,
+    "descripcion": "Centro-oeste de la provincia."
+  },
+  {
+    "id": "banado_la_estrella",
+    "nombre": "Bañado La Estrella",
+    "centro": [-60.95, -24.40],
+    "estacion": null,
+    "descripcion": "Gran humedal alimentado por el río Pilcomayo."
+  },
+  {
+    "id": "ingeniero_juarez",
+    "nombre": "Ingeniero Juárez",
+    "centro": [-61.85, -23.90],
+    "estacion": null,
+    "descripcion": "Oeste de la provincia, la región más seca."
+  }
+]

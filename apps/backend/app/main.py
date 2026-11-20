@@ -78,7 +78,27 @@ def salud():
 
 @app.get("/api/escenas")
 def escenas():
-    return [{k: v for k, v in e.items() if k != "archivo"} for e in datos.catalogo()]
+    return [_publica(e) for e in datos.catalogo()]
+
+
+@app.get("/api/provincia")
+def provincia():
+    """Vista de contexto de toda la provincia: contorno (IGN) y agua de siempre (GSW, unos 250 m)."""
+    datos_provincia = datos.provincia()
+    if not datos_provincia:
+        raise HTTPException(404, "No está descargada la vista provincial (scripts/descargar_provincia.py).")
+    return datos_provincia
+
+
+@app.get("/api/zonas")
+def zonas():
+    """Zonas clave de la provincia con sus límites (de su primera escena) y cuántas fechas tienen."""
+    salida = []
+    for z in datos.zonas():
+        propias = [e for e in datos.catalogo() if e["zona"] == z["id"]]
+        if propias:
+            salida.append(z | {"bounds": propias[0]["bounds"], "fechas": len(propias)})
+    return salida
 
 
 def _overlay_png(mascara: np.ndarray) -> str:
@@ -120,6 +140,8 @@ def _radar(a: dict, b: dict) -> dict | None:
     """
     if not confianza.necesita_radar(a, b):
         return None
+    if a.get("zona", datos.ZONA_ORIGINAL) != datos.ZONA_ORIGINAL:
+        return {"usado": False, "motivo": "Todavía no hay pasadas de radar descargadas para esta zona."}
     pa = _pasada_cercana(a["fecha"])
     pb = _pasada_cercana(b["fecha"], pa.get("orbita_relativa") if pa else None)
     if not pa or not pb or pa["id"] == pb["id"]:
@@ -149,11 +171,11 @@ def _radar(a: dict, b: dict) -> dict | None:
 
 def _infraestructura(mascara: np.ndarray, escena: dict, umbral_pct: float, radio_m: float) -> dict | None:
     """Establecimientos y rutas del IGN cerca del agua nueva donde normalmente no hay agua."""
-    infra = datos.infraestructura()
+    infra = datos.infraestructura(escena["zona"])
     if not infra:
         return None
     agua = mascara == AGUA_NUEVA
-    ocurrencia = datos.gsw_ocurrencia()
+    ocurrencia = datos.gsw_ocurrencia(escena["zona"])
     con_gsw = ocurrencia is not None and ocurrencia.shape == mascara.shape
     if con_gsw:
         agua &= ocurrencia < umbral_pct
@@ -229,9 +251,9 @@ def _agua_png(indice: np.ndarray, umbral: float) -> str:
     return _png(rgba)
 
 
-def _agua_habitual(mascara: np.ndarray, umbral_pct: float, res: float) -> dict | None:
+def _agua_habitual(mascara: np.ndarray, umbral_pct: float, res: float, zona: str = datos.ZONA_ORIGINAL) -> dict | None:
     """Separa el agua nueva en habitual e inusual con Global Surface Water. None si no hay capa."""
-    ocurrencia = datos.gsw_ocurrencia()
+    ocurrencia = datos.gsw_ocurrencia(zona)
     if ocurrencia is None or ocurrencia.shape != mascara.shape:
         return None
     inusual, habitual = separar_agua_nueva(mascara, ocurrencia, umbral_pct)
@@ -239,7 +261,7 @@ def _agua_habitual(mascara: np.ndarray, umbral_pct: float, res: float) -> dict |
     solo_inusual[inusual] = AGUA_NUEVA
     capa_siempre = np.zeros((*mascara.shape, 4), dtype="uint8")
     capa_siempre[ocurrencia >= umbral_pct] = (70, 90, 110, 120)
-    meta = datos.gsw_metadatos()
+    meta = datos.gsw_metadatos()  # mismo origen y período para todas las zonas
     return {
         "umbral_pct": umbral_pct,
         "area_agua_nueva_inusual_ha": round(area_hectareas(int(inusual.sum()), res), 2),
@@ -255,7 +277,7 @@ def _agua_habitual(mascara: np.ndarray, umbral_pct: float, res: float) -> dict |
 
 
 def _publica(e: dict) -> dict:
-    return {k: v for k, v in e.items() if k != "archivo"}
+    return {k: v for k, v in e.items() if k not in ("archivo", "_carpeta")}
 
 
 DIAS_LLUVIA_PREVIA = 30
@@ -295,6 +317,33 @@ def _lluvia(a: dict, b: dict) -> dict:
     }
 
 
+def _nivel_rio(estacion: str | None, a: dict, b: dict) -> dict | None:
+    """Altura del río en la escala de referencia de la zona, o None si no hay una cercana."""
+    if estacion == "k1_formosa":
+        k3 = datos.umbrales_k3()["estaciones"]["formosa"]
+        return {
+            "estacion": k3["nombre"], "unidad": "m",
+            "fecha_a": a["fecha"], "altura_a": datos.nivel_rio(a["fecha"]),
+            "fecha_b": b["fecha"], "altura_b": datos.nivel_rio(b["fecha"]),
+            "umbrales": {"aguas_bajas": k3["aguas_bajas"], "alerta": k3["alerta"], "evacuacion": k3["evacuacion"]},
+            "fuente": "INA · K1 (serie limpiada por el equipo) y K3 · Dato observado",
+        }
+    if estacion and estacion.startswith("ina_"):
+        site = int(estacion.split("_")[1])
+        e = next((x for x in datos.estaciones_region() if x["sitecode"] == site), None)
+        if e is None:
+            return None
+        return {
+            "estacion": e["nombre"], "unidad": "m",
+            "fecha_a": a["fecha"], "altura_a": datos.altura_ina(site, a["fecha"]),
+            "fecha_b": b["fecha"], "altura_b": datos.altura_ina(site, b["fecha"]),
+            "umbrales": {"aguas_bajas": e["nivel_de_aguas_bajas"], "alerta": e["nivel_de_alerta"],
+                         "evacuacion": e["nivel_de_evacuacion"]},
+            "fuente": "INA, API pública del Sistema de Alerta · Dato observado",
+        }
+    return None
+
+
 @app.post("/api/comparar")
 def comparar(pedido: PedidoComparar):
     if pedido.escena_a == pedido.escena_b:
@@ -303,6 +352,8 @@ def comparar(pedido: PedidoComparar):
     faltantes = [i for i, e in ((pedido.escena_a, a), (pedido.escena_b, b)) if e is None]
     if faltantes:
         raise HTTPException(404, f"Escena(s) inexistente(s): {', '.join(faltantes)}")
+    if a["zona"] != b["zona"]:
+        raise HTTPException(400, "Las escenas son de zonas distintas; elegí dos fechas de la misma zona.")
     if (a["satelite"], a["resolucion_m"]) != (b["satelite"], b["resolucion_m"]):
         raise HTTPException(
             400, "Las escenas son de distinto satélite o resolución; compararlas genera cambios falsos."
@@ -313,7 +364,7 @@ def comparar(pedido: PedidoComparar):
     radar = _radar(a, b)
     mascara = detectar_cambio(ndwi_a, ndwi_b, pedido.umbral_agua)
     res = a["resolucion_m"]
-    k3 = datos.umbrales_k3()["estaciones"]["formosa"]
+    zona = datos.buscar_zona(a["zona"]) or {"id": a["zona"], "estacion": None}
 
     return {
         "escena_a": _publica(a),
@@ -331,20 +382,12 @@ def comparar(pedido: PedidoComparar):
         "ndvi_b_png": capas_b["ndvi"],
         "ndvi_medio": {"a": capas_a["ndvi_medio"], "b": capas_b["ndvi_medio"]},
         "bounds": a["bounds"],
-        "nivel_rio": {
-            "estacion": k3["nombre"],
-            "unidad": "m",
-            "fecha_a": a["fecha"],
-            "altura_a": datos.nivel_rio(a["fecha"]),
-            "fecha_b": b["fecha"],
-            "altura_b": datos.nivel_rio(b["fecha"]),
-            "umbrales": {"aguas_bajas": k3["aguas_bajas"], "alerta": k3["alerta"], "evacuacion": k3["evacuacion"]},
-            "fuente": "INA · K1 (serie limpiada por el equipo) y K3 · Dato observado",
-        },
-        "agua_habitual": _agua_habitual(mascara, pedido.umbral_habitual_pct, res),
+        "zona": {k: zona.get(k) for k in ("id", "nombre", "descripcion")},
+        "nivel_rio": _nivel_rio(zona.get("estacion"), a, b),
+        "agua_habitual": _agua_habitual(mascara, pedido.umbral_habitual_pct, res, a["zona"]),
         "infraestructura": _infraestructura(mascara, a, pedido.umbral_habitual_pct, pedido.radio_infraestructura_m),
-        "region": _region(a, b),
-        "lluvia": _lluvia(a, b),
+        "region": _region(a, b) if zona.get("estacion") else None,
+        "lluvia": _lluvia(a, b) if a["zona"] == datos.ZONA_ORIGINAL else None,
         "confianza": confianza.evaluar(a, b),
         "radar": radar,
         "avisos": confianza.avisos(a, b, radar_usado=bool(radar and radar["usado"])),
