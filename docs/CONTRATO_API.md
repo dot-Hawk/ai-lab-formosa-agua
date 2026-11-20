@@ -12,22 +12,36 @@ Formato: JSON. Errores: siempre `{"detalle": "mensaje legible"}` (422 agrega `er
 Lista de escenas disponibles. `200` →
 ```json
 [{
-  "id": "demo-2026-10-01",
-  "fecha": "2026-10-01",
-  "fuente": "Copernicus · Sentinel-2 L2A · tile ...",
+  "id": "s2-2026-10-26",
+  "fecha": "2026-10-26",
+  "fuente": "Copernicus Sentinel-2 (ESA), escena S2A_21JUM_20261026_0_L2A, vía Earth Search (AWS Open Data)",
   "satelite": "Sentinel-2",
-  "producto": "L2A",
+  "producto": "L2A, Sentinel-2A, tile 21JUM",
   "resolucion_m": 10,
-  "nubes_pct": 4.0,
+  "nubes_pct": 20.1,
+  "nubes_escena_pct": 9.2,
+  "sin_dato_pct": 25.2,
   "categoria": "Observado | Simulado",
+  "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_21JUM_20261026_0_L2A",
+  "consultado": "2026-11-20",
   "bounds": [[sur, oeste], [norte, este]]
 }]
 ```
 
+| Campo | Significado |
+|---|---|
+| `nubes_pct` | Porcentaje del recorte cubierto por nubes o sombras (es el que muestra la interfaz) |
+| `nubes_escena_pct` | Porcentaje de nubes de la escena Sentinel-2 completa, según su metadato |
+| `sin_dato_pct` | Porcentaje del recorte excluido del cálculo (nubes, sombras, saturado o sin dato, según la capa SCL) |
+| `url` | Ítem STAC de la escena en Earth Search |
+| `consultado` | Fecha en que se descargó la escena |
+
+Escenas cargadas hoy: `s2-2019-06-21`, `s2-2024-11-13`, `s2-2026-10-02` y `s2-2026-10-26`.
+
 ## `POST /api/comparar`
 Entrada:
 ```json
-{"escena_a": "demo-2026-10-01", "escena_b": "demo-2026-10-31", "umbral_agua": 0.0}
+{"escena_a": "s2-2026-10-02", "escena_b": "s2-2026-10-26", "umbral_agua": 0.0}
 ```
 `umbral_agua` es opcional (NDWI entre -1 y 1, por defecto 0).
 
@@ -37,16 +51,16 @@ Salida `200`:
   "escena_a": { ...metadatos },
   "escena_b": { ...metadatos },
   "umbral_agua": 0.0,
-  "area_agua_nueva_ha": 80.0,
-  "area_agua_perdida_ha": 0.0,
+  "area_agua_nueva_ha": 110.64,
+  "area_agua_perdida_ha": 43.25,
   "overlay_png": "data:image/png;base64,...",   // azul = agua nueva, naranja = agua perdida
-  "bounds": [[-26.2, -58.18], [-26.182, -58.16]],
+  "bounds": [[-26.24, -58.18], [-26.17, -58.11]],
   "nivel_rio": {
     "estacion": "FORMOSA (Puerto Formosa)", "unidad": "m",
-    "fecha_a": "2026-10-01", "altura_a": null,   // null = sin dato en la serie K1 limpia
-    "fecha_b": "2026-10-31", "altura_b": null,
+    "fecha_a": "2026-10-02", "altura_a": 2.35,   // null = sin dato en la serie K1 limpia
+    "fecha_b": "2026-10-26", "altura_b": 5.44,
     "umbrales": {"aguas_bajas": 1.6, "alerta": 7.8, "evacuacion": 8.3},
-    "fuente": "INA · K1 ... · Dato observado"
+    "fuente": "INA · K1 (serie limpiada por el equipo) y K3 · Dato observado"
   },
   "advertencia": "Un cambio detectado es un indicio, no una afectación comprobada. ...",
   "leyenda": "PROTOTIPO · ..."
@@ -63,9 +77,10 @@ Errores:
 ## Ejemplo reproducible
 ```bash
 curl -X POST localhost:8000/api/comparar -H 'Content-Type: application/json' \
-  -d '{"escena_a":"demo-2026-10-01","escena_b":"demo-2026-10-31"}'
+  -d '{"escena_a":"s2-2026-10-02","escena_b":"s2-2026-10-26"}'
+# → 200 · area_agua_nueva_ha 110.64 · area_agua_perdida_ha 43.25
 # Caso inválido:
 curl -X POST localhost:8000/api/comparar -H 'Content-Type: application/json' \
-  -d '{"escena_a":"demo-2026-10-01","escena_b":"demo-2026-10-01"}'   # → 400
+  -d '{"escena_a":"s2-2026-10-02","escena_b":"s2-2026-10-02"}'   # → 400 "Elegí dos escenas distintas para comparar."
 ```
 Documentación interactiva: http://localhost:8000/docs
