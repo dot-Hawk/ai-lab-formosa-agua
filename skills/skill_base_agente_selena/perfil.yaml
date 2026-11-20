@@ -1,15 +1,18 @@
 integrante:
   id: "PENDIENTE"
   alias: "Selena"
+  alias_de_uso: "Sele"
   alias_confirmado_en_registro: false
   nombre_real: "Selena Milagros Britez"
   nombre_en_registro: "Selena Brítez"
+  autor_git: "sbrittz"
 
 agente:
   id: "PENDIENTE"
   skill: "skill_base_agente_selena"
   runtime: "PENDIENTE"
   runtime_sesion_alta: "Codex con PowerShell y Git"
+  runtime_sesion_rol_d: "Claude Code (Claude Opus 5.5) con PowerShell, Git Bash y Git, 2026-11-20"
   soporte_subagentes: "PENDIENTE"
 
 git:
@@ -17,72 +20,175 @@ git:
   rama_base: "main"
   commit_base: "f1ca354def7dbe707a22f1920e48c5037da068d2"
   remoto: "origin"
+  url_remoto: "https://github.com/dot-Hawk/ai-lab-formosa-agua.git"
   referencia_base: "origin/main"
-  upstream_alta: "SIN CONFIGURAR"
-  rama_integracion: "PENDIENTE"
+  upstream: "origin/dev-Selena-Milagros-Britez"
+  ramas_incorporadas:
+    - rama: "origin/dev-Diego"
+      commit: "3ff4b86dd916e596fa654e84632d2fa29c88936b"
+      merge: "8385507"
+      motivo: "Armar los entregables sobre la versión actual del prototipo"
+  rama_integracion: "PENDIENTE (docs/ROLES.md propone main)"
 
 skill_general:
   archivo: "SKILL_BASE.md"
   version: "0.4.0"
   commit_referencia: "f1ca354def7dbe707a22f1920e48c5037da068d2"
   ultimo_commit_del_archivo: "0f21eb62870ff76cb49db419b638a8177205a5f4"
+  sin_cambios_verificado_en: "3ff4b86dd916e596fa654e84632d2fa29c88936b (origin/dev-Diego), 2026-11-20"
   plantillas: "PLANTILLAS.md"
 
 responsabilidades:
-  modulos: []
+  modulos:
+    - "Rol D · Entregables (docs/ROLES.md)"
+  rol_confirmado_por_equipo: false
   directorios_autorizados:
     - "skills/skill_base_agente_selena/"
-  alcance_autorizacion: "Alta de la skill personal"
+    - "docs/entregables/"
+    - "README.md"
+    - "docs/ROLES.md (sección de las 7 preguntas y fila del rol D)"
+  alcance_autorizacion: "Alta de la skill personal; rol D pedido por la integrante el 2026-11-20"
   archivos_compartidos:
     - "SKILL_BASE.md"
     - "PLANTILLAS.md"
     - "docs/CONTRATO_API.md"
     - "apps/backend/tests/test_api.py"
+  cambios_a_compartidos_sin_aprobacion_registrada:
+    - archivo: "docs/CONTRATO_API.md"
+      commit: "5d073d5"
+      cambio: "Ejemplos con los IDs reales de las escenas y campos nuevos de /api/escenas; solo documentación"
+      estado: "Pendiente de aviso y revisión del equipo"
   limites:
     - "Coordinar y obtener aprobación antes de cambiar recursos compartidos según el protocolo general"
     - "Preservar trabajo local y ramas ajenas"
     - "Solicitar autorización para operaciones sensibles y cambios de alcance"
+    - "No modificar código de apps/backend ni apps/frontend desde el rol D: los hallazgos se proponen al rol que corresponde"
 
-tareas: []
+tareas:
+  - id: "TASK-SETUP-SELENA"
+    titulo: "Crear la skill personal de Selena"
+    responsable: "Selena Milagros Britez"
+    estado: "HECHA"
+    commits: ["ebae4f9"]
+  - id: "TASK-D-01"
+    titulo: "Responder las 7 preguntas"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_REVISION"
+    archivos: ["docs/ROLES.md"]
+    criterios_de_aceptacion:
+      - "Las siete preguntas respondidas con datos que la herramienta muestra hoy"
+      - "Cifras iguales a las de la API y la ficha de fuentes"
+    pruebas_requeridas:
+      - "Comparar las cifras con /api/comparar en un clon limpio"
+    commits: ["3376fcb"]
+    pendiente: "Confirmación del equipo"
+  - id: "TASK-D-02"
+    titulo: "Ficha técnica"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_REVISION"
+    archivos: ["docs/entregables/ficha_tecnica.md"]
+    criterios_de_aceptacion:
+      - "Todas las secciones de la plantilla completas"
+      - "Funciones listadas solo si se pueden mostrar en vivo"
+    commits: ["82edd65"]
+    pendiente: "Roles de Agostina y Matías, reto confirmado con el CITF y commit o tag evaluable"
+  - id: "TASK-D-03"
+    titulo: "Ficha de fuentes"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_REVISION"
+    archivos: ["docs/entregables/ficha_fuentes.md"]
+    criterios_de_aceptacion:
+      - "Cada cifra, umbral, serie o capa con archivo o URL, fecha y categoría"
+      - "Resultados calculados separados de los datos observados"
+    commits: ["742b76f"]
+  - id: "TASK-D-04"
+    titulo: "Guion del pitch de 3 minutos"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_REVISION"
+    archivos: ["docs/entregables/guion_pitch.md"]
+    commits: ["71daa09"]
+    pendiente: "Repartir los bloques entre integrantes y cronometrar dos ensayos"
+  - id: "TASK-D-05"
+    titulo: "Guion y grabación del video de 120 segundos"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_CURSO"
+    archivos: ["docs/entregables/guion_video.md"]
+    commits: ["406450a"]
+    pendiente: "Grabar, exportar a MP4 y guardar dos copias locales"
+  - id: "TASK-D-06"
+    titulo: "Póster"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_CURSO"
+    archivos: ["docs/entregables/poster.md"]
+    commits: ["328b66d"]
+    pendiente: "Diseño, capturas, código QR e impresión"
+  - id: "TASK-D-07"
+    titulo: "Prueba desde un clon limpio"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_REVISION"
+    archivos: ["docs/entregables/prueba_clon_limpio.md"]
+    criterios_de_aceptacion:
+      - "Seguir solo el README en una carpeta vacía"
+      - "Pruebas del backend y del frontend, build, flujo principal y caso inválido"
+    commits: ["327f370"]
+    pendiente: "Repetirla sobre main una vez integrado; pasada manual por la interfaz"
+  - id: "TASK-D-08"
+    titulo: "README final"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_REVISION"
+    archivos: ["README.md", "docs/CONTRATO_API.md"]
+    commits: ["3503b0b", "5d073d5"]
+    pendiente: "Agregar el commit o tag evaluable"
 
 coordinacion:
   protocolo_revision: "VCPD"
   revision_antes_de_cada_bloque_de_cambios: true
   responsable_revision: "PENDIENTE"
   responsable_integracion: "PENDIENTE"
-  canal_comunicacion: "PENDIENTE"
+  canal_comunicacion: "PENDIENTE (docs/ROLES.md alude al grupo del equipo)"
   mecanismo_trabajo_no_publicado: "PENDIENTE"
   registro_roles: "docs/ROLES.md"
+  informe_ultimo_bloque: "skills/skill_base_agente_selena/INFORME_ROL_D.md"
 
 desarrollo:
   gestor_paquetes:
     backend: "uv"
     frontend: "npm"
   versiones_tecnologicas:
-    python: ">=3.11"
-    node: ">=20 según README"
+    python: "3.11 a 3.14 (con 3.15 falla pyyaml en Windows)"
+    python_probado: "3.14.10"
+    uv_probado: "0.13.7"
+    node: ">=20 según README; probado con 26.13.0"
+    npm_probado: "11.20.0"
     fastapi: ">=0.115"
     numpy: ">=2.0"
+    react: "^19.1.0"
     leaflet: "1.9.4"
     vite: "^6.0.0"
+    vitest: "^3.2.7"
   directorios:
     backend: "apps/backend"
     frontend: "apps/frontend"
   comandos:
     instalacion:
-      backend: "uv sync"
+      backend: "uv sync --python 3.14"
       frontend: "npm install"
     desarrollo:
       backend: "uv run uvicorn app.main:app --reload --port 8000"
       frontend: "npm run dev"
     pruebas:
       backend: "uv run pytest"
-      frontend: "PENDIENTE"
-    lint: "PENDIENTE"
-    tipos: "PENDIENTE"
+      frontend: "npm test"
+    lint: "PENDIENTE (sin script en los manifiestos)"
+    tipos: "PENDIENTE (sin script en los manifiestos)"
     compilacion:
-      backend: "PENDIENTE"
+      backend: "No aplica (Python sin paso de compilación)"
       frontend: "npm run build"
+  resultados_ultima_validacion:
+    fecha: "2026-11-20"
+    backend_pytest: "40 pasaron"
+    frontend_test: "37 pasaron"
+    frontend_build: "correcto"
 
 integracion:
   estrategia: "PENDIENTE"
