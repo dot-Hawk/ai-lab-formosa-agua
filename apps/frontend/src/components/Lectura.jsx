@@ -1,4 +1,5 @@
 import Confianza from "./Confianza.jsx";
+import Radar from "./Radar.jsx";
 import {
   estadoNivel,
   formatearFecha,
@@ -97,6 +98,7 @@ export default function Lectura({ resultado }) {
       {(resultado.avisos ?? []).map((aviso) => (
         <p key={aviso} className="aviso aviso-indicio" role="note">{aviso}</p>
       ))}
+      <Radar radar={resultado.radar} />
 
       <table className="comparacion" aria-label="Escenas comparadas">
         <thead>

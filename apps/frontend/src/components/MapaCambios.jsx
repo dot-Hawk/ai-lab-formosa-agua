@@ -51,7 +51,9 @@ export default function MapaCambios({ resultado }) {
   const habitual = resultado?.agua_habitual ?? null;
   const capa = habitual && soloInusual ? habitual.overlay_inusual_png : resultado?.overlay_png;
   const hayDeslizador = Boolean(resultado?.agua_a_png && resultado?.agua_b_png);
+  const hayRadar = Boolean(resultado?.radar?.usado);
   const deslizador = hayDeslizador && modo === "deslizador";
+  const radar = hayRadar && modo === "radar";
   const lonCorte = resultado ? longitudDeCorte(resultado.bounds, corte) : null;
 
   return (
@@ -64,10 +66,15 @@ export default function MapaCambios({ resultado }) {
         {resultado && (
           <>
             <Rectangle bounds={resultado.bounds} pathOptions={{ className: "marco-escena", fill: false }} />
-            {!deslizador && habitual && verSiempre && (
+            {!deslizador && !radar && habitual && verSiempre && (
               <ImageOverlay url={habitual.agua_de_siempre_png} bounds={resultado.bounds} opacity={0.9} />
             )}
-            {!deslizador && visible && <ImageOverlay key={capa} url={capa} bounds={resultado.bounds} opacity={opacidad} />}
+            {!deslizador && !radar && visible && (
+              <ImageOverlay key={capa} url={capa} bounds={resultado.bounds} opacity={opacidad} />
+            )}
+            {radar && visible && (
+              <ImageOverlay key={resultado.radar.overlay_png} url={resultado.radar.overlay_png} bounds={resultado.bounds} opacity={opacidad} />
+            )}
             {deslizador && (
               <>
                 <ImageOverlay key={resultado.agua_a_png} url={resultado.agua_a_png} bounds={resultado.bounds} opacity={1} />
@@ -84,17 +91,25 @@ export default function MapaCambios({ resultado }) {
       </MapContainer>
 
       <div className="mapa-leyenda">
-        {hayDeslizador && (
+        {(hayDeslizador || hayRadar) && (
           <div className="modos" role="radiogroup" aria-label="Vista del mapa">
             <label>
               <input type="radio" name="modo" value="cambios" checked={modo === "cambios"} onChange={() => setModo("cambios")} />
               Cambios
             </label>
-            <label>
-              <input type="radio" name="modo" value="deslizador" checked={modo === "deslizador"}
-                onChange={() => setModo("deslizador")} />
-              Antes / después
-            </label>
+            {hayDeslizador && (
+              <label>
+                <input type="radio" name="modo" value="deslizador" checked={modo === "deslizador"}
+                  onChange={() => setModo("deslizador")} />
+                Antes / después
+              </label>
+            )}
+            {hayRadar && (
+              <label>
+                <input type="radio" name="modo" value="radar" checked={modo === "radar"} onChange={() => setModo("radar")} />
+                Radar
+              </label>
+            )}
           </div>
         )}
 
@@ -119,7 +134,9 @@ export default function MapaCambios({ resultado }) {
           </>
         ) : (
           <>
-            <p className="leyenda-titulo">Cambio de superficie de agua</p>
+            <p className="leyenda-titulo">
+              {radar ? `Cambio de agua según radar (${formatearFecha(resultado.radar.pasada_a.fecha)} → ${formatearFecha(resultado.radar.pasada_b.fecha)})` : "Cambio de superficie de agua"}
+            </p>
             <ul>
               <li><span className="muestra muestra-nueva" aria-hidden="true" /> Agua nueva</li>
               <li><span className="muestra muestra-perdida" aria-hidden="true" /> Agua que ya no está</li>
@@ -134,7 +151,7 @@ export default function MapaCambios({ resultado }) {
                   <input type="checkbox" checked={visible} onChange={(e) => setVisible(e.target.checked)} />
                   Mostrar cambios
                 </label>
-                {habitual && (
+                {habitual && !radar && (
                   <>
                     <label>
                       <input type="checkbox" checked={soloInusual} disabled={!visible}

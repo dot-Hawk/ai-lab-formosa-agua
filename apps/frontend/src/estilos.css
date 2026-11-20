@@ -573,3 +573,21 @@ button:disabled {
 .corte input { accent-color: var(--rio); width: 100%; }
 
 .linea-corte { stroke: #fff; filter: drop-shadow(0 0 2px rgb(0 0 0 / 0.6)); }
+
+/* ---------- Radar ---------- */
+
+.radar {
+  margin-top: 1rem;
+  padding: 0.7rem 0.8rem;
+  background: #fff;
+  border: 1px solid var(--rejilla-suave);
+  border-left: 3px solid var(--rio);
+  border-radius: 6px;
+}
+
+.radar h3 {
+  margin: 0 0 0.3rem;
+  font-size: var(--t0);
+}
+
+.radar .superficies { margin-top: 0.5rem; }
