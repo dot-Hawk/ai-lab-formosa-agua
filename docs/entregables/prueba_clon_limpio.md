@@ -42,7 +42,7 @@ Otras comparaciones consultadas para el pitch y la ficha de fuentes:
 
 1. **`uv sync` falla en Windows si uv elige Python 3.15.** `uvicorn[standard]` depende de `pyyaml`, que todavía no publica binarios para 3.15, y compilarlo requiere Visual C++. Con `uv sync --python 3.14` funciona.
    - *Qué se hizo:* el README pasa a indicar `uv sync --python 3.14`.
-   - *Qué se propone (rol B):* agregar un archivo `apps/backend/.python-version` con `3.14`, o limitar `requires-python` a `>=3.11,<3.15` en `pyproject.toml`, para que no dependa de que la persona lea la nota. No se tocó porque es un archivo del backend.
+   - *Resuelto:* Diego agregó `apps/backend/.python-version` con `3.14` (commit `a9715e2`), así `uv sync` ya elige la versión correcta sin la nota.
 2. **Los ejemplos de `docs/CONTRATO_API.md` usan IDs que ya no existen** (`demo-2026-10-01`, `demo-2026-10-31`). Con las escenas reales, el `curl` del contrato devuelve 404. Además, la respuesta de `/api/escenas` tiene campos nuevos (`nubes_escena_pct`, `sin_dato_pct`, `url`, `consultado`) que el contrato no documenta.
    - *Qué se hizo:* se actualizaron los ejemplos y los campos en el contrato, en un commit aparte para que se pueda revisar o revertir solo. Es un archivo compartido, así que **hay que avisar al equipo**.
 3. **El README no menciona `npm run build`** entre las pruebas, pese a que `docs/ROLES.md` lo pide antes de cada merge. Se agregó.
