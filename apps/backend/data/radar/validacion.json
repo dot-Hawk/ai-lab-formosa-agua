@@ -1,0 +1,249 @@
+{
+  "metodo": "VV en dB, promedio móvil de 5 x 5 píxeles, agua = VV < umbral; se compara con NDWI > 0 de Sentinel-2 a 1 día",
+  "umbral_elegido_db": -13,
+  "iou_promedio": 0.873,
+  "pruebas": [
+    {
+      "umbral_db": -10,
+      "iou_promedio": 0.708,
+      "pares": [
+        {
+          "radar": "s1-2021-01-17",
+          "optico": "s2-2021-01-18",
+          "iou": 0.834,
+          "acuerdo": 0.968,
+          "agua_radar_ha": 1018.0,
+          "agua_optico_ha": 872.7
+        },
+        {
+          "radar": "s1-2026-10-01",
+          "optico": "s2-2026-10-02",
+          "iou": 0.581,
+          "acuerdo": 0.879,
+          "agua_radar_ha": 1568.1,
+          "agua_optico_ha": 923.8
+        }
+      ]
+    },
+    {
+      "umbral_db": -11,
+      "iou_promedio": 0.805,
+      "pares": [
+        {
+          "radar": "s1-2021-01-17",
+          "optico": "s2-2021-01-18",
+          "iou": 0.876,
+          "acuerdo": 0.978,
+          "agua_radar_ha": 949.5,
+          "agua_optico_ha": 872.7
+        },
+        {
+          "radar": "s1-2026-10-01",
+          "optico": "s2-2026-10-02",
+          "iou": 0.735,
+          "acuerdo": 0.94,
+          "agua_radar_ha": 1223.5,
+          "agua_optico_ha": 923.8
+        }
+      ]
+    },
+    {
+      "umbral_db": -12,
+      "iou_promedio": 0.857,
+      "pares": [
+        {
+          "radar": "s1-2021-01-17",
+          "optico": "s2-2021-01-18",
+          "iou": 0.889,
+          "acuerdo": 0.981,
+          "agua_radar_ha": 909.6,
+          "agua_optico_ha": 872.7
+        },
+        {
+          "radar": "s1-2026-10-01",
+          "optico": "s2-2026-10-02",
+          "iou": 0.825,
+          "acuerdo": 0.965,
+          "agua_radar_ha": 1070.8,
+          "agua_optico_ha": 923.8
+        }
+      ]
+    },
+    {
+      "umbral_db": -13,
+      "iou_promedio": 0.873,
+      "pares": [
+        {
+          "radar": "s1-2021-01-17",
+          "optico": "s2-2021-01-18",
+          "iou": 0.886,
+          "acuerdo": 0.98,
+          "agua_radar_ha": 870.1,
+          "agua_optico_ha": 872.7
+        },
+        {
+          "radar": "s1-2026-10-01",
+          "optico": "s2-2026-10-02",
+          "iou": 0.861,
+          "acuerdo": 0.974,
+          "agua_radar_ha": 1000.1,
+          "agua_optico_ha": 923.8
+        }
+      ]
+    },
+    {
+      "umbral_db": -14,
+      "iou_promedio": 0.855,
+      "pares": [
+        {
+          "radar": "s1-2021-01-17",
+          "optico": "s2-2021-01-18",
+          "iou": 0.836,
+          "acuerdo": 0.972,
+          "agua_radar_ha": 796.5,
+          "agua_optico_ha": 872.7
+        },
+        {
+          "radar": "s1-2026-10-01",
+          "optico": "s2-2026-10-02",
+          "iou": 0.873,
+          "acuerdo": 0.977,
+          "agua_radar_ha": 954.1,
+          "agua_optico_ha": 923.8
+        }
+      ]
+    },
+    {
+      "umbral_db": -15,
+      "iou_promedio": 0.762,
+      "pares": [
+        {
+          "radar": "s1-2021-01-17",
+          "optico": "s2-2021-01-18",
+          "iou": 0.666,
+          "acuerdo": 0.944,
+          "agua_radar_ha": 619.8,
+          "agua_optico_ha": 872.7
+        },
+        {
+          "radar": "s1-2026-10-01",
+          "optico": "s2-2026-10-02",
+          "iou": 0.859,
+          "acuerdo": 0.975,
+          "agua_radar_ha": 900.7,
+          "agua_optico_ha": 923.8
+        }
+      ]
+    },
+    {
+      "umbral_db": -16,
+      "iou_promedio": 0.574,
+      "pares": [
+        {
+          "radar": "s1-2021-01-17",
+          "optico": "s2-2021-01-18",
+          "iou": 0.379,
+          "acuerdo": 0.898,
+          "agua_radar_ha": 348.0,
+          "agua_optico_ha": 872.7
+        },
+        {
+          "radar": "s1-2026-10-01",
+          "optico": "s2-2026-10-02",
+          "iou": 0.769,
+          "acuerdo": 0.959,
+          "agua_radar_ha": 785.7,
+          "agua_optico_ha": 923.8
+        }
+      ]
+    },
+    {
+      "umbral_db": -17,
+      "iou_promedio": 0.364,
+      "pares": [
+        {
+          "radar": "s1-2021-01-17",
+          "optico": "s2-2021-01-18",
+          "iou": 0.141,
+          "acuerdo": 0.86,
+          "agua_radar_ha": 128.9,
+          "agua_optico_ha": 872.7
+        },
+        {
+          "radar": "s1-2026-10-01",
+          "optico": "s2-2026-10-02",
+          "iou": 0.588,
+          "acuerdo": 0.928,
+          "agua_radar_ha": 591.8,
+          "agua_optico_ha": 923.8
+        }
+      ]
+    },
+    {
+      "umbral_db": -18,
+      "iou_promedio": 0.206,
+      "pares": [
+        {
+          "radar": "s1-2021-01-17",
+          "optico": "s2-2021-01-18",
+          "iou": 0.031,
+          "acuerdo": 0.843,
+          "agua_radar_ha": 27.8,
+          "agua_optico_ha": 872.7
+        },
+        {
+          "radar": "s1-2026-10-01",
+          "optico": "s2-2026-10-02",
+          "iou": 0.38,
+          "acuerdo": 0.893,
+          "agua_radar_ha": 382.3,
+          "agua_optico_ha": 923.8
+        }
+      ]
+    },
+    {
+      "umbral_db": -19,
+      "iou_promedio": 0.116,
+      "pares": [
+        {
+          "radar": "s1-2021-01-17",
+          "optico": "s2-2021-01-18",
+          "iou": 0.005,
+          "acuerdo": 0.839,
+          "agua_radar_ha": 4.5,
+          "agua_optico_ha": 872.7
+        },
+        {
+          "radar": "s1-2026-10-01",
+          "optico": "s2-2026-10-02",
+          "iou": 0.227,
+          "acuerdo": 0.867,
+          "agua_radar_ha": 228.8,
+          "agua_optico_ha": 923.8
+        }
+      ]
+    },
+    {
+      "umbral_db": -20,
+      "iou_promedio": 0.065,
+      "pares": [
+        {
+          "radar": "s1-2021-01-17",
+          "optico": "s2-2021-01-18",
+          "iou": 0.0,
+          "acuerdo": 0.838,
+          "agua_radar_ha": 0.4,
+          "agua_optico_ha": 872.7
+        },
+        {
+          "radar": "s1-2026-10-01",
+          "optico": "s2-2026-10-02",
+          "iou": 0.13,
+          "acuerdo": 0.851,
+          "agua_radar_ha": 132.3,
+          "agua_optico_ha": 923.8
+        }
+      ]
+    }
+  ]
+}

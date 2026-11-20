@@ -52,3 +52,44 @@ def separar_agua_nueva(mascara: np.ndarray, ocurrencia: np.ndarray, umbral_pct: 
     nueva = mascara == AGUA_NUEVA
     habitual = ocurrencia >= umbral_pct
     return nueva & ~habitual, nueva & habitual
+
+
+# --- Radar Sentinel-1 ------------------------------------------------------------------------------
+# El agua calma refleja la señal de radar lejos del satélite: en VV aparece muy oscura (dB bajos).
+
+
+def filtro_media(db: np.ndarray, lado: int = 5) -> np.ndarray:
+    """Promedio móvil de `lado` x `lado` píxeles que ignora los NaN. Atenúa el moteado ("speckle")."""
+    r = lado // 2
+    valido = np.isfinite(db)
+    v = np.pad(np.where(valido, db, 0.0), r)
+    n = np.pad(valido.astype("float64"), r)
+    sv = np.cumsum(np.cumsum(v, 0), 1)
+    sn = np.cumsum(np.cumsum(n, 0), 1)
+    sv = np.pad(sv, ((1, 0), (1, 0)))
+    sn = np.pad(sn, ((1, 0), (1, 0)))
+    h, w = db.shape
+    suma = sv[lado:lado + h, lado:lado + w] - sv[:h, lado:lado + w] - sv[lado:lado + h, :w] + sv[:h, :w]
+    cuenta = sn[lado:lado + h, lado:lado + w] - sn[:h, lado:lado + w] - sn[lado:lado + h, :w] + sn[:h, :w]
+    with np.errstate(invalid="ignore", divide="ignore"):
+        salida = suma / cuenta
+    salida[~valido] = np.nan
+    return salida
+
+
+def agua_radar(db: np.ndarray, umbral_db: float) -> np.ndarray:
+    """Agua según radar: VV filtrada por debajo del umbral (dB). NaN donde no hay dato."""
+    filtrada = filtro_media(db)
+    salida = (filtrada < umbral_db).astype("float64")
+    salida[np.isnan(filtrada)] = np.nan
+    return salida
+
+
+def detectar_cambio_radar(db_antes: np.ndarray, db_despues: np.ndarray, umbral_db: float) -> np.ndarray:
+    """Igual que detectar_cambio pero con radar: 1 agua nueva, -1 agua perdida, 0 sin cambio o sin dato."""
+    a, b = agua_radar(db_antes, umbral_db), agua_radar(db_despues, umbral_db)
+    valido = ~np.isnan(a) & ~np.isnan(b)
+    mascara = np.zeros(a.shape, dtype="int8")
+    mascara[valido & (a == 0) & (b == 1)] = AGUA_NUEVA
+    mascara[valido & (a == 1) & (b == 0)] = AGUA_PERDIDA
+    return mascara

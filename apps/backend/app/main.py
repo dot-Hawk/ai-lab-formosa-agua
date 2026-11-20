@@ -18,7 +18,15 @@ from PIL import Image
 from pydantic import BaseModel, Field
 
 from app import confianza, datos
-from app.cambio import AGUA_NUEVA, AGUA_PERDIDA, area_hectareas, detectar_cambio, ndwi, separar_agua_nueva
+from app.cambio import (
+    AGUA_NUEVA,
+    AGUA_PERDIDA,
+    area_hectareas,
+    detectar_cambio,
+    detectar_cambio_radar,
+    ndwi,
+    separar_agua_nueva,
+)
 
 LEYENDA = "PROTOTIPO · AI LAB Misión: Código Formosa · no es una herramienta oficial"
 ADVERTENCIA = (
@@ -78,6 +86,56 @@ def _png(rgba: np.ndarray) -> str:
     buf = io.BytesIO()
     Image.fromarray(rgba, "RGBA").save(buf, format="PNG")
     return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+MAX_DIAS_RADAR = 2  # distancia máxima entre la pasada de radar y la fecha óptica
+UMBRAL_RADAR_DB = -13.0  # respaldo si falta data/radar/validacion.json
+
+
+def _pasada_cercana(fecha: str, orbita: int | None = None) -> dict | None:
+    objetivo = datetime.date.fromisoformat(fecha)
+    candidatas = [
+        (abs((datetime.date.fromisoformat(p["fecha"]) - objetivo).days), p)
+        for p in datos.radar_catalogo()
+        if orbita is None or p.get("orbita_relativa") == orbita
+    ]
+    candidatas = [(d, p) for d, p in candidatas if d <= MAX_DIAS_RADAR]
+    return min(candidatas, key=lambda c: c[0])[1] if candidatas else None
+
+
+def _radar(a: dict, b: dict) -> dict | None:
+    """Si alguna escena óptica tiene más de 20 % de nubes, compara con radar Sentinel-1.
+
+    Las dos pasadas tienen que ser del mismo sensor y de la misma órbita relativa (misma geometría),
+    a no más de 2 días de cada fecha óptica. None si no hace falta radar.
+    """
+    if not confianza.necesita_radar(a, b):
+        return None
+    pa = _pasada_cercana(a["fecha"])
+    pb = _pasada_cercana(b["fecha"], pa.get("orbita_relativa") if pa else None)
+    if not pa or not pb or pa["id"] == pb["id"]:
+        return {"usado": False, "motivo": f"No hay pasadas de radar de la misma órbita a {MAX_DIAS_RADAR} días o menos de las dos fechas."}
+    validacion = datos.radar_validacion()
+    umbral = float(validacion.get("umbral_elegido_db", UMBRAL_RADAR_DB))
+    mascara = detectar_cambio_radar(datos.cargar_radar(pa), datos.cargar_radar(pb), umbral)
+    res = pa["resolucion_m"]
+    return {
+        "usado": True,
+        "motivo": f"Una escena óptica tiene más de {confianza.NUBES_PARA_RADAR_PCT} % de nubes sobre la zona.",
+        "pasada_a": _publica(pa),
+        "pasada_b": _publica(pb),
+        "umbral_db": umbral,
+        "area_agua_nueva_ha": round(area_hectareas(int((mascara == AGUA_NUEVA).sum()), res), 2),
+        "area_agua_perdida_ha": round(area_hectareas(int((mascara == AGUA_PERDIDA).sum()), res), 2),
+        "overlay_png": _overlay_png(mascara),
+        "validacion": {
+            "iou_promedio": validacion.get("iou_promedio"),
+            "metodo": validacion.get("metodo"),
+            "texto": "Umbral calibrado con dos pares radar/óptico sin nubes a 1 día (17-18/01/2021 y 01-02/10/2026).",
+        },
+        "nota": "El radar confunde agua con superficies muy lisas (pistas, arena húmeda) y puede no ver agua bajo "
+                "vegetación o con viento. Es un indicio, igual que el óptico.",
+    }
 
 
 def _agua_png(indice: np.ndarray, umbral: float) -> str:
@@ -168,6 +226,7 @@ def comparar(pedido: PedidoComparar):
         )
 
     ndwi_a, ndwi_b = ndwi(*datos.cargar_bandas(a)), ndwi(*datos.cargar_bandas(b))
+    radar = _radar(a, b)
     mascara = detectar_cambio(ndwi_a, ndwi_b, pedido.umbral_agua)
     res = a["resolucion_m"]
     k3 = datos.umbrales_k3()["estaciones"]["formosa"]
@@ -196,7 +255,8 @@ def comparar(pedido: PedidoComparar):
         "region": _region(a, b),
         "lluvia": _lluvia(a, b),
         "confianza": confianza.evaluar(a, b),
-        "avisos": confianza.avisos(a, b),
+        "radar": radar,
+        "avisos": confianza.avisos(a, b, radar_usado=bool(radar and radar["usado"])),
         "advertencia": ADVERTENCIA,
         "leyenda": LEYENDA,
     }

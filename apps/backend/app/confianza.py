@@ -58,14 +58,24 @@ def evaluar(a: dict, b: dict) -> dict:
     }
 
 
-def avisos(a: dict, b: dict) -> list[str]:
+def necesita_radar(a: dict, b: dict) -> bool:
+    return max(a["nubes_pct"], b["nubes_pct"]) > NUBES_PARA_RADAR_PCT
+
+
+def avisos(a: dict, b: dict, radar_usado: bool = False) -> list[str]:
     """Avisos para mostrar en pantalla, además de la advertencia general."""
     salida = []
     for e in (a, b):
         if e["nubes_pct"] > NUBES_PARA_RADAR_PCT:
+            seguimiento = (
+                "La herramienta pasó sola al radar (Sentinel-1), que ve a través de las nubes: "
+                "el resultado con radar está más abajo."
+                if radar_usado else
+                "Para días nublados hace falta radar (Sentinel-1), pero no hay una pasada cercana a estas fechas."
+            )
             salida.append(
                 f"La escena del {e['fecha'][8:10]}/{e['fecha'][5:7]}/{e['fecha'][:4]} tiene "
-                f"{_texto(e['nubes_pct'])} % de nubes sobre la zona: lo que está debajo no se analiza. "
-                "Para días nublados haría falta radar (Sentinel-1), que todavía no está integrado."
+                f"{_texto(e['nubes_pct'])} % de nubes sobre la zona: lo que está debajo no se analiza "
+                f"con la imagen óptica. {seguimiento}"
             )
     return salida

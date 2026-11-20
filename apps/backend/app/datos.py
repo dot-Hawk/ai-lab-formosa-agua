@@ -122,3 +122,34 @@ def gsw_ocurrencia() -> np.ndarray | None:
 @lru_cache
 def gsw_metadatos() -> dict:
     return json.loads(GSW_JSON.read_text(encoding="utf-8")) if GSW_JSON.exists() else {}
+
+
+# --- Radar Sentinel-1 (data/radar) ---------------------------------------------------------------
+
+RADAR_DIR = DATA_DIR / "radar"
+SIN_DATO_RADAR = -32768
+
+
+@lru_cache
+def radar_catalogo() -> list[dict]:
+    ruta = RADAR_DIR / "catalogo.json"
+    return json.loads(ruta.read_text(encoding="utf-8")) if ruta.exists() else []
+
+
+def buscar_radar(radar_id: str) -> dict | None:
+    return next((e for e in radar_catalogo() if e["id"] == radar_id), None)
+
+
+def cargar_radar(pasada: dict) -> np.ndarray:
+    """VV en dB (float), NaN donde no hay dato."""
+    with np.load(RADAR_DIR / pasada["archivo"]) as z:
+        crudo = z["vv_db"]
+    salida = crudo.astype("float64") / 100
+    salida[crudo == SIN_DATO_RADAR] = np.nan
+    return salida
+
+
+@lru_cache
+def radar_validacion() -> dict:
+    ruta = RADAR_DIR / "validacion.json"
+    return json.loads(ruta.read_text(encoding="utf-8")) if ruta.exists() else {}

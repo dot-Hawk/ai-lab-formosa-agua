@@ -1,0 +1,83 @@
+[
+  {
+    "id": "s1-2021-01-17",
+    "fecha": "2021-01-17",
+    "captura_utc": "2021-01-17T09:20:32Z",
+    "fuente": "Copernicus Sentinel-1 (ESA), S1B_IW_GRDH_1SDV_20210117T092020_20210117T092045_025192_02FFDE_rtc, RTC de Microsoft Planetary Computer",
+    "satelite": "Sentinel-1",
+    "plataforma": "SENTINEL-1B",
+    "producto": "RTC (gamma0, corrección de relieve), polarización VV",
+    "orbita_relativa": 141,
+    "orbita": "descending",
+    "resolucion_m": 10,
+    "sin_dato_pct": 0.0,
+    "categoria": "Observado",
+    "url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-1-rtc/items/S1B_IW_GRDH_1SDV_20210117T092020_20210117T092045_025192_02FFDE_rtc",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -26.240068565045473,
+        -58.18000000000001
+      ],
+      [
+        -26.17,
+        -58.109914534595774
+      ]
+    ],
+    "archivo": "s1-2021-01-17.npz"
+  },
+  {
+    "id": "s1-2026-10-01",
+    "fecha": "2026-10-01",
+    "captura_utc": "2026-10-01T09:20:15Z",
+    "fuente": "Copernicus Sentinel-1 (ESA), S1C_IW_GRDH_1SDV_20261001T092002_20261001T092027_009689_0134B9_rtc, RTC de Microsoft Planetary Computer",
+    "satelite": "Sentinel-1",
+    "plataforma": "SENTINEL-1C",
+    "producto": "RTC (gamma0, corrección de relieve), polarización VV",
+    "orbita_relativa": 141,
+    "orbita": "descending",
+    "resolucion_m": 10,
+    "sin_dato_pct": 0.0,
+    "categoria": "Observado",
+    "url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-1-rtc/items/S1C_IW_GRDH_1SDV_20261001T092002_20261001T092027_009689_0134B9_rtc",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -26.240068565045473,
+        -58.18000000000001
+      ],
+      [
+        -26.17,
+        -58.109914534595774
+      ]
+    ],
+    "archivo": "s1-2026-10-01.npz"
+  },
+  {
+    "id": "s1-2026-10-25",
+    "fecha": "2026-10-25",
+    "captura_utc": "2026-10-25T09:20:14Z",
+    "fuente": "Copernicus Sentinel-1 (ESA), S1C_IW_GRDH_1SDV_20261025T092001_20261025T092026_010039_014091_rtc, RTC de Microsoft Planetary Computer",
+    "satelite": "Sentinel-1",
+    "plataforma": "SENTINEL-1C",
+    "producto": "RTC (gamma0, corrección de relieve), polarización VV",
+    "orbita_relativa": 141,
+    "orbita": "descending",
+    "resolucion_m": 10,
+    "sin_dato_pct": 0.0,
+    "categoria": "Observado",
+    "url": "https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-1-rtc/items/S1C_IW_GRDH_1SDV_20261025T092001_20261025T092026_010039_014091_rtc",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -26.240068565045473,
+        -58.18000000000001
+      ],
+      [
+        -26.17,
+        -58.109914534595774
+      ]
+    ],
+    "archivo": "s1-2026-10-25.npz"
+  }
+]
