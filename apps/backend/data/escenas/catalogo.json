@@ -28,6 +28,118 @@
     "incidencia_grados": null
   },
   {
+    "id": "s2-2021-01-18",
+    "fecha": "2021-01-18",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2B_21JUM_20210118_1_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2B, tile 21JUM",
+    "resolucion_m": 10,
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 1.2,
+    "captura_utc": "2021-01-18T13:59:50Z",
+    "sol_elevacion_grados": 60.9,
+    "incidencia_grados": 10.9,
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_21JUM_20210118_1_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -26.240068565045473,
+        -58.18000000000001
+      ],
+      [
+        -26.17,
+        -58.109914534595774
+      ]
+    ],
+    "archivo": "s2-2021-01-18.npz"
+  },
+  {
+    "id": "s2-2021-02-07",
+    "fecha": "2021-02-07",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2B_21JUM_20210207_1_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2B, tile 21JUM",
+    "resolucion_m": 10,
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 1.6,
+    "captura_utc": "2021-02-07T13:59:49Z",
+    "sol_elevacion_grados": 58.3,
+    "incidencia_grados": null,
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_21JUM_20210207_1_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -26.240068565045473,
+        -58.18000000000001
+      ],
+      [
+        -26.17,
+        -58.109914534595774
+      ]
+    ],
+    "archivo": "s2-2021-02-07.npz"
+  },
+  {
+    "id": "s2-2022-11-24",
+    "fecha": "2022-11-24",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2A_21JUM_20221124_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2A, tile 21JUM",
+    "resolucion_m": 10,
+    "nubes_pct": 0.1,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 5.9,
+    "captura_utc": "2022-11-24T13:59:49Z",
+    "sol_elevacion_grados": 66.3,
+    "incidencia_grados": null,
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_21JUM_20221124_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -26.240068565045473,
+        -58.18000000000001
+      ],
+      [
+        -26.17,
+        -58.109914534595774
+      ]
+    ],
+    "archivo": "s2-2022-11-24.npz"
+  },
+  {
+    "id": "s2-2022-12-14",
+    "fecha": "2022-12-14",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2A_21JUM_20221214_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2A, tile 21JUM",
+    "resolucion_m": 10,
+    "nubes_pct": 0.1,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 1.4,
+    "captura_utc": "2022-12-14T13:59:50Z",
+    "sol_elevacion_grados": 65.2,
+    "incidencia_grados": null,
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2A_21JUM_20221214_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -26.240068565045473,
+        -58.18000000000001
+      ],
+      [
+        -26.17,
+        -58.109914534595774
+      ]
+    ],
+    "archivo": "s2-2022-12-14.npz"
+  },
+  {
     "id": "s2-2024-11-13",
     "fecha": "2024-11-13",
     "fuente": "Copernicus Sentinel-2 (ESA), escena S2A_21JUM_20241113_0_L2A, vía Earth Search (AWS Open Data)",

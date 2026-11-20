@@ -13,7 +13,8 @@ bandas: el backend los trata como "sin dato" y no los cuenta como cambio.
 
 Requiere el grupo de dependencias "escenas":
     uv sync --group escenas
-    uv run python scripts/descargar_escenas.py
+    uv run python scripts/descargar_escenas.py                 # todas las escenas de ESCENAS
+    uv run python scripts/descargar_escenas.py --agregar ID…   # solo esas, sumadas al catálogo actual
 """
 
 import json
@@ -39,6 +40,11 @@ ESCENAS = [
     "S2B_21JUM_20261002_0_L2A",  # inicio de la crecida 2026: 2,35 m
     "S2A_21JUM_20261026_0_L2A",  # crecida a días del corte: 5,44 m
     "S2B_21JUM_20190621_1_L2A",  # creciente 2019, sobre evacuación: 9,08 m
+    # Pares a 20 días, 0 % de nubes en la escena, elegidos con scripts/buscar_pares.py (alturas INA)
+    "S2B_21JUM_20210118_1_L2A",  # crecida 2021, antes: 2,16 m
+    "S2B_21JUM_20210207_1_L2A",  # crecida 2021, después: 5,37 m
+    "S2A_21JUM_20221124_0_L2A",  # bajante 2022, antes: 4,68 m
+    "S2A_21JUM_20221214_0_L2A",  # bajante 2022, después: 1,79 m
 ]
 
 # Clases SCL (Scene Classification) de Sentinel-2 L2A
@@ -143,15 +149,19 @@ def main() -> None:
     from pystac_client import Client
     from rasterio.enums import Resampling
 
+    import sys
+    solo_agregar = "--agregar" in sys.argv
+    pedidas = [a for a in sys.argv[1:] if not a.startswith("--")] if solo_agregar else ESCENAS
+
     transform, ancho, alto, bounds = grilla_mercator()
-    items = {i.id: i for i in Client.open(STAC_URL).search(collections=[COLECCION], ids=ESCENAS).items()}
-    faltan = set(ESCENAS) - set(items)
+    items = {i.id: i for i in Client.open(STAC_URL).search(collections=[COLECCION], ids=pedidas).items()}
+    faltan = set(pedidas) - set(items)
     if faltan:
         raise SystemExit(f"No se encontraron en el catálogo: {sorted(faltan)}")
 
     ESCENAS_DIR.mkdir(parents=True, exist_ok=True)
     catalogo = []
-    for item_id in ESCENAS:
+    for item_id in pedidas:
         item = items[item_id]
         print(f"Leyendo {item_id} ({ancho}x{alto} px)…", flush=True)
         verde_a, nir_a = item.assets["green"], item.assets["nir"]
@@ -187,8 +197,12 @@ def main() -> None:
         })
         print(f"  nubes en el recorte {catalogo[-1]['nubes_pct']} %, sin dato {catalogo[-1]['sin_dato_pct']} %")
 
+    ruta = ESCENAS_DIR / "catalogo.json"
+    if solo_agregar and ruta.exists():
+        nuevas = {e["id"] for e in catalogo}
+        catalogo += [e for e in json.loads(ruta.read_text(encoding="utf-8")) if e["id"] not in nuevas]
     catalogo.sort(key=lambda e: e["fecha"])
-    (ESCENAS_DIR / "catalogo.json").write_text(json.dumps(catalogo, indent=2, ensure_ascii=False), encoding="utf-8")
+    ruta.write_text(json.dumps(catalogo, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"Catálogo con {len(catalogo)} escenas en {ESCENAS_DIR}")
 
 
