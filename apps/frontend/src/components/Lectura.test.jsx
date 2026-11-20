@@ -114,3 +114,12 @@ describe("Lectura con NDVI", () => {
     expect(within(fila).getByText("0,419")).toBeInTheDocument();
   });
 });
+
+describe("Lectura de una zona sin escala del río", () => {
+  it("no muestra filas del río y lo explica", () => {
+    render(<Lectura resultado={{ ...resultado, nivel_rio: null, zona: { id: "pirane", nombre: "Pirané" } }} />);
+    expect(screen.queryByRole("row", { name: /Río en Puerto Formosa/ })).not.toBeInTheDocument();
+    expect(screen.getByText("Esta zona no tiene una escala hidrométrica del INA cercana.")).toBeInTheDocument();
+    expect(screen.getByText("Zona: Pirané")).toBeInTheDocument();
+  });
+});

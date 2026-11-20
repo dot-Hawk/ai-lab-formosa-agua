@@ -3,7 +3,12 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { escenas, resultado } from "./test/fixtures.js";
 
-vi.mock("./lib/api.js", () => ({ listarEscenas: vi.fn(), comparar: vi.fn() }));
+vi.mock("./lib/api.js", () => ({
+  listarEscenas: vi.fn(),
+  comparar: vi.fn(),
+  listarZonas: vi.fn(() => Promise.resolve([])),
+  verProvincia: vi.fn(() => Promise.reject(new Error("sin vista provincial"))),
+}));
 // Leaflet necesita un navegador real; en los tests se reemplaza por un marcador.
 vi.mock("./components/MapaCambios.jsx", () => ({ default: () => <div data-testid="mapa" /> }));
 

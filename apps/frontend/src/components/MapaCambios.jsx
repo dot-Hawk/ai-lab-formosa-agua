@@ -1,6 +1,16 @@
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from "react";
-import { CircleMarker, ImageOverlay, MapContainer, Polyline, Rectangle, TileLayer, Tooltip, useMap } from "react-leaflet";
+import {
+  CircleMarker,
+  ImageOverlay,
+  MapContainer,
+  Polygon,
+  Polyline,
+  Rectangle,
+  TileLayer,
+  Tooltip,
+  useMap,
+} from "react-leaflet";
 import { formatearFecha } from "../lib/vista.js";
 
 const CENTRO_FORMOSA = [-26.183, -58.183]; // Puerto Formosa (K3)
@@ -55,7 +65,14 @@ function ImagenRecortada({ url, bounds, corte }) {
   );
 }
 
-export default function MapaCambios({ resultado }) {
+/** Qué encuadrar: el resultado, si no la zona elegida, si no toda la provincia. */
+export function encuadre(resultado, zonas, zonaActual, provincia) {
+  if (resultado) return resultado.bounds;
+  const zona = (zonas ?? []).find((z) => z.id === zonaActual);
+  return zona?.bounds ?? provincia?.bounds ?? null;
+}
+
+export default function MapaCambios({ resultado, provincia = null, zonas = [], zonaActual = null }) {
   const [visible, setVisible] = useState(true);
   const [opacidad, setOpacidad] = useState(0.8);
   const [soloInusual, setSoloInusual] = useState(false);
@@ -64,6 +81,7 @@ export default function MapaCambios({ resultado }) {
   const [corte, setCorte] = useState(50);
   const [verInfra, setVerInfra] = useState(true);
   const [capaFecha, setCapaFecha] = useState("agua");
+  const [verSiempreProvincia, setVerSiempreProvincia] = useState(true);
 
   const simulado = resultado && [resultado.escena_a, resultado.escena_b].some((e) => e.categoria === "Simulado");
   const habitual = resultado?.agua_habitual ?? null;
@@ -83,6 +101,19 @@ export default function MapaCambios({ resultado }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="© OpenStreetMap. Mapa de fondo de referencia"
         />
+        {provincia && (
+          <Polygon positions={provincia.contorno} pathOptions={{ className: "contorno-provincia", fill: false }} />
+        )}
+        {!resultado && provincia && verSiempreProvincia && (
+          <ImageOverlay url={provincia.agua_siempre.png} bounds={provincia.bounds} opacity={0.85} />
+        )}
+        {!resultado && zonas.map((z) => (
+          <Rectangle key={z.id} bounds={z.bounds}
+            pathOptions={{ className: z.id === zonaActual ? "zona zona-actual" : "zona" }}>
+            <Tooltip>{z.nombre}</Tooltip>
+          </Rectangle>
+        ))}
+        {!resultado && <Encuadre bounds={encuadre(null, zonas, zonaActual, provincia)} />}
         {resultado && (
           <>
             <Rectangle bounds={resultado.bounds} pathOptions={{ className: "marco-escena", fill: false }} />
@@ -229,7 +260,29 @@ export default function MapaCambios({ resultado }) {
                 </label>
               </div>
             ) : (
-              <p className="ayuda">Elegí dos fechas y compará para ver los cambios.</p>
+              <>
+                <p className="ayuda">Elegí una zona y dos fechas, y compará para ver los cambios.</p>
+                {provincia && (
+                  <>
+                    <ul>
+                      <li><span className="muestra muestra-zona" aria-hidden="true" /> Zonas clave (10 m)</li>
+                      <li><span className="muestra muestra-siempre-prov" aria-hidden="true" /> Agua de siempre</li>
+                      <li><span className="muestra muestra-estacional-prov" aria-hidden="true" /> Agua estacional</li>
+                    </ul>
+                    <label className="leyenda-controles">
+                      <span>
+                        <input type="checkbox" checked={verSiempreProvincia}
+                          onChange={(e) => setVerSiempreProvincia(e.target.checked)} />{" "}
+                        Agua de siempre en la provincia
+                      </span>
+                    </label>
+                    <p className="ayuda">
+                      {provincia.agua_siempre.fuente}, a unos {provincia.agua_siempre.resolucion_aprox_m} m por píxel:
+                      es contexto, no un análisis de cambios. Contorno: {provincia.contorno_fuente}.
+                    </p>
+                  </>
+                )}
+              </>
             )}
           </>
         )}

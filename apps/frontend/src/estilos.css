@@ -630,3 +630,13 @@ button:disabled {
   font-size: var(--t-1);
   background: linear-gradient(90deg, rgb(140 100 60), rgb(215 195 110), rgb(120 175 70), rgb(25 110 45)) top / 100% 0.6rem no-repeat;
 }
+
+/* ---------- Provincia y zonas ---------- */
+
+.contorno-provincia { stroke: var(--tinta); stroke-width: 2; stroke-dasharray: 6 4; fill: none; }
+.zona { stroke: var(--sedimento); stroke-width: 2; fill: var(--sedimento); fill-opacity: 0.12; }
+.zona-actual { stroke: var(--evacuacion); stroke-width: 3; fill-opacity: 0.25; }
+.muestra-zona { border: 2px solid var(--sedimento); background: rgb(168 116 42 / 0.15); }
+.muestra-siempre-prov { background: rgb(30 90 170 / 0.85); }
+.muestra-estacional-prov { background: rgb(110 170 220 / 0.7); }
+.sin-escala h2 { font-size: var(--t1); margin: 0 0 0.4rem; }

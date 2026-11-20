@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { resultado } from "../test/fixtures.js";
-import MapaCambios, { capasDeslizador, longitudDeCorte } from "./MapaCambios.jsx";
+import MapaCambios, { capasDeslizador, encuadre, longitudDeCorte } from "./MapaCambios.jsx";
 
 const capas = (c) => [...c.querySelectorAll("img.leaflet-image-layer")].map((i) => i.getAttribute("src"));
 
@@ -85,5 +85,30 @@ describe("Deslizador con color real y NDVI", () => {
     await userEvent.click(screen.getByLabelText("NDVI"));
     expect(capas(container)).toEqual([completo.ndvi_a_png, completo.ndvi_b_png]);
     expect(screen.getByText("NDVI: vegetación en cada fecha")).toBeInTheDocument();
+  });
+});
+
+describe("encuadre del mapa", () => {
+  const zonas = [{ id: "formosa", bounds: [[1, 1], [2, 2]] }, { id: "clorinda", bounds: [[3, 3], [4, 4]] }];
+  const provincia = { bounds: [[-27, -62], [-22, -57]] };
+
+  it("prioriza el resultado, después la zona elegida y después la provincia", () => {
+    expect(encuadre(resultado, zonas, "clorinda", provincia)).toEqual(resultado.bounds);
+    expect(encuadre(null, zonas, "clorinda", provincia)).toEqual([[3, 3], [4, 4]]);
+    expect(encuadre(null, zonas, "no-existe", provincia)).toEqual(provincia.bounds);
+    expect(encuadre(null, [], null, null)).toBeNull();
+  });
+
+  it("antes de comparar muestra la leyenda de la provincia y deja ocultar su capa", async () => {
+    const prov = {
+      ...provincia, contorno: [[-27, -62], [-22, -62], [-22, -57]],
+      agua_siempre: { png: "data:image/png;base64,PROV", fuente: "GSW", resolucion_aprox_m: 270 },
+      contorno_fuente: "IGN",
+    };
+    const { container } = render(<MapaCambios resultado={null} provincia={prov} zonas={zonas} zonaActual="formosa" />);
+    expect(capas(container)).toEqual([prov.agua_siempre.png]);
+    expect(screen.getByText("Zonas clave (10 m)")).toBeInTheDocument();
+    await userEvent.click(screen.getByLabelText("Agua de siempre en la provincia"));
+    expect(capas(container)).toEqual([]);
   });
 });

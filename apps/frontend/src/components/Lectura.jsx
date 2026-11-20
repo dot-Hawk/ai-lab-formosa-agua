@@ -39,11 +39,13 @@ export default function Lectura({ resultado }) {
     ["Cobertura de nubes", formatearPorcentaje(a.nubes_pct), formatearPorcentaje(b.nubes_pct)],
     ["Fuente", a.fuente, b.fuente],
     ["Categoría", <Categoria valor={a.categoria} />, <Categoria valor={b.categoria} />],
-    [
-      `Río en ${n.estacion.replace(/^FORMOSA \((.*)\)$/, "$1")}`,
-      <Nivel altura={n.altura_a} umbrales={n.umbrales} />,
-      <Nivel altura={n.altura_b} umbrales={n.umbrales} />,
-    ],
+    ...(n
+      ? [[
+          `Río en ${n.estacion.replace(/^FORMOSA \((.*)\)$/, "$1")}`,
+          <Nivel altura={n.altura_a} umbrales={{ ...n.umbrales, aguas_bajas: n.umbrales.aguas_bajas ?? -Infinity }} />,
+          <Nivel altura={n.altura_b} umbrales={{ ...n.umbrales, aguas_bajas: n.umbrales.aguas_bajas ?? -Infinity }} />,
+        ]]
+      : []),
     ...(resultado.region?.estaciones ?? []).map((e) => {
       // sin nivel de aguas bajas informado, no se marca "aguas bajas"
       const umbrales = { ...e.umbrales, aguas_bajas: e.umbrales.aguas_bajas ?? -Infinity };
@@ -73,6 +75,7 @@ export default function Lectura({ resultado }) {
   return (
     <section className="lectura" aria-labelledby="lectura-titulo">
       <h2 id="lectura-titulo">Cambios entre las dos fechas</h2>
+      {resultado.zona?.nombre && <p className="ayuda">Zona: {resultado.zona.nombre}</p>}
 
       <dl className="superficies">
         <div className="superficie superficie-nueva">
@@ -127,7 +130,11 @@ export default function Lectura({ resultado }) {
           ))}
         </tbody>
       </table>
-      <p className="fuente">{n.fuente}</p>
+      {n ? (
+        <p className="fuente">{n.fuente}</p>
+      ) : (
+        <p className="fuente">Esta zona no tiene una escala hidrométrica del INA cercana.</p>
+      )}
       {resultado.region && <p className="fuente">Otras escalas: {resultado.region.fuente}</p>}
       {lluvia && (
         <p className="fuente">

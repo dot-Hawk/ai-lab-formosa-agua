@@ -3,7 +3,7 @@ import EscalaHidrometrica from "./components/EscalaHidrometrica.jsx";
 import FormularioConsulta from "./components/FormularioConsulta.jsx";
 import Lectura from "./components/Lectura.jsx";
 import MapaCambios from "./components/MapaCambios.jsx";
-import { comparar, listarEscenas } from "./lib/api.js";
+import { comparar, listarEscenas, listarZonas, verProvincia } from "./lib/api.js";
 import { ESTACION_FORMOSA } from "./lib/estacion.js";
 
 const LEYENDA_PROTOTIPO = "PROTOTIPO · AI LAB Misión: Código Formosa · no es una herramienta oficial";
@@ -14,10 +14,22 @@ export default function App() {
   const [resultado, setResultado] = useState(null);
   const [comparando, setComparando] = useState(false);
   const [errorComparar, setErrorComparar] = useState(null);
+  const [zonas, setZonas] = useState([]);
+  const [provincia, setProvincia] = useState(null);
+  const [zonaActual, setZonaActual] = useState(null);
 
   useEffect(() => {
     listarEscenas().then(setEscenas, (err) => setErrorCarga(err.message));
+    // Zonas y vista provincial son complementos: si fallan, la herramienta sigue funcionando
+    listarZonas().then(setZonas, () => setZonas([]));
+    verProvincia().then(setProvincia, () => setProvincia(null));
   }, []);
+
+  function alCambiarZona(id) {
+    setZonaActual(id);
+    setResultado(null);
+    setErrorComparar(null);
+  }
 
   async function alComparar({ escenaA, escenaB, umbral, indice }) {
     setComparando(true);
@@ -31,8 +43,10 @@ export default function App() {
     }
   }
 
-  const umbrales = resultado?.nivel_rio.umbrales ?? ESTACION_FORMOSA.umbrales;
-  const lecturas = resultado
+  const nivel = resultado?.nivel_rio ?? null;
+  const escalaFormosa = !resultado || (nivel && /FORMOSA/i.test(nivel.estacion));
+  const umbrales = nivel?.umbrales ?? ESTACION_FORMOSA.umbrales;
+  const lecturas = resultado && nivel
     ? [
         { etiqueta: "Antes", fecha: resultado.nivel_rio.fecha_a, altura: resultado.nivel_rio.altura_a },
         { etiqueta: "Después", fecha: resultado.nivel_rio.fecha_b, altura: resultado.nivel_rio.altura_b },
@@ -63,7 +77,8 @@ export default function App() {
               </p>
             )}
             {escenas && escenas.length >= 2 && (
-              <FormularioConsulta escenas={escenas} cargando={comparando} onComparar={alComparar} />
+              <FormularioConsulta escenas={escenas} zonas={zonas} cargando={comparando} onComparar={alComparar}
+                onZona={alCambiarZona} />
             )}
             {errorComparar && <p className="aviso aviso-error" role="alert">{errorComparar}</p>}
           </section>
@@ -71,10 +86,27 @@ export default function App() {
           {resultado && <Lectura resultado={resultado} />}
         </aside>
 
-        <MapaCambios resultado={resultado} />
+        <MapaCambios resultado={resultado} provincia={provincia} zonas={zonas}
+          zonaActual={zonaActual ?? zonas[0]?.id ?? null} />
 
         <aside className="panel panel-escala">
-          <EscalaHidrometrica estacion={ESTACION_FORMOSA.nombre} umbrales={umbrales} lecturas={lecturas} />
+          {escalaFormosa ? (
+            <EscalaHidrometrica estacion={ESTACION_FORMOSA.nombre} umbrales={umbrales} lecturas={lecturas} />
+          ) : (
+            <section className="sin-escala" aria-labelledby="sin-escala-titulo">
+              <h2 id="sin-escala-titulo">Río en la zona</h2>
+              {nivel ? (
+                <p className="ayuda">
+                  Esta zona usa la escala de {nivel.estacion}: su altura y sus umbrales están en la tabla de resultados.
+                </p>
+              ) : (
+                <p className="ayuda">
+                  Esta zona no tiene una escala hidrométrica del INA cercana. La escala de Puerto Formosa no
+                  representa lo que pasa acá.
+                </p>
+              )}
+            </section>
+          )}
         </aside>
       </main>
     </div>

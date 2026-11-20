@@ -15,6 +15,10 @@ async function pedir(ruta, opciones) {
 
 export const listarEscenas = () => pedir("/api/escenas");
 
+export const listarZonas = () => pedir("/api/zonas");
+
+export const verProvincia = () => pedir("/api/provincia");
+
 export const comparar = (escenaA, escenaB, umbralAgua, indiceAgua = "ndwi") =>
   pedir("/api/comparar", {
     method: "POST",
