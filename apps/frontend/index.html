@@ -3,31 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Operación Agua · Imágenes satelitales</title>
+    <meta name="description" content="Prototipo AI LAB: comparación de imágenes satelitales para detectar cambios en superficies de agua en Formosa." />
+    <title>Comparador satelital · Operación Agua</title>
   </head>
   <body>
-    <div class="leyenda-prototipo">PROTOTIPO · AI LAB Misión: Código Formosa · no es una herramienta oficial</div>
-    <header>
-      <h1>Operación Agua · Comparador de imágenes satelitales</h1>
-      <p>Equipo 1 · Instituto Politécnico Formosa</p>
-    </header>
-    <main>
-      <aside>
-        <form id="form-comparar">
-          <label>Fecha "antes" <select id="escena-a" required></select></label>
-          <label>Fecha "después" <select id="escena-b" required></select></label>
-          <label>Umbral NDWI de agua <input id="umbral" type="number" step="0.05" min="-1" max="1" value="0" /></label>
-          <button type="submit">Comparar</button>
-        </form>
-        <div id="estado" role="status"></div>
-        <section id="resultado" hidden></section>
-        <div class="advertencia">
-          Un cambio detectado es un <strong>indicio</strong>, no una afectación comprobada.
-          Las decisiones operativas quedan a cargo de las autoridades competentes.
-        </div>
-      </aside>
-      <div id="mapa"></div>
-    </main>
-    <script type="module" src="/src/main.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
