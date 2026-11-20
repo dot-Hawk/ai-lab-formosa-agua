@@ -69,6 +69,24 @@ def porcentaje_nubes(scl: np.ndarray) -> float:
     return float(100 * nubosos.sum() / con_dato.sum())
 
 
+def metadatos_captura(propiedades: dict) -> dict:
+    """Hora de captura y ángulos de la escena, desde las propiedades STAC del ítem.
+
+    - captura_utc: instante de la toma (ISO 8601, UTC, sin fracciones de segundo).
+    - sol_elevacion_grados: altura del sol sobre el horizonte; con sol bajo hay sombras largas.
+    - incidencia_grados: ángulo de visión del satélite respecto de la vertical.
+    """
+    def angulo(clave):
+        v = propiedades.get(clave)
+        return None if v is None else round(float(v), 1)
+
+    return {
+        "captura_utc": str(propiedades["datetime"])[:19] + "Z",
+        "sol_elevacion_grados": angulo("view:sun_elevation"),
+        "incidencia_grados": angulo("view:incidence_angle"),
+    }
+
+
 def empaquetar(verde: np.ndarray, nir: np.ndarray, validos: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Reflectancia -> uint16 (x10000) como espera app/datos.py. 0 = sin dato en ambas bandas."""
     validos = validos & ~np.isnan(verde) & ~np.isnan(nir)
@@ -160,6 +178,7 @@ def main() -> None:
             "nubes_pct": round(porcentaje_nubes(scl), 1),
             "nubes_escena_pct": round(p.get("eo:cloud_cover", float("nan")), 1),
             "sin_dato_pct": round(float(100 * (v == 0).mean()), 1),
+            **metadatos_captura(p),
             "categoria": "Observado",
             "url": f"{STAC_URL}/collections/{COLECCION}/items/{item_id}",
             "consultado": date.today().isoformat(),
