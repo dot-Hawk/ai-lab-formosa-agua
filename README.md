@@ -43,8 +43,8 @@ Variables de entorno opcionales: ver `.env.example`.
 ## Probar
 - **Flujo principal:** abrir http://localhost:5173, elegir las dos fechas y presionar *Comparar*. Se superponen en el mapa el agua nueva (azul) y el agua que ya no está (naranja).
 - **Entrada inválida:** elegir la misma fecha en ambos campos. La interfaz muestra *"Elegí dos escenas distintas para comparar."* y se puede seguir trabajando.
-- **Ficha de confianza:** junto al resultado aparece un semáforo (alta, media o baja) con sus motivos: nubes, zona sin dato, días entre fechas y altura del sol. Con las escenas incluidas, la comparación 02/10 → 26/10/2026 da **baja** por el 20,1 % de nubes, y lo avisa.
-- **Pruebas automáticas:** `cd apps/backend && uv run pytest` (50 pruebas) y `cd apps/frontend && npm test` (43 pruebas)
+- **Ficha de confianza:** junto al resultado aparece un semáforo (alta, media o baja) con sus motivos: nubes, zona sin dato, días entre fechas y altura del sol. Con las escenas incluidas: la crecida 18/01 → 07/02/2021 da **alta** (222,9 ha de agua nueva); la bajante 24/11 → 14/12/2022 da **media** (132,2 ha de agua que ya no está); 02/10 → 26/10/2026 da **baja** por el 20,1 % de nubes, y lo avisa.
+- **Pruebas automáticas:** `cd apps/backend && uv run pytest` (57 pruebas) y `cd apps/frontend && npm test` (46 pruebas)
 - **Compilación del frontend:** `cd apps/frontend && npm run build`
 - Registro de la última prueba desde un clon limpio: [docs/entregables/prueba_clon_limpio.md](docs/entregables/prueba_clon_limpio.md)
 - Ejemplos con `curl`: [docs/CONTRATO_API.md](docs/CONTRATO_API.md)
@@ -52,9 +52,11 @@ Variables de entorno opcionales: ver `.env.example`.
 ## Datos incluidos
 | Dato | Archivo | Categoría |
 |---|---|---|
-| Escenas Sentinel-2 L2A (bandas B03 y B08, tile 21JUM) del 21/06/2019, 13/11/2024, 02/10/2026 y 26/10/2026 | `apps/backend/data/escenas/` (recortes de 7 x 7,8 km sobre Formosa, Alberdi y los bañados del sur) | Dato observado |
+| Escenas Sentinel-2 L2A (bandas B03 y B08, tile 21JUM) del 21/06/2019, 18/01/2021, 07/02/2021, 24/11/2022, 14/12/2022, 13/11/2024, 02/10/2026 y 26/10/2026 | `apps/backend/data/escenas/` (recortes de 7 x 7,8 km sobre Formosa, Alberdi y los bañados del sur) | Dato observado |
 | Umbrales Puerto Formosa | `apps/backend/data/K3_estaciones_umbrales.json` (kit K3, INA, 29/10/2026) | Dato observado |
 | Altura del río | `apps/backend/data/niveles_formosa_limpio.csv` (kit K1 limpiado por el equipo) | Dato observado |
+| Alturas en Puerto Pilcomayo y Puerto Bermejo (2017 al 31/10/2026) | `apps/backend/data/ina_alturas_region.csv` y `ina_estaciones_region.json` (API pública del INA) | Dato observado |
+| Lluvia diaria sobre la zona (12/2016 al 31/10/2026) | `apps/backend/data/lluvia_formosa_era5.csv` (reanálisis ERA5 vía Open-Meteo) | **Estimado** |
 
 Las escenas vienen de Copernicus Sentinel-2 (ESA) a través de Earth Search (Element84, AWS Open Data), sin cuenta. Para volver a descargarlas:
 
@@ -63,6 +65,12 @@ cd apps/backend
 uv sync --group escenas
 uv run python scripts/descargar_escenas.py
 ```
+
+Otros datos reales, todos de APIs públicas sin cuenta y cortados al 31/10/2026:
+- `uv run python scripts/descargar_ina.py`: alturas del INA en Puerto Formosa, Puerto Pilcomayo y Puerto Bermejo.
+- `uv run python scripts/descargar_lluvia.py`: lluvia estimada (ERA5).
+- `uv run python scripts/buscar_pares.py`: busca pares de escenas limpias, a 30 días o menos, con el río en niveles muy distintos.
+- `uv run python scripts/completar_metadatos.py`: agrega hora de captura y ángulos al catálogo.
 
 La limpieza de K1 se repite con `uv run python scripts/limpiar_k1.py`. Fuentes y tratamientos: `docs/entregables/`.
 

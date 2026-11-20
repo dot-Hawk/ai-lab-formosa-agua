@@ -42,7 +42,7 @@ Lista de escenas disponibles. `200` →
 | `sol_elevacion_grados` | Altura del sol sobre el horizonte en la toma |
 | `incidencia_grados` | Ángulo de visión del satélite respecto de la vertical; `null` si el catálogo no lo informa |
 
-Escenas cargadas hoy: `s2-2019-06-21`, `s2-2024-11-13`, `s2-2026-10-02` y `s2-2026-10-26`.
+Escenas cargadas hoy: `s2-2019-06-21`, `s2-2021-01-18`, `s2-2021-02-07`, `s2-2022-11-24`, `s2-2022-12-14`, `s2-2024-11-13`, `s2-2026-10-02` y `s2-2026-10-26`.
 
 ## `POST /api/comparar`
 Entrada:
@@ -67,6 +67,20 @@ Salida `200`:
     "fecha_b": "2026-10-26", "altura_b": 5.44,
     "umbrales": {"aguas_bajas": 1.6, "alerta": 7.8, "evacuacion": 8.3},
     "fuente": "INA · K1 (serie limpiada por el equipo) y K3 · Dato observado"
+  },
+  "region": {
+    "estaciones": [
+      {"nombre": "Puerto Pilcomayo", "rio": "Paraguay", "altura_a": 1.13, "altura_b": 3.64,   // null = sin dato en el INA
+       "umbrales": {"aguas_bajas": 1.4, "alerta": 5.35, "evacuacion": 6}},
+      {"nombre": "Puerto Bermejo", "rio": "Paraguay", "altura_a": 2.75, "altura_b": 5.94,
+       "umbrales": {"aguas_bajas": null, "alerta": 6.5, "evacuacion": 7}}
+    ],
+    "fuente": "INA, API pública del Sistema de Alerta (escalas de Prefectura Naval) · Dato observado"
+  },
+  "lluvia": {
+    "dias_previos": 30, "previa_a_mm": 157.7, "previa_b_mm": 185.1,
+    "entre_fechas_mm": 173.0,               // null si las fechas están a más de 90 días
+    "fuente": "Reanálisis ERA5 (Copernicus/ECMWF) vía Open-Meteo, ...", "categoria": "Estimado", "nota": "..."
   },
   "confianza": {
     "nivel": "baja",                      // alta | media | baja: el peor de los criterios

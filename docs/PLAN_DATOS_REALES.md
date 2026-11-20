@@ -55,6 +55,13 @@ La crecida de junio de 2019 (9,08 m el 21/06/2019) contra la bajante de noviembr
 ### 8 · Documentación
 Por cada fuente nueva: fila en la ficha de fuentes (URL, fecha de consulta, licencia, resolución, categoría, transformación), un script reproducible en `apps/backend/scripts/` y datos recortados chicos en el repo.
 
+## Datos reales ya incorporados (20/11/2026)
+| Dato | Fuente (API pública, sin cuenta) | Categoría | Uso |
+|---|---|---|---|
+| 4 escenas nuevas: crecida 18/01 → 07/02/2021 y bajante 24/11 → 14/12/2022 | Earth Search (Sentinel-2 L2A), elegidas con `scripts/buscar_pares.py` | Observado | Pares a 20 días, sin nubes: confianza alta y media |
+| Alturas diarias de Puerto Formosa, Puerto Pilcomayo y Puerto Bermejo (2017 al 31/10/2026) | INA, `alerta.ina.gob.ar/pub/datos` | Observado | Río en la región en cada comparación; control cruzado con K1 |
+| Lluvia diaria sobre la zona (12/2016 al 31/10/2026) | Open-Meteo, reanálisis ERA5 | Estimado | Lluvia de los 30 días previos y entre fechas |
+
 ## Reglas del semáforo de confianza (propuesta, a confirmar)
 Se evalúa cada criterio y el resultado es el **peor** de todos.
 
