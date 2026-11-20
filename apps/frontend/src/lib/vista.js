@@ -53,3 +53,6 @@ export function formatearHoraArgentina(iso) {
 
 /** Nivel del semáforo de confianza -> texto para mostrar. */
 export const TEXTO_CONFIANZA = { alta: "Alta", media: "Media", baja: "Baja" };
+
+/** 368.8 -> "368,8 mm" · null -> "sin dato" */
+export const formatearMilimetros = (v) => (v == null ? "sin dato" : `${numero(v, 1)} mm`);

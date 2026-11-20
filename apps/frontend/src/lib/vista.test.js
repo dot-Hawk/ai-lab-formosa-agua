@@ -5,6 +5,7 @@ import {
   formatearHoraArgentina,
   formatearHectareas,
   formatearMetros,
+  formatearMilimetros,
   formatearPorcentaje,
   posicionEnEscala,
   validarSeleccion,
@@ -94,5 +95,13 @@ describe("formatearHoraArgentina", () => {
 
   it("indica cuando falta el dato", () => {
     expect(formatearHoraArgentina(undefined)).toBe("sin dato");
+  });
+});
+
+describe("formatearMilimetros", () => {
+  it("usa coma decimal y avisa el faltante", () => {
+    expect(formatearMilimetros(368.8)).toBe("368,8 mm");
+    expect(formatearMilimetros(0)).toBe("0,0 mm");
+    expect(formatearMilimetros(null)).toBe("sin dato");
   });
 });

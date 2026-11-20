@@ -5,6 +5,7 @@ import {
   formatearHoraArgentina,
   formatearHectareas,
   formatearMetros,
+  formatearMilimetros,
   formatearPorcentaje,
 } from "../lib/vista.js";
 
@@ -41,7 +42,24 @@ export default function Lectura({ resultado }) {
       <Nivel altura={n.altura_a} umbrales={n.umbrales} />,
       <Nivel altura={n.altura_b} umbrales={n.umbrales} />,
     ],
+    ...(resultado.region?.estaciones ?? []).map((e) => {
+      // sin nivel de aguas bajas informado, no se marca "aguas bajas"
+      const umbrales = { ...e.umbrales, aguas_bajas: e.umbrales.aguas_bajas ?? -Infinity };
+      return [
+        `Río en ${e.nombre}`,
+        <Nivel altura={e.altura_a} umbrales={umbrales} />,
+        <Nivel altura={e.altura_b} umbrales={umbrales} />,
+      ];
+    }),
+    ...(resultado.lluvia
+      ? [[
+          `Lluvia ${resultado.lluvia.dias_previos} días antes (estimada)`,
+          formatearMilimetros(resultado.lluvia.previa_a_mm),
+          formatearMilimetros(resultado.lluvia.previa_b_mm),
+        ]]
+      : []),
   ];
+  const lluvia = resultado.lluvia;
 
   return (
     <section className="lectura" aria-labelledby="lectura-titulo">
@@ -83,6 +101,13 @@ export default function Lectura({ resultado }) {
         </tbody>
       </table>
       <p className="fuente">{n.fuente}</p>
+      {resultado.region && <p className="fuente">Otras escalas: {resultado.region.fuente}</p>}
+      {lluvia && (
+        <p className="fuente">
+          Lluvia: {lluvia.fuente} · <strong>{lluvia.categoria}</strong>. {lluvia.nota}
+          {lluvia.entre_fechas_mm != null && ` Entre las dos fechas: ${formatearMilimetros(lluvia.entre_fechas_mm)}.`}
+        </p>
+      )}
 
       <p className="aviso aviso-indicio">{resultado.advertencia}</p>
     </section>

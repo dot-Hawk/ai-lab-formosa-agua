@@ -42,6 +42,19 @@ export const resultado = {
     criterios: "Reglas definidas por el equipo.",
   },
   avisos: [],
+  region: {
+    estaciones: [
+      { nombre: "Puerto Pilcomayo", rio: "Paraguay", altura_a: 1.73, altura_b: 4.93,
+        umbrales: { aguas_bajas: 1.4, alerta: 5.35, evacuacion: 6 } },
+      { nombre: "Puerto Bermejo", rio: "Paraguay", altura_a: null, altura_b: -0.2,
+        umbrales: { aguas_bajas: null, alerta: 6.5, evacuacion: 7 } },
+    ],
+    fuente: "INA · Dato observado",
+  },
+  lluvia: {
+    dias_previos: 30, previa_a_mm: 227.3, previa_b_mm: 368.8, entre_fechas_mm: 258,
+    fuente: "ERA5 vía Open-Meteo", categoria: "Estimado", nota: "Es una estimación de un modelo.",
+  },
   advertencia: "Un cambio detectado es un indicio, no una afectación comprobada.",
   leyenda: "PROTOTIPO",
 };

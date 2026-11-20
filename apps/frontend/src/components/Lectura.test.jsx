@@ -21,7 +21,7 @@ describe("Lectura", () => {
 
   it("muestra la altura y su estado, y un único 'sin dato' cuando falta", () => {
     render(<Lectura resultado={resultado} />);
-    const fila = screen.getByRole("row", { name: /Río en/ });
+    const fila = screen.getByRole("row", { name: /Río en Puerto Formosa/ });
     expect(within(fila).getByText("2,37 m")).toBeInTheDocument();
     expect(within(fila).getByText("Por debajo del nivel de alerta")).toBeInTheDocument();
     expect(within(fila).getAllByText(/sin dato/i)).toHaveLength(1);
@@ -68,5 +68,26 @@ describe("Lectura con ficha de confianza", () => {
     delete viejo.avisos;
     render(<Lectura resultado={viejo} />);
     expect(screen.queryByText(/Confianza del resultado/)).not.toBeInTheDocument();
+  });
+});
+
+describe("Lectura con región y lluvia", () => {
+  it("muestra las otras escalas del río con su estado o sin dato", () => {
+    render(<Lectura resultado={resultado} />);
+    const pilcomayo = screen.getByRole("row", { name: /Río en Puerto Pilcomayo/ });
+    expect(within(pilcomayo).getByText("4,93 m")).toBeInTheDocument();
+    const bermejo = screen.getByRole("row", { name: /Río en Puerto Bermejo/ });
+    expect(within(bermejo).getByText("Sin dato")).toBeInTheDocument();
+    // sin nivel de aguas bajas informado, una altura negativa no se marca como "aguas bajas"
+    expect(within(bermejo).getByText("Por debajo del nivel de alerta")).toBeInTheDocument();
+  });
+
+  it("muestra la lluvia estimada, marcada como estimación", () => {
+    render(<Lectura resultado={resultado} />);
+    const fila = screen.getByRole("row", { name: /Lluvia 30 días antes \(estimada\)/ });
+    expect(within(fila).getByText("227,3 mm")).toBeInTheDocument();
+    expect(within(fila).getByText("368,8 mm")).toBeInTheDocument();
+    expect(screen.getByText(/Entre las dos fechas: 258,0 mm/)).toBeInTheDocument();
+    expect(screen.getByText("Estimado")).toBeInTheDocument();
   });
 });
