@@ -80,6 +80,14 @@ def _png(rgba: np.ndarray) -> str:
     return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
 
 
+def _agua_png(indice: np.ndarray, umbral: float) -> str:
+    """Agua de una sola fecha para el deslizador: azul = agua, gris = sin dato (nube o borde)."""
+    rgba = np.zeros((*indice.shape, 4), dtype="uint8")
+    rgba[np.isnan(indice)] = (120, 120, 120, 110)
+    rgba[np.nan_to_num(indice, nan=-1) > umbral] = (30, 110, 255, 210)
+    return _png(rgba)
+
+
 def _agua_habitual(mascara: np.ndarray, umbral_pct: float, res: float) -> dict | None:
     """Separa el agua nueva en habitual e inusual con Global Surface Water. None si no hay capa."""
     ocurrencia = datos.gsw_ocurrencia()
@@ -159,7 +167,8 @@ def comparar(pedido: PedidoComparar):
             400, "Las escenas son de distinto satélite o resolución; compararlas genera cambios falsos."
         )
 
-    mascara = detectar_cambio(ndwi(*datos.cargar_bandas(a)), ndwi(*datos.cargar_bandas(b)), pedido.umbral_agua)
+    ndwi_a, ndwi_b = ndwi(*datos.cargar_bandas(a)), ndwi(*datos.cargar_bandas(b))
+    mascara = detectar_cambio(ndwi_a, ndwi_b, pedido.umbral_agua)
     res = a["resolucion_m"]
     k3 = datos.umbrales_k3()["estaciones"]["formosa"]
 
@@ -170,6 +179,8 @@ def comparar(pedido: PedidoComparar):
         "area_agua_nueva_ha": round(area_hectareas(int((mascara == AGUA_NUEVA).sum()), res), 2),
         "area_agua_perdida_ha": round(area_hectareas(int((mascara == AGUA_PERDIDA).sum()), res), 2),
         "overlay_png": _overlay_png(mascara),
+        "agua_a_png": _agua_png(ndwi_a, pedido.umbral_agua),
+        "agua_b_png": _agua_png(ndwi_b, pedido.umbral_agua),
         "bounds": a["bounds"],
         "nivel_rio": {
             "estacion": k3["nombre"],

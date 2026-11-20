@@ -68,3 +68,10 @@ def test_comparar_incluye_confianza_y_avisos():
 def test_escenas_incluyen_hora_de_captura():
     for e in cliente.get("/api/escenas").json():
         assert e["captura_utc"].endswith("Z")
+
+
+def test_comparar_incluye_el_agua_de_cada_fecha_para_el_deslizador():
+    r = cliente.post("/api/comparar", json={"escena_a": "s2-2021-01-18", "escena_b": "s2-2021-02-07"}).json()
+    for clave in ("agua_a_png", "agua_b_png"):
+        assert r[clave].startswith("data:image/png;base64,")
+    assert r["agua_a_png"] != r["agua_b_png"]
