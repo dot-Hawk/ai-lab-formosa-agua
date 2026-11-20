@@ -106,13 +106,13 @@ def empaquetar(verde: np.ndarray, nir: np.ndarray, validos: np.ndarray) -> tuple
 
 # --- Lectura (requiere red y el grupo "escenas") ----------------------------------------
 
-def grilla_mercator():
-    """Transform, ancho, alto y bounds lat/lon de la grilla común en EPSG:3857."""
+def grilla_mercator(bbox=BBOX):
+    """Transform, ancho, alto y bounds lat/lon de la grilla común en EPSG:3857 para `bbox`."""
     from rasterio.transform import from_origin
     from rasterio.warp import transform_bounds
 
-    oeste, sur, este, norte = transform_bounds("EPSG:4326", "EPSG:3857", *BBOX)
-    lat_centro = math.radians((BBOX[1] + BBOX[3]) / 2)
+    oeste, sur, este, norte = transform_bounds("EPSG:4326", "EPSG:3857", *bbox)
+    lat_centro = math.radians((bbox[1] + bbox[3]) / 2)
     res = RESOLUCION_TERRENO_M / math.cos(lat_centro)  # metros Mercator por píxel
     ancho = math.ceil((este - oeste) / res)
     alto = math.ceil((norte - sur) / res)
@@ -143,11 +143,77 @@ def parametros(asset, offset_ya_aplicado: bool) -> tuple[float, float, int]:
     return banda.get("scale", 0.0001), offset, banda.get("nodata", 0)
 
 
+# Bandas que se guardan: nombre en el .npz -> asset de Earth Search. B11 (swir16) es de 20 m y
+# se remuestrea a la grilla de 10 m. Con ellas se calculan NDWI, MNDWI, NDVI y el color real.
+BANDAS = {"verde": "green", "nir": "nir", "rojo": "red", "azul": "blue", "swir": "swir16"}
+
+
+def empaquetar_bandas(bandas: dict[str, np.ndarray], validos: np.ndarray) -> dict[str, np.ndarray]:
+    """Igual que empaquetar, para cualquier conjunto de bandas: 0 = sin dato en todas."""
+    validos = validos.copy()
+    for b in bandas.values():
+        validos &= ~np.isnan(b)
+    salida = {}
+    for nombre, banda in bandas.items():
+        v = np.clip(np.nan_to_num(banda, nan=0) * 10_000, 1, 65_535).round().astype("uint16")
+        v[~validos] = 0
+        salida[nombre] = v
+    return salida
+
+
+def descargar(item, transform, ancho, alto, bounds, carpeta: Path, id_escena: str, zona: str) -> dict:
+    """Lee las bandas del ítem en la grilla, guarda el .npz y devuelve su entrada de catálogo."""
+    from rasterio.enums import Resampling
+
+    aplicado = bool(item.properties.get("earthsearch:boa_offset_applied", False))
+    crudas = {}
+    for nombre, asset_id in BANDAS.items():
+        asset = item.assets[asset_id]
+        crudas[nombre] = reflectancia(leer_banda(asset.href, transform, ancho, alto, Resampling.bilinear),
+                                      *parametros(asset, aplicado))
+    scl = leer_banda(item.assets["scl"].href, transform, ancho, alto, Resampling.nearest)
+    bandas = empaquetar_bandas(crudas, mascara_validos(scl))
+    fecha = item.datetime.date().isoformat()
+    archivo = f"{id_escena}.npz"
+    carpeta.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(carpeta / archivo, **bandas)
+    p = item.properties
+    return {
+        "id": id_escena,
+        "zona": zona,
+        "fecha": fecha,
+        "fuente": f"Copernicus Sentinel-2 (ESA), escena {item.id}, vía Earth Search (AWS Open Data)",
+        "satelite": "Sentinel-2",
+        "producto": f"L2A, {p.get('platform', '').title()}, tile {item.id.split('_')[1]}",
+        "resolucion_m": RESOLUCION_TERRENO_M,
+        "nubes_pct": round(porcentaje_nubes(scl), 1),
+        "nubes_escena_pct": round(p.get("eo:cloud_cover", float("nan")), 1),
+        "sin_dato_pct": round(float(100 * (bandas["verde"] == 0).mean()), 1),
+        **metadatos_captura(p),
+        "bandas": list(BANDAS),
+        "categoria": "Observado",
+        "url": f"{STAC_URL}/collections/{COLECCION}/items/{item.id}",
+        "consultado": date.today().isoformat(),
+        "bounds": bounds,
+        "archivo": archivo,
+    }
+
+
+def guardar_catalogo(ruta: Path, nuevas: list[dict], conservar_otras: bool) -> list[dict]:
+    catalogo = list(nuevas)
+    if conservar_otras and ruta.exists():
+        ids = {e["id"] for e in nuevas}
+        catalogo += [e for e in json.loads(ruta.read_text(encoding="utf-8")) if e["id"] not in ids]
+    catalogo.sort(key=lambda e: e["fecha"])
+    ruta.write_text(json.dumps(catalogo, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return catalogo
+
+
 def main() -> None:
+    """Zona de estudio original (data/escenas). Para otras zonas: scripts/descargar_zonas.py."""
     os.environ.setdefault("GDAL_DISABLE_READDIR_ON_OPEN", "EMPTY_DIR")
     os.environ.setdefault("CPL_VSIL_CURL_ALLOWED_EXTENSIONS", ".tif")
     from pystac_client import Client
-    from rasterio.enums import Resampling
 
     import sys
     solo_agregar = "--agregar" in sys.argv
@@ -159,50 +225,14 @@ def main() -> None:
     if faltan:
         raise SystemExit(f"No se encontraron en el catálogo: {sorted(faltan)}")
 
-    ESCENAS_DIR.mkdir(parents=True, exist_ok=True)
-    catalogo = []
+    nuevas = []
     for item_id in pedidas:
         item = items[item_id]
-        print(f"Leyendo {item_id} ({ancho}x{alto} px)…", flush=True)
-        verde_a, nir_a = item.assets["green"], item.assets["nir"]
-        aplicado = bool(item.properties.get("earthsearch:boa_offset_applied", False))
-        verde = reflectancia(leer_banda(verde_a.href, transform, ancho, alto, Resampling.bilinear),
-                             *parametros(verde_a, aplicado))
-        nir = reflectancia(leer_banda(nir_a.href, transform, ancho, alto, Resampling.bilinear),
-                           *parametros(nir_a, aplicado))
-        scl = leer_banda(item.assets["scl"].href, transform, ancho, alto, Resampling.nearest)
-
-        v, n = empaquetar(verde, nir, mascara_validos(scl))
-        fecha = item.datetime.date().isoformat()
-        archivo = f"s2-{fecha}.npz"
-        np.savez_compressed(ESCENAS_DIR / archivo, verde=v, nir=n)
-
-        p = item.properties
-        catalogo.append({
-            "id": f"s2-{fecha}",
-            "fecha": fecha,
-            "fuente": f"Copernicus Sentinel-2 (ESA), escena {item_id}, vía Earth Search (AWS Open Data)",
-            "satelite": "Sentinel-2",
-            "producto": f"L2A, {p.get('platform', '').title()}, tile {item_id.split('_')[1]}",
-            "resolucion_m": RESOLUCION_TERRENO_M,
-            "nubes_pct": round(porcentaje_nubes(scl), 1),
-            "nubes_escena_pct": round(p.get("eo:cloud_cover", float("nan")), 1),
-            "sin_dato_pct": round(float(100 * (v == 0).mean()), 1),
-            **metadatos_captura(p),
-            "categoria": "Observado",
-            "url": f"{STAC_URL}/collections/{COLECCION}/items/{item_id}",
-            "consultado": date.today().isoformat(),
-            "bounds": bounds,
-            "archivo": archivo,
-        })
-        print(f"  nubes en el recorte {catalogo[-1]['nubes_pct']} %, sin dato {catalogo[-1]['sin_dato_pct']} %")
-
-    ruta = ESCENAS_DIR / "catalogo.json"
-    if solo_agregar and ruta.exists():
-        nuevas = {e["id"] for e in catalogo}
-        catalogo += [e for e in json.loads(ruta.read_text(encoding="utf-8")) if e["id"] not in nuevas]
-    catalogo.sort(key=lambda e: e["fecha"])
-    ruta.write_text(json.dumps(catalogo, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        print(f"Leyendo {item_id} ({ancho}x{alto} px, {len(BANDAS)} bandas)…", flush=True)
+        e = descargar(item, transform, ancho, alto, bounds, ESCENAS_DIR, f"s2-{item.datetime.date().isoformat()}", "formosa")
+        nuevas.append(e)
+        print(f"  nubes en el recorte {e['nubes_pct']} %, sin dato {e['sin_dato_pct']} %")
+    catalogo = guardar_catalogo(ESCENAS_DIR / "catalogo.json", nuevas, solo_agregar)
     print(f"Catálogo con {len(catalogo)} escenas en {ESCENAS_DIR}")
 
 

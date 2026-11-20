@@ -23,6 +23,29 @@ def ndwi(verde: np.ndarray, nir: np.ndarray) -> np.ndarray:
         return np.where(suma == 0, np.nan, (verde - nir) / suma)
 
 
+def diferencia_normalizada(a: np.ndarray, b: np.ndarray) -> np.ndarray:
+    """(a - b) / (a + b) píxel a píxel; NaN donde a + b = 0 o falta el dato."""
+    if a.shape != b.shape:
+        raise ValueError(f"Las bandas tienen distinto tamaño: {a.shape} vs {b.shape}")
+    a, b = a.astype("float64"), b.astype("float64")
+    suma = a + b
+    with np.errstate(divide="ignore", invalid="ignore"):
+        return np.where(suma == 0, np.nan, (a - b) / suma)
+
+
+def mndwi(verde: np.ndarray, swir: np.ndarray) -> np.ndarray:
+    """MNDWI (Xu, 2006) = (Verde - SWIR) / (Verde + SWIR), con B03 y B11.
+
+    Separa mejor el agua de la ciudad que el NDWI: techos y calles reflejan mucho en el SWIR.
+    """
+    return diferencia_normalizada(verde, swir)
+
+
+def ndvi(nir: np.ndarray, rojo: np.ndarray) -> np.ndarray:
+    """NDVI = (NIR - Rojo) / (NIR + Rojo), con B08 y B04. Vegetación verde: valores altos."""
+    return diferencia_normalizada(nir, rojo)
+
+
 def detectar_cambio(ndwi_antes: np.ndarray, ndwi_despues: np.ndarray, umbral_agua: float = 0.0) -> np.ndarray:
     """Clasifica cada píxel: 1 agua nueva, -1 agua perdida, 0 sin cambio o sin dato."""
     if ndwi_antes.shape != ndwi_despues.shape:

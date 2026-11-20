@@ -32,6 +32,17 @@ def cargar_bandas(escena: dict) -> tuple[np.ndarray, np.ndarray]:
         return z["verde"] / 10_000, z["nir"] / 10_000
 
 
+def cargar_banda(escena: dict, nombre: str) -> np.ndarray | None:
+    """Una banda como reflectancia 0-1 (NaN = sin dato), o None si la escena no la tiene."""
+    with np.load(ESCENAS_DIR / escena["archivo"]) as z:
+        if nombre not in z.files:
+            return None
+        crudo = z[nombre]
+    salida = crudo / 10_000
+    salida[crudo == 0] = np.nan
+    return salida
+
+
 @lru_cache
 def umbrales_k3() -> dict:
     return json.loads((DATA_DIR / "K3_estaciones_umbrales.json").read_text(encoding="utf-8"))

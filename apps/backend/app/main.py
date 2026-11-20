@@ -7,6 +7,7 @@ import base64
 import datetime
 import io
 import os
+from typing import Literal
 
 import numpy as np
 from fastapi import FastAPI, HTTPException, Request
@@ -24,6 +25,8 @@ from app.cambio import (
     area_hectareas,
     detectar_cambio,
     detectar_cambio_radar,
+    mndwi,
+    ndvi,
     ndwi,
     separar_agua_nueva,
 )
@@ -57,6 +60,9 @@ class PedidoComparar(BaseModel):
     escena_a: str = Field(description="id de la escena 'antes'")
     escena_b: str = Field(description="id de la escena 'después'")
     umbral_agua: float = Field(0.0, ge=-1, le=1, description="NDWI mínimo para considerar agua")
+    indice_agua: Literal["ndwi", "mndwi"] = Field(
+        "ndwi", description="Índice para detectar agua: NDWI (B03, B08) o MNDWI (B03, B11)"
+    )
     radio_infraestructura_m: float = Field(
         500, ge=50, le=3000, description="Distancia al agua nueva inusual para contar un establecimiento como expuesto"
     )
@@ -167,6 +173,54 @@ def _infraestructura(mascara: np.ndarray, escena: dict, umbral_pct: float, radio
     }
 
 
+def _color_jpg(escena: dict) -> str | None:
+    """Color real (B04, B03, B02) con un estiramiento fijo de reflectancia 0-0,25. JPEG, liviano."""
+    rojo, verde, azul = (datos.cargar_banda(escena, b) for b in ("rojo", "verde", "azul"))
+    if rojo is None or azul is None:
+        return None
+    rgb = np.dstack([rojo, verde, azul])
+    rgb = np.clip(np.nan_to_num(rgb, nan=0) / 0.25, 0, 1) ** (1 / 1.4)
+    buf = io.BytesIO()
+    Image.fromarray((rgb * 255).astype("uint8"), "RGB").save(buf, format="JPEG", quality=82)
+    return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+# Escala de NDVI: suelo desnudo o agua (marrón) -> vegetación rala (amarillo) -> vegetación densa (verde)
+_NDVI_PUNTOS = np.array([-0.2, 0.2, 0.5, 0.8])
+_NDVI_COLORES = np.array([[140, 100, 60], [215, 195, 110], [120, 175, 70], [25, 110, 45]], dtype="float64")
+
+
+def _ndvi_png(indice: np.ndarray) -> str:
+    rgba = np.zeros((*indice.shape, 4), dtype="uint8")
+    valido = ~np.isnan(indice)
+    v = np.clip(indice[valido], _NDVI_PUNTOS[0], _NDVI_PUNTOS[-1])
+    for canal in range(3):
+        rgba[valido, canal] = np.interp(v, _NDVI_PUNTOS, _NDVI_COLORES[:, canal]).astype("uint8")
+    rgba[valido, 3] = 215
+    # Paleta de 48 colores: la capa pesa unas 10 veces menos y la escala sigue siendo legible
+    buf = io.BytesIO()
+    Image.fromarray(rgba, "RGBA").quantize(48, method=Image.Quantize.FASTOCTREE).save(buf, format="PNG", optimize=True)
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+def _capas_por_fecha(escena: dict) -> dict:
+    """Color real y NDVI de una fecha, si la escena tiene las bandas (las viejas solo tienen B03 y B08)."""
+    rojo, nir = datos.cargar_banda(escena, "rojo"), datos.cargar_banda(escena, "nir")
+    if rojo is None:
+        return {"color": None, "ndvi": None, "ndvi_medio": None}
+    indice = ndvi(nir, rojo)
+    return {"color": _color_jpg(escena), "ndvi": _ndvi_png(indice), "ndvi_medio": round(float(np.nanmean(indice)), 3)}
+
+
+def _indice_agua(escena: dict, nombre: str) -> np.ndarray:
+    if nombre == "mndwi":
+        swir = datos.cargar_banda(escena, "swir")
+        if swir is None:
+            raise HTTPException(400, f"La escena {escena['id']} no tiene la banda SWIR (B11): usá NDWI.")
+        return mndwi(datos.cargar_banda(escena, "verde"), swir)
+    return ndwi(*datos.cargar_bandas(escena))
+
+
 def _agua_png(indice: np.ndarray, umbral: float) -> str:
     """Agua de una sola fecha para el deslizador: azul = agua, gris = sin dato (nube o borde)."""
     rgba = np.zeros((*indice.shape, 4), dtype="uint8")
@@ -254,7 +308,8 @@ def comparar(pedido: PedidoComparar):
             400, "Las escenas son de distinto satélite o resolución; compararlas genera cambios falsos."
         )
 
-    ndwi_a, ndwi_b = ndwi(*datos.cargar_bandas(a)), ndwi(*datos.cargar_bandas(b))
+    ndwi_a, ndwi_b = _indice_agua(a, pedido.indice_agua), _indice_agua(b, pedido.indice_agua)
+    capas_a, capas_b = _capas_por_fecha(a), _capas_por_fecha(b)
     radar = _radar(a, b)
     mascara = detectar_cambio(ndwi_a, ndwi_b, pedido.umbral_agua)
     res = a["resolucion_m"]
@@ -264,11 +319,17 @@ def comparar(pedido: PedidoComparar):
         "escena_a": _publica(a),
         "escena_b": _publica(b),
         "umbral_agua": pedido.umbral_agua,
+        "indice_agua": pedido.indice_agua,
         "area_agua_nueva_ha": round(area_hectareas(int((mascara == AGUA_NUEVA).sum()), res), 2),
         "area_agua_perdida_ha": round(area_hectareas(int((mascara == AGUA_PERDIDA).sum()), res), 2),
         "overlay_png": _overlay_png(mascara),
         "agua_a_png": _agua_png(ndwi_a, pedido.umbral_agua),
         "agua_b_png": _agua_png(ndwi_b, pedido.umbral_agua),
+        "color_a_jpg": capas_a["color"],
+        "color_b_jpg": capas_b["color"],
+        "ndvi_a_png": capas_a["ndvi"],
+        "ndvi_b_png": capas_b["ndvi"],
+        "ndvi_medio": {"a": capas_a["ndvi_medio"], "b": capas_b["ndvi_medio"]},
         "bounds": a["bounds"],
         "nivel_rio": {
             "estacion": k3["nombre"],
