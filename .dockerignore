@@ -1,0 +1,14 @@
+# Solo entra lo que el Dockerfile copia explícitamente; esto acelera el build
+.git
+**/node_modules
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/dist
+05_Kit_equipos_v1.1
+*.pdf
+skills
+docs
+apps/backend/data/crudo
+apps/backend/data/k1_observaciones_limpias.csv
+.env
