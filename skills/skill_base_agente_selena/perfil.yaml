@@ -44,6 +44,7 @@ responsabilidades:
   rol_confirmado_por_equipo: false
   directorios_autorizados:
     - "skills/skill_base_agente_selena/"
+    - "apps/ (funcionalidades del plan, pedidas por la integrante el 2026-11-20; coordinar con Diego)"
     - "docs/entregables/"
     - "README.md"
     - "docs/ROLES.md (sección de las 7 preguntas y fila del rol D)"
@@ -139,6 +140,51 @@ tareas:
     archivos: ["README.md", "docs/CONTRATO_API.md"]
     commits: ["3503b0b", "5d073d5"]
     pendiente: "Agregar el commit o tag evaluable"
+  - id: "TASK-F-01"
+    titulo: "Plan de funcionalidades con datos reales"
+    responsable: "Selena Milagros Britez"
+    estado: "HECHA"
+    archivos: ["docs/PLAN_DATOS_REALES.md"]
+    commits: ["dffa1bd"]
+  - id: "TASK-F-03"
+    titulo: "Ficha de confianza (hora, ángulos y semáforo) y aviso de nubes"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_REVISION"
+    commits: ["d6ebf2a", "f6c9a1a", "58a8741", "8108187"]
+    pendiente: "Que el equipo confirme las reglas del semáforo"
+  - id: "TASK-F-DATOS"
+    titulo: "Datos reales: escenas 2021 y 2022, INA y lluvia ERA5"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_REVISION"
+    commits: ["cb115f6", "9148bc8", "18e2ef9", "72634f2", "a86dd2c"]
+  - id: "TASK-F-04"
+    titulo: "Agua nueva contra agua de siempre (Global Surface Water)"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_REVISION"
+    commits: ["4ffe421", "0a90e95", "953228a"]
+    pendiente: "Confirmar el umbral del 50 %"
+  - id: "TASK-F-01B"
+    titulo: "Deslizador antes/después"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_REVISION"
+    commits: ["f5db75f", "78d9a31"]
+  - id: "TASK-F-02"
+    titulo: "Radar Sentinel-1 automático con nubes"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_REVISION"
+    commits: ["72b74e7", "435afc9"]
+    pendiente: "Validar el umbral de -13 dB con más fechas"
+  - id: "TASK-F-05"
+    titulo: "Exposición de infraestructura (IGN)"
+    responsable: "Selena Milagros Britez"
+    estado: "EN_REVISION"
+    commits: ["86b62ea", "d0d2e1d"]
+    pendiente: "Datos de Paraguay para Alberdi"
+  - id: "TASK-D-07B"
+    titulo: "Segunda prueba desde un clon limpio"
+    responsable: "Selena Milagros Britez"
+    estado: "HECHA"
+    commits: ["dda9588", "b8208b1"]
 
 coordinacion:
   protocolo_revision: "VCPD"
@@ -186,8 +232,8 @@ desarrollo:
       frontend: "npm run build"
   resultados_ultima_validacion:
     fecha: "2026-11-20"
-    backend_pytest: "40 pasaron"
-    frontend_test: "37 pasaron"
+    backend_pytest: "82 pasaron (clon limpio, commit 8303050)"
+    frontend_test: "66 pasaron (clon limpio; timeout de 15 s)"
     frontend_build: "correcto"
 
 integracion:

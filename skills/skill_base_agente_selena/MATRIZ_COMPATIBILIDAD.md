@@ -23,6 +23,8 @@ Referencia de secciones en [SKILL_BASE.md](../../SKILL_BASE.md), versión 0.4.0.
 | VCPD-2026-11-20-001 | 2026-11-20, UTC−03 | Inspección y creación de rama personal | `main` durante la inspección, `f1ca354def7dbe707a22f1920e48c5037da068d2` | Correcto tras autorización | Continuar con el nombre de rama confirmado en el pedido |
 | VCPD-2026-11-20-002 | 2026-11-20 11:22 UTC−03 | Documentación de la skill personal | `dev-Selena-Milagros-Britez`, mismo commit base | Correcto | Continuar dentro de la carpeta personal |
 | VCPD-2026-11-20-003 | 2026-11-20, tarde, UTC−03 | Rol D: entregables, README y prueba desde un clon limpio | `dev-Selena-Milagros-Britez`, `ebae4f9` antes del bloque | Correcto (`git fetch --all`) | Incorporar `dev-Diego`; continuar en `docs/`, `README.md` y la carpeta personal; coordinar el cambio en el contrato |
+| VCPD-2026-11-20-004 | 2026-11-20 14:40 UTC−03 | Funcionalidades del plan con datos reales | `dev-Selena-Milagros-Britez`, `a86dd2c` | Correcto | Incorporar `a9715e2` de Diego (Python 3.14) |
+| VCPD-2026-11-20-005 | 2026-11-20 15:24 UTC−03 | Deslizador, radar e infraestructura | `dev-Selena-Milagros-Britez`, `953228a` | Correcto | Incorporar `6bd1586` a `da8371a` de Diego (Docker; `main.py` sin conflicto: su bloque va al final) |
 
 ### Detalle de VCPD-2026-11-20-003
 

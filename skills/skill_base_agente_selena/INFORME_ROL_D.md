@@ -91,3 +91,54 @@ Tomar el rol D de [docs/ROLES.md](../../docs/ROLES.md) y dejar listos los entreg
 
 ## Estado de integración
 No solicitada. Los commits son locales en `dev-Selena-Milagros-Britez` y todavía no se publicaron en `origin`.
+
+---
+
+# Informe — Bloque 2 · Funcionalidades con datos reales (TASK-F-*)
+
+- **Responsable:** Selena Milagros Britez (autor Git `sbrittz`)
+- **Agente:** sesión en Claude Code (Claude Opus 5.5)
+- **Rama:** `dev-Selena-Milagros-Britez`
+- **Fecha:** 2026-11-20, de 14:00 a 16:00 UTC−03
+- **Estado:** EN_REVISION
+
+## Objetivo
+Implementar con datos reales las cinco funcionalidades del plan (`docs/PLAN_DATOS_REALES.md`), pedidas por la integrante.
+
+## Trabajo realizado
+| Funcionalidad | Datos reales | Commits |
+|---|---|---|
+| Ficha de confianza y aviso de nubes | Hora y ángulos del catálogo Sentinel-2 | `d6ebf2a`, `f6c9a1a`, `58a8741` |
+| Escenas limpias de crecida (2021) y bajante (2022) | Earth Search, elegidas con alturas del INA | `9148bc8` |
+| Río en la región y lluvia | API del INA (observado); ERA5 vía Open-Meteo (estimado) | `cb115f6`, `18e2ef9`, `72634f2` |
+| Agua nueva contra agua de siempre | Global Surface Water v1.4 (JRC) | `4ffe421`, `0a90e95` |
+| Deslizador antes/después | Las mismas escenas | `f5db75f`, `78d9a31` |
+| Radar Sentinel-1 automático | Sentinel-1 RTC (Planetary Computer), validado contra Sentinel-2 | `72b74e7`, `435afc9` |
+| Exposición de infraestructura | IGN, Capas SIG (WFS) | `86b62ea`, `d0d2e1d` |
+
+## Decisiones tomadas con evidencia
+- **Umbral del radar −13 dB:** el mejor de −10 a −20 dB contra Sentinel-2 sin nubes a 1 día (IoU 0,873, 98 % de acuerdo). Calibrado con solo dos pares.
+- **Agua consolidada para la infraestructura:** sin filtro, el ruido urbano del NDWI marcaba 79 de 83 escuelas; con mayoría en 5 × 5 píxeles quedan 2 (2021) y 4 (octubre 2026).
+- **La API del INA coincide con K1:** 3.470 de 3.552 días idénticos.
+
+## Validaciones
+| Comando | Alcance | Resultado |
+|---|---|---|
+| `uv run pytest -q` | Backend, clon limpio | 82 pasaron |
+| `npm test` | Frontend, clon limpio | 66 pasaron (con timeout de 15 s) |
+| `npm run build` | Frontend | Correcto |
+| API en un clon limpio | Flujo principal, radar, infraestructura y caso inválido | Correcto (ver `docs/entregables/prueba_clon_limpio.md`) |
+| Navegador (Edge automatizado) | Deslizador, agua de siempre, radar, infraestructura | Sin errores de consola |
+
+## Contratos y archivos compartidos tocados
+- `docs/CONTRATO_API.md`: solo campos nuevos y opcionales; nada se quitó ni cambió de forma.
+- `apps/backend/tests/test_api.py`: solo pruebas nuevas.
+- Código de Diego en `apps/`: se agregaron módulos y campos; se ajustó una prueba que buscaba la única fila "Río en" (ahora hay tres) y el `testTimeout`. **Hay que avisarle.**
+
+## Pendientes y riesgos
+- El equipo tiene que confirmar las reglas del semáforo, el umbral del agua de siempre (50 %) y el del radar.
+- El video de 107 s quedó sin renderizar por falta de memoria; el de 99 s (versión 1) sigue disponible.
+- Falta integrar en `main` y crear el tag de entrega.
+
+## Estado de integración
+Publicado en `origin/dev-Selena-Milagros-Britez`. Integración en `main` no solicitada.
