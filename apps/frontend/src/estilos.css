@@ -547,3 +547,29 @@ button:disabled {
 
 .habitual p { margin: 0; }
 .habitual .ayuda { margin-top: 0.4rem; }
+
+/* ---------- Deslizador antes / después ---------- */
+
+.modos {
+  display: flex;
+  gap: 0.9rem;
+  margin-bottom: 0.5rem;
+  font-size: var(--t-1);
+}
+
+.modos label { display: flex; align-items: center; gap: 0.3rem; }
+.modos input { accent-color: var(--rio); }
+
+.muestra-sin-dato { background: rgb(120 120 120 / 0.45); }
+
+.corte {
+  display: grid;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  font-size: var(--t-1);
+}
+
+.corte-fechas { display: flex; justify-content: space-between; gap: 0.5rem; }
+.corte input { accent-color: var(--rio); width: 100%; }
+
+.linea-corte { stroke: #fff; filter: drop-shadow(0 0 2px rgb(0 0 0 / 0.6)); }
