@@ -50,7 +50,12 @@ def filas_diarias(site: int, datos: list[dict]) -> list[dict]:
 
 def metadatos_estaciones(todas: list[dict]) -> list[dict]:
     claves = ("sitecode", "nombre", "rio", "lat", "lon", "propietario", "nivel_de_aguas_bajas", "nivel_de_alerta", "nivel_de_evacuacion")
-    return [{k: e.get(k) for k in claves} for e in todas if e.get("sitecode") in ESTACIONES and e.get("tabla_id") == "alturas_prefe"]
+    salida = []
+    for e in todas:
+        if e.get("sitecode") in ESTACIONES and e.get("tabla_id") == "alturas_prefe":
+            # el INA llama "Bermejo" a la escala de Puerto Bermejo: se usa el nombre completo
+            salida.append({k: e.get(k) for k in claves} | {"nombre": ESTACIONES[e["sitecode"]], "nombre_ina": e.get("nombre")})
+    return salida
 
 
 def main() -> None:

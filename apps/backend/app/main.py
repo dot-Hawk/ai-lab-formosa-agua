@@ -4,6 +4,7 @@ Contrato documentado en docs/CONTRATO_API.md.
 """
 
 import base64
+import datetime
 import io
 import os
 
@@ -73,6 +74,43 @@ def _publica(e: dict) -> dict:
     return {k: v for k, v in e.items() if k != "archivo"}
 
 
+DIAS_LLUVIA_PREVIA = 30
+MAX_DIAS_LLUVIA_ENTRE = 90  # con más días, el acumulado entre fechas deja de explicar el cambio
+
+
+def _region(a: dict, b: dict) -> dict:
+    """Altura observada en otras escalas del río Paraguay (INA) en las dos fechas."""
+    return {
+        "estaciones": [
+            {
+                "nombre": e["nombre"],
+                "rio": e["rio"].title(),
+                "altura_a": datos.altura_ina(e["sitecode"], a["fecha"]),
+                "altura_b": datos.altura_ina(e["sitecode"], b["fecha"]),
+                "umbrales": {"aguas_bajas": e["nivel_de_aguas_bajas"], "alerta": e["nivel_de_alerta"],
+                             "evacuacion": e["nivel_de_evacuacion"]},
+            }
+            for e in datos.estaciones_region()
+        ],
+        "fuente": "INA, API pública del Sistema de Alerta (escalas de Prefectura Naval) · Dato observado",
+    }
+
+
+def _lluvia(a: dict, b: dict) -> dict:
+    """Lluvia estimada (ERA5) antes de cada fecha y entre ambas."""
+    desde, hasta = sorted((a["fecha"], b["fecha"]))
+    dias = (datetime.date.fromisoformat(hasta) - datetime.date.fromisoformat(desde)).days
+    return {
+        "dias_previos": DIAS_LLUVIA_PREVIA,
+        "previa_a_mm": datos.lluvia_previa(a["fecha"], DIAS_LLUVIA_PREVIA),
+        "previa_b_mm": datos.lluvia_previa(b["fecha"], DIAS_LLUVIA_PREVIA),
+        "entre_fechas_mm": datos.lluvia_entre(desde, hasta) if dias <= MAX_DIAS_LLUVIA_ENTRE else None,
+        "fuente": "Reanálisis ERA5 (Copernicus/ECMWF) vía Open-Meteo, celda de ~25 km sobre la zona",
+        "categoria": "Estimado",
+        "nota": "Es una estimación de un modelo, no una medición: puede diferir de los pluviómetros.",
+    }
+
+
 @app.post("/api/comparar")
 def comparar(pedido: PedidoComparar):
     if pedido.escena_a == pedido.escena_b:
@@ -108,6 +146,8 @@ def comparar(pedido: PedidoComparar):
             "umbrales": {"aguas_bajas": k3["aguas_bajas"], "alerta": k3["alerta"], "evacuacion": k3["evacuacion"]},
             "fuente": "INA · K1 (serie limpiada por el equipo) y K3 · Dato observado",
         },
+        "region": _region(a, b),
+        "lluvia": _lluvia(a, b),
         "confianza": confianza.evaluar(a, b),
         "avisos": confianza.avisos(a, b),
         "advertencia": ADVERTENCIA,

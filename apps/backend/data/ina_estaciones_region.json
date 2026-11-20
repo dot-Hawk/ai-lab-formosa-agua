@@ -10,7 +10,8 @@
       "propietario": "PNA",
       "nivel_de_aguas_bajas": 1.4,
       "nivel_de_alerta": 5.35,
-      "nivel_de_evacuacion": 6
+      "nivel_de_evacuacion": 6,
+      "nombre_ina": "Puerto Pilcomayo"
     },
     {
       "sitecode": 57,
@@ -21,18 +22,20 @@
       "propietario": "PNA",
       "nivel_de_aguas_bajas": 1.6,
       "nivel_de_alerta": 7.8,
-      "nivel_de_evacuacion": 8.3
+      "nivel_de_evacuacion": 8.3,
+      "nombre_ina": "Puerto Formosa"
     },
     {
       "sitecode": 58,
-      "nombre": "Bermejo",
+      "nombre": "Puerto Bermejo",
       "rio": "PARAGUAY",
       "lat": -26.92629,
       "lon": -58.506205,
       "propietario": null,
       "nivel_de_aguas_bajas": null,
       "nivel_de_alerta": 6.5,
-      "nivel_de_evacuacion": 7
+      "nivel_de_evacuacion": 7,
+      "nombre_ina": "Bermejo"
     }
   ]
 }
