@@ -48,6 +48,27 @@ No son datos observados: son estimaciones que la herramienta calcula a partir de
 
 La capa se reproyectó de 30 m a la grilla de 10 m de las escenas por vecino más cercano: los bordes son aproximados. El umbral del 50 % es una decisión del equipo.
 
+## Radar Sentinel-1
+
+| Qué muestra la herramienta | Valor o rango | Fuente | Categoría | Fecha del dato |
+|---|---|---|---|---|
+| Pasada de radar 01/10/2026 (VV) | Sentinel-1C, órbita relativa 141, 10 m | [S1C_IW_GRDH_1SDV_20261001T092002_20261001T092027_009689_0134B9_rtc](https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-1-rtc/items/S1C_IW_GRDH_1SDV_20261001T092002_20261001T092027_009689_0134B9_rtc) · `radar/s1-2026-10-01.npz` | Observado | 01/10/2026 |
+| Pasada de radar 25/10/2026 (VV) | Sentinel-1C, órbita relativa 141, 10 m | [S1C_IW_GRDH_1SDV_20261025T092001_20261025T092026_010039_014091_rtc](https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-1-rtc/items/S1C_IW_GRDH_1SDV_20261025T092001_20261025T092026_010039_014091_rtc) · `radar/s1-2026-10-25.npz` | Observado | 25/10/2026 |
+| Pasada de radar 17/01/2021 (VV, solo validación) | Sentinel-1B, órbita relativa 141, 10 m | [S1B_IW_GRDH_1SDV_20210117T092020_20210117T092045_025192_02FFDE_rtc](https://planetarycomputer.microsoft.com/api/stac/v1/collections/sentinel-1-rtc/items/S1B_IW_GRDH_1SDV_20210117T092020_20210117T092045_025192_02FFDE_rtc) · `radar/s1-2021-01-17.npz` | Observado | 17/01/2021 |
+| Umbral de agua del radar | VV < −13 dB tras un promedio de 5 × 5 píxeles | Calibrado con `scripts/validar_radar.py` contra Sentinel-2 sin nubes a 1 día (17-18/01/2021 y 01-02/10/2026): IoU promedio 0,873, 98 % de acuerdo · `radar/validacion.json` | Criterio del equipo, validado | 20/11/2026 |
+| Agua nueva / que ya no está según radar, 01/10 → 25/10/2026 | 220,83 ha / 27,74 ha | Cálculo de la herramienta | Estimado (cálculo) | Consulta del 20/11/2026 |
+
+## Infraestructura
+
+| Qué muestra la herramienta | Valor o rango | Fuente | Categoría | Fecha del dato |
+|---|---|---|---|---|
+| Establecimientos educativos de la zona | 83 | IGN, capa `ign:puntos_de_ciencia_y_educacion_020601` (Mapa Educativo Nacional), WFS https://wms.ign.gob.ar/geoserver/ows · `infraestructura_ign.json` | Referencia (cartografía oficial) | Consulta del 20/11/2026 |
+| Establecimientos de salud de la zona | 6 | IGN, capa `ign:salud_020801` | Referencia (cartografía oficial) | Consulta del 20/11/2026 |
+| Red vial de la zona | 1 tramo (camino terciario); sin rutas nacionales ni provinciales en el recorte | IGN, capas `ign:vial_nacional`, `ign:vial_provincial`, `ign:vial_terciaria` | Referencia (cartografía oficial) | Consulta del 20/11/2026 |
+| Establecimientos a menos de 500 m del agua nueva inusual | 2 escuelas (crecida 2021) · 4 escuelas (octubre 2026) · 0 centros de salud | Cálculo de la herramienta, con el agua consolidada en manchas de más de la mitad de 50 × 50 m | Estimado (cálculo) | Consulta del 20/11/2026 |
+
+El IGN cubre solo territorio argentino: Alberdi (Paraguay) no tiene datos.
+
 ## Río Paraguay en Puerto Formosa
 
 | Qué muestra la herramienta | Valor o rango | Fuente (archivo del kit o URL) | Categoría | Fecha del dato |
@@ -87,6 +108,8 @@ La lluvia es una estimación y puede diferir de una medición: por ejemplo, para
 - Programa Copernicus, Sentinel-2 (ESA, Unión Europea): https://browser.dataspace.copernicus.eu, citado en la guía del desafío (relevamiento del CITF del 16/11/2026).
 - INA, Sistema de Información y Alerta Hidrológico, catálogo de estaciones: https://alerta.ina.gob.ar/pub/datos/estaciones&format=json, consultado el 29/10/2026 (kit K3).
 - El Monterizo, 17/9/2026: esquema preventivo provincial por El Niño con inspección satelital de riachos (citado en la guía del desafío).
+- Microsoft Planetary Computer, Sentinel-1 RTC: https://planetarycomputer.microsoft.com/api/stac/v1 (colección `sentinel-1-rtc`), consultado el 20/11/2026.
+- IGN, Capas SIG por WFS: https://wms.ign.gob.ar/geoserver/ows, consultado el 20/11/2026.
 - Global Surface Water (JRC), descargas v1.4: https://global-surface-water.appspot.com/download, consultado el 20/11/2026.
 - INA, API pública del Sistema de Alerta Hidrológico: https://alerta.ina.gob.ar/pub/datos/datos y /estaciones, consultada el 20/11/2026.
 - Open-Meteo, API de datos históricos (reanálisis ERA5): https://archive-api.open-meteo.com/v1/archive, consultada el 20/11/2026.

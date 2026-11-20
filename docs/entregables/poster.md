@@ -31,6 +31,9 @@ Técnicos de la mesa interinstitucional por El Niño (Defensa Civil, Producción
 3. El mapa marca el **agua nueva (azul)** y el **agua que ya no está (naranja)**, con su superficie en hectáreas.
 4. Al lado muestra la ficha de cada imagen (satélite, resolución, fecha y hora, nubes), la altura del río en Formosa y en Pilcomayo frente a los umbrales del INA, y la lluvia estimada del mes previo.
 5. Un **semáforo de confianza** (alta, media o baja) dice cuánto creerle al resultado, y por qué.
+6. Separa el agua nueva **donde normalmente no hay agua** del río que vuelve a su cauce (Global Surface Water, 1984–2021).
+7. Si hay muchas nubes, **pasa sola al radar Sentinel-1**, que ve a través de ellas.
+8. Marca las **escuelas y centros de salud** (IGN) a menos de 500 m del agua nueva.
 
 *[Captura grande del mapa con la comparación 18/01/2021 → 07/02/2021 y el semáforo en verde]*
 
@@ -42,6 +45,10 @@ Técnicos de la mesa interinstitucional por El Niño (Defensa Civil, Producción
 | Octubre 2026: 02/10 → 26/10 | 2,35 m → 5,44 m | 110,6 ha | 43,3 ha | 🔴 Baja (20 % de nubes) |
 
 Cuando el río sube aparece agua, y cuando baja desaparece. Con nubes, la herramienta baja la confianza y lo avisa.
+
+- **Crecida 2021:** de las 222,9 ha de agua nueva, **86,1 ha** están donde normalmente no hay agua.
+- **Octubre 2026 con radar:** el radar ve **220,8 ha** de agua nueva donde el óptico, tapado por nubes, veía 110,6.
+- **Exposición:** 4 escuelas a menos de 500 m del agua nueva inusual en octubre de 2026; ningún centro de salud.
 
 Sector de 7 × 7,8 km entre Formosa, Alberdi y los bañados del sur.
 
@@ -63,10 +70,10 @@ Sector de 7 × 7,8 km entre Formosa, Alberdi y los bañados del sur.
 - Sin datos posteriores al 31/10/2026. No pronostica ni decide: **la decisión es de la mesa.**
 
 ## Qué sigue
-Elegir cualquier zona en el mapa · descarga automática de cada pasada nueva · radar Sentinel-1 para días nublados · validación con relevamientos en terreno.
+Elegir cualquier zona en el mapa · descarga automática de cada pasada nueva · validar el radar con más fechas · datos de Paraguay para Alberdi · validación con relevamientos en terreno.
 
 ## Cómo está hecha
-Python (FastAPI, NumPy) · React (Vite, Leaflet) · 103 pruebas automáticas · Asistentes de IA para programar y documentar, con revisión del equipo.
+Python (FastAPI, NumPy) · React (Vite, Leaflet) · 148 pruebas automáticas · Asistentes de IA para programar y documentar, con revisión del equipo.
 
 **Repositorio:** https://github.com/dot-Hawk/ai-lab-formosa-agua
 *[Código QR al repositorio]*

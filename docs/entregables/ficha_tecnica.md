@@ -16,23 +16,24 @@ Lo usan los técnicos de la mesa interinstitucional por El Niño que siguen el r
 ## Qué funciona hoy
 - Elegir dos de las ocho escenas Sentinel-2 reales (21/06/2019, 18/01/2021, 07/02/2021, 24/11/2022, 14/12/2022, 13/11/2024, 02/10/2026 y 26/10/2026) y compararlas. Incluye una crecida (2021, confianza alta) y una bajante (2022), a 20 días cada una.
 - Mapa con el agua nueva en azul y el agua que ya no está en naranja, con opacidad regulable, sobre un recorte de 7 × 7,8 km (Formosa, Alberdi y bañados del sur).
+- Deslizador antes/después: a cada lado de una línea móvil se ve el agua detectada en cada fecha.
 - Superficie de cada cambio en hectáreas, con un umbral NDWI que se puede ajustar (por defecto 0).
 - Agua nueva contra agua de siempre: cuántas hectáreas de agua nueva caen donde normalmente no hay agua (Global Surface Water, 1984–2021). El mapa puede mostrar solo ese agua inusual y el agua de siempre en gris.
 - Tabla antes/después con fecha y hora de captura, satélite, producto, resolución, cobertura de nubes, fuente y categoría de cada escena.
 - Semáforo de confianza del resultado (alta, media o baja) con el motivo de cada criterio: nubes y zona sin dato sobre el recorte, días entre fechas y altura del sol. Las reglas están escritas en pantalla.
-- Aviso cuando una escena supera el 20 % de nubes sobre la zona: lo de abajo no se analiza y haría falta radar (Sentinel-1), que no está integrado.
+- Radar automático: si una escena óptica supera el 20 % de nubes sobre la zona, la herramienta compara también con radar Sentinel-1 (que ve a través de las nubes) y lo avisa. Umbral validado contra Sentinel-2 sin nubes (98 % de acuerdo). En octubre de 2026 el radar ve 220,8 ha de agua nueva y el óptico 110,6.
+- Infraestructura expuesta: escuelas y centros de salud del IGN a menos de 500 m (configurable) del agua nueva inusual, y km de ruta afectados, con marcadores en el mapa.
 - Altura del río en Puerto Formosa en cada fecha (serie K1 limpia), sobre una escala con los umbrales del INA: aguas bajas 1,60 m, alerta 7,80 m y evacuación 8,30 m. Si falta el dato, muestra "Sin dato".
 - Altura del río en Puerto Pilcomayo y Puerto Bermejo en las dos fechas (API del INA, dato observado) y lluvia de los 30 días previos (ERA5, marcada como estimada).
 - Píxeles con nube o sombra excluidos del cálculo.
 - Mensajes de carga, catálogo vacío y error. El caso inválido (misma escena dos veces) devuelve *"Elegí dos escenas distintas para comparar."* y se puede seguir trabajando.
 - Leyenda PROTOTIPO y advertencia de que un cambio detectado es un indicio, no una afectación comprobada.
-- 57 pruebas del backend y 46 del frontend, todas pasando (20/11/2026).
+- 82 pruebas del backend y 66 del frontend, todas pasando (20/11/2026).
 
 ## Qué falta para que la mesa la use
 - **Zonas:** hoy hay un solo recorte. Para elegir cualquier sector de la provincia hay que dibujar el área en el mapa y descargar las escenas al momento (el script ya existe; falta conectarlo a la interfaz). Estimado: 1 a 2 semanas.
-- **Fechas:** solo hay cuatro escenas cargadas. Hay que automatizar la descarga de cada pasada nueva de Sentinel-2 (cada 5 días aproximadamente).
-- **Nubes:** integrar Sentinel-1 (radar), que ve a través de las nubes, para los días de lluvia. Hoy la herramienta solo avisa cuando hay más de 20 % de nubes. Estimado: 2 a 4 semanas.
-- **Infraestructura:** cruzar el agua nueva con rutas, escuelas y centros de salud (capas del IGN).
+- **Fechas:** hay ocho escenas ópticas y tres pasadas de radar cargadas. Hay que automatizar la descarga de cada pasada nueva (Sentinel-2 cada 5 días, Sentinel-1 cada 6 a 12).
+- **Radar e infraestructura:** validar el umbral del radar con más fechas y sumar más capas del IGN (puentes, defensas, localidades) y datos de Paraguay para Alberdi.
 - **Semáforo:** validar con la mesa las reglas, que hoy son una propuesta del equipo.
 - Plan detallado: [PLAN_DATOS_REALES.md](../PLAN_DATOS_REALES.md).
 - **Validación:** contrastar los cambios con relevamientos en terreno de Defensa Civil o con el Global Surface Water Explorer para ajustar el umbral NDWI.
@@ -42,7 +43,7 @@ Lo usan los técnicos de la mesa interinstitucional por El Niño que siguen el r
 ## Cómo está hecha
 - **Backend:** Python 3.14, FastAPI, NumPy y Pillow. Calcula NDWI = (verde − NIR) / (verde + NIR) píxel por píxel, marca agua donde NDWI > umbral, compara las dos fechas y genera la capa PNG.
 - **Frontend:** React 19, Vite 6 y Leaflet 1.9.4 (react-leaflet), con pruebas en Vitest y Testing Library.
-- **Datos:** Sentinel-2 L2A vía Earth Search (STAC, AWS Open Data), descargado con `pystac-client` y `rasterio`. Kits K1 y K3 del INA. API pública del INA (alturas de la región). Open-Meteo (lluvia ERA5, estimada). Global Surface Water del JRC (agua de siempre, 1984–2021).
+- **Datos:** Sentinel-2 L2A vía Earth Search (STAC, AWS Open Data), descargado con `pystac-client` y `rasterio`. Kits K1 y K3 del INA. API pública del INA (alturas de la región). Open-Meteo (lluvia ERA5, estimada). Global Surface Water del JRC (agua de siempre, 1984–2021). Sentinel-1 RTC de Microsoft Planetary Computer (radar). IGN, Capas SIG por WFS (escuelas, salud y rutas).
 - **Gestores:** uv (Python) y npm (Node), con lockfiles en el repositorio.
 - **Herramientas de IA:** asistentes de programación (Antigravity CLI con Claude, Codex y Claude Code) para escribir código, pruebas y documentación. Todo lo que generaron fue revisado y probado por el equipo. La herramienta no usa IA para calcular ni decidir: el NDWI es una fórmula fija.
 
@@ -50,6 +51,8 @@ Lo usan los técnicos de la mesa interinstitucional por El Niño que siguen el r
 - No dice si hubo una afectación: un cambio detectado es un indicio y hay que verificarlo en terreno.
 - No ve debajo de las nubes. En la escena del 26/10/2026 el 20,1 % del recorte está tapado, y algunos bordes de nube pueden aparecer como cambio.
 - No distingue cursos de agua de menos de 10 m de ancho.
+- El radar puede confundir agua con superficies muy lisas y no ver agua bajo vegetación o con viento; su umbral se calibró con solo dos pares de fechas.
+- La infraestructura es la del IGN a la fecha de consulta y cubre solo Argentina: Alberdi (Paraguay) queda sin datos. Estar cerca del agua es una exposición posible, no una afectación.
 - El NDWI puede confundir agua con sombras o con suelo muy húmedo.
 - No tiene lluvia observada: la que muestra es una estimación de un modelo (ERA5). Tampoco usa datos posteriores al 31/10/2026.
 - No pronostica ni recomienda acciones. Las decisiones son de la mesa.

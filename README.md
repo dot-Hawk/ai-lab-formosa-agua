@@ -43,9 +43,12 @@ Variables de entorno opcionales: ver `.env.example`.
 ## Probar
 - **Flujo principal:** abrir http://localhost:5173, elegir las dos fechas y presionar *Comparar*. Se superponen en el mapa el agua nueva (azul) y el agua que ya no está (naranja).
 - **Entrada inválida:** elegir la misma fecha en ambos campos. La interfaz muestra *"Elegí dos escenas distintas para comparar."* y se puede seguir trabajando.
+- **Antes / después:** en la leyenda del mapa, *Antes / después* muestra el agua de cada fecha a los lados de una línea que se mueve con el deslizador.
+- **Radar:** con 02/10 → 26/10/2026 (la segunda tiene 20,1 % de nubes), la herramienta pasa sola al radar Sentinel-1, lo avisa y muestra su resultado (220,8 ha de agua nueva). En el mapa, modo *Radar*.
+- **Infraestructura:** debajo del resultado, las escuelas y centros de salud del IGN a menos de 500 m del agua nueva inusual, también marcados en el mapa.
 - **Agua de siempre:** en el mapa, *Solo agua nueva donde normalmente no hay* oculta el agua que vuelve a su lugar habitual, y *Ver agua de siempre* la muestra en gris. En la crecida de 2021, 86,1 de las 222,9 ha de agua nueva son inusuales.
 - **Ficha de confianza:** junto al resultado aparece un semáforo (alta, media o baja) con sus motivos: nubes, zona sin dato, días entre fechas y altura del sol. Con las escenas incluidas: la crecida 18/01 → 07/02/2021 da **alta** (222,9 ha de agua nueva); la bajante 24/11 → 14/12/2022 da **media** (132,2 ha de agua que ya no está); 02/10 → 26/10/2026 da **baja** por el 20,1 % de nubes, y lo avisa.
-- **Pruebas automáticas:** `cd apps/backend && uv run pytest` (62 pruebas) y `cd apps/frontend && npm test` (51 pruebas)
+- **Pruebas automáticas:** `cd apps/backend && uv run pytest` (82 pruebas) y `cd apps/frontend && npm test` (66 pruebas)
 - **Compilación del frontend:** `cd apps/frontend && npm run build`
 - Registro de la última prueba desde un clon limpio: [docs/entregables/prueba_clon_limpio.md](docs/entregables/prueba_clon_limpio.md)
 - Ejemplos con `curl`: [docs/CONTRATO_API.md](docs/CONTRATO_API.md)
@@ -57,6 +60,8 @@ Variables de entorno opcionales: ver `.env.example`.
 | Umbrales Puerto Formosa | `apps/backend/data/K3_estaciones_umbrales.json` (kit K3, INA, 29/10/2026) | Dato observado |
 | Altura del río | `apps/backend/data/niveles_formosa_limpio.csv` (kit K1 limpiado por el equipo) | Dato observado |
 | Alturas en Puerto Pilcomayo y Puerto Bermejo (2017 al 31/10/2026) | `apps/backend/data/ina_alturas_region.csv` y `ina_estaciones_region.json` (API pública del INA) | Dato observado |
+| Radar Sentinel-1 (VV): 17/01/2021, 01/10/2026 y 25/10/2026 | `apps/backend/data/radar/` (RTC de Microsoft Planetary Computer, con su validación) | Dato observado |
+| Escuelas, salud y rutas de la zona | `apps/backend/data/infraestructura_ign.json` (IGN, Capas SIG) | Referencia |
 | Agua de siempre (1984–2021) | `apps/backend/data/gsw_zona.npz` y `gsw_zona.json` (Global Surface Water, JRC) | Dato observado (Landsat, 30 m) |
 | Lluvia diaria sobre la zona (12/2016 al 31/10/2026) | `apps/backend/data/lluvia_formosa_era5.csv` (reanálisis ERA5 vía Open-Meteo) | **Estimado** |
 
@@ -74,6 +79,8 @@ Otros datos reales, todos de APIs públicas sin cuenta y cortados al 31/10/2026:
 - `uv run python scripts/buscar_pares.py`: busca pares de escenas limpias, a 30 días o menos, con el río en niveles muy distintos.
 - `uv run python scripts/completar_metadatos.py`: agrega hora de captura y ángulos al catálogo.
 - `uv run python scripts/descargar_gsw.py`: recorte de Global Surface Water (agua de siempre, 1984–2021).
+- `uv run python scripts/descargar_radar.py` y `scripts/validar_radar.py`: pasadas de radar Sentinel-1 y calibración del umbral contra Sentinel-2.
+- `uv run python scripts/descargar_infraestructura.py`: escuelas, salud y rutas del IGN en la zona.
 
 La limpieza de K1 se repite con `uv run python scripts/limpiar_k1.py`. Fuentes y tratamientos: `docs/entregables/`.
 

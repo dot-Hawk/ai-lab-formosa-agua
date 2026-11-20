@@ -61,11 +61,13 @@ Operación Agua · Comparador de imágenes satelitales · Sábado 21/11/2026 des
 
 - **¿Por qué NDWI y no IA?** Porque es una fórmula conocida (McFeeters, 1996), repetible y explicable. Para una mesa que decide, importa poder decir por qué se marcó cada píxel. La IA la usamos para programar y documentar más rápido, con revisión del equipo.
 - **¿Cómo se calcula la confianza?** Con cuatro criterios escritos en pantalla: nubes y zona sin dato sobre el sector, días entre fechas y altura del sol. Se toma el peor. Las reglas son una propuesta del equipo y la mesa las puede ajustar.
-- **¿Qué pasa con las nubes?** Los píxeles con nube o sombra se excluyen usando la clasificación de Sentinel-2, y si superan el 20 % la herramienta avisa. El paso siguiente es sumar Sentinel-1 (radar), que ve a través de las nubes.
+- **¿Qué pasa con las nubes?** Los píxeles con nube o sombra se excluyen usando la clasificación de Sentinel-2. Si superan el 20 %, la herramienta pasa sola al radar Sentinel-1, que ve a través de las nubes. Calibramos el radar contra el óptico en días despejados: coinciden en el 98 % de los píxeles.
 - **¿De dónde salen las alturas del río?** Del kit K1 del INA, que limpiamos, y de la API pública del INA para Puerto Pilcomayo y Puerto Bermejo. Comparamos K1 contra la API: 3.470 de 3.552 días son idénticos.
 - **¿La lluvia es real?** Es una estimación del reanálisis ERA5, no un pluviómetro: el kit no trae lluvia observada. Por eso dice "estimada" en pantalla.
 - **¿Desde cuándo se puede comparar?** Hay imágenes Sentinel-2 de la zona desde enero de 2017 hasta el corte del 31/10/2026. Hoy la herramienta tiene ocho fechas cargadas.
-- **¿Qué falta para usarla de verdad?** Elegir cualquier zona en el mapa, descargar automáticamente cada pasada nueva, sumar radar para días nublados, restar el agua permanente (Global Surface Water) y validar con relevamientos en terreno.
+- **¿Qué falta para usarla de verdad?** Elegir cualquier zona en el mapa, descargar automáticamente cada pasada nueva, validar el radar con más fechas, sumar datos de Paraguay y validar con relevamientos en terreno.
+- **¿Qué escuelas quedan cerca del agua?** Cruzamos el agua nueva inusual con las capas del IGN: en octubre de 2026, 4 escuelas quedan a menos de 500 metros y ningún centro de salud. Es una exposición posible, no una afectación.
+- **¿Cómo saben que no es el río de siempre?** Con Global Surface Water, el registro de dónde hubo agua entre 1984 y 2021: en la crecida de 2021, 86 de las 223 hectáreas nuevas están donde normalmente no hay agua.
 
 ## Ensayo
 - [ ] Cronometrar dos ensayos completos (objetivo: 2:50).

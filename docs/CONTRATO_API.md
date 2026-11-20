@@ -49,7 +49,7 @@ Entrada:
 ```json
 {"escena_a": "s2-2026-10-02", "escena_b": "s2-2026-10-26", "umbral_agua": 0.0}
 ```
-`umbral_agua` es opcional (NDWI entre -1 y 1, por defecto 0). `umbral_habitual_pct` también (1 a 100, por defecto 50): % del tiempo con agua entre 1984 y 2021 desde el que un píxel cuenta como "agua de siempre".
+`umbral_agua` es opcional (NDWI entre -1 y 1, por defecto 0). `radio_infraestructura_m` (50 a 3000, por defecto 500) es la distancia al agua nueva inusual para contar un establecimiento como expuesto. `umbral_habitual_pct` también es opcional (1 a 100, por defecto 50): % del tiempo con agua entre 1984 y 2021 desde el que un píxel cuenta como "agua de siempre".
 
 Salida `200`:
 ```json
@@ -60,6 +60,8 @@ Salida `200`:
   "area_agua_nueva_ha": 110.64,
   "area_agua_perdida_ha": 43.25,
   "overlay_png": "data:image/png;base64,...",   // azul = agua nueva, naranja = agua perdida
+  "agua_a_png": "data:image/png;base64,...",    // deslizador: agua en la fecha A (azul) y sin dato (gris)
+  "agua_b_png": "data:image/png;base64,...",    // ídem, fecha B
   "bounds": [[-26.24, -58.18], [-26.17, -58.11]],
   "nivel_rio": {
     "estacion": "FORMOSA (Puerto Formosa)", "unidad": "m",
@@ -77,6 +79,16 @@ Salida `200`:
     "fuente": "Global Surface Water v1.4 (JRC, Comisión Europea), Pekel et al. 2016, Nature 540",
     "periodo": "1984-2021", "resolucion_original_m": 30,
     "categoria": "Observado (derivado de Landsat)", "nota": "..."
+  },
+  "infraestructura": {                     // null si no está data/infraestructura_ign.json
+    "radio_m": 500,
+    "referencia": "agua nueva donde normalmente no hay agua, solo manchas consolidadas (...)",
+    "referencia_ha": 24.9,
+    "conteo": {"educacion": {"en_zona": 83, "cerca": 4, "en_agua": 0}, "salud": {"en_zona": 6, "cerca": 0, "en_agua": 0}},
+    "establecimientos": [{"tipo": "educacion", "nombre": "Colegio Privado Alas", "lat": -26.18795, "lon": -58.160578, "en_agua": false}],
+    "rutas": {"tramos_en_zona": 1, "km_en_agua": 0.0, "km_cerca": 0.0},
+    "fuente": "IGN, Capas SIG (servicio WFS público)", "capas": {...}, "consultado": "2026-11-20",
+    "categoria": "Referencia (cartografía oficial)", "nota": "..."
   },
   "region": {
     "estaciones": [
@@ -103,13 +115,24 @@ Salida `200`:
     ],
     "criterios": "Nubes y píxeles sin dato en la zona: alta < 5 % ..."
   },
+  "radar": {                                // null si ninguna escena óptica supera el 20 % de nubes
+    "usado": true,                          // false + "motivo" si no hay pasadas cercanas
+    "motivo": "Una escena óptica tiene más de 20 % de nubes sobre la zona.",
+    "pasada_a": {"id": "s1-2026-10-01", "fecha": "2026-10-01", "plataforma": "SENTINEL-1C", "orbita_relativa": 141, ...},
+    "pasada_b": {"id": "s1-2026-10-25", "fecha": "2026-10-25", ...},
+    "umbral_db": -13.0,
+    "area_agua_nueva_ha": 220.83, "area_agua_perdida_ha": 27.74,
+    "overlay_png": "data:image/png;base64,...",
+    "validacion": {"iou_promedio": 0.873, "metodo": "...", "texto": "..."},
+    "nota": "..."
+  },
   "avisos": ["La escena del 26/10/2026 tiene 20,1 % de nubes sobre la zona: ... Sentinel-1 ..."],
   "advertencia": "Un cambio detectado es un indicio, no una afectación comprobada. ...",
   "leyenda": "PROTOTIPO · ..."
 }
 ```
 
-`confianza` sigue las reglas propuestas en [PLAN_DATOS_REALES.md](PLAN_DATOS_REALES.md) (`apps/backend/app/confianza.py`). `avisos` es una lista, vacía si no hay nada que advertir; hoy avisa cuando una escena supera el 20 % de nubes sobre la zona.
+`confianza` sigue las reglas propuestas en [PLAN_DATOS_REALES.md](PLAN_DATOS_REALES.md) (`apps/backend/app/confianza.py`). `avisos` es una lista, vacía si no hay nada que advertir; hoy avisa cuando una escena supera el 20 % de nubes sobre la zona y si la herramienta pasó al radar. `radar` compara dos pasadas de Sentinel-1 de la misma órbita a 2 días o menos de cada fecha (`apps/backend/app/main.py`, `_radar`).
 
 Errores:
 | Código | Cuándo |
