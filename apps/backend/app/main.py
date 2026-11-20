@@ -12,6 +12,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from PIL import Image
 from pydantic import BaseModel, Field
 
@@ -111,3 +112,11 @@ def comparar(pedido: PedidoComparar):
         "advertencia": ADVERTENCIA,
         "leyenda": LEYENDA,
     }
+
+
+# --- Interfaz compilada (imagen Docker) ---------------------------------------
+# Si STATIC_DIR apunta al build del frontend, se sirve en "/". Se monta al final para
+# que las rutas /api/* definidas arriba tengan prioridad.
+_static = os.getenv("STATIC_DIR")
+if _static and os.path.isdir(_static):
+    app.mount("/", StaticFiles(directory=_static, html=True), name="frontend")
