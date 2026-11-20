@@ -1,4 +1,5 @@
 import Confianza from "./Confianza.jsx";
+import Infraestructura from "./Infraestructura.jsx";
 import Radar from "./Radar.jsx";
 import {
   estadoNivel,
@@ -99,6 +100,7 @@ export default function Lectura({ resultado }) {
         <p key={aviso} className="aviso aviso-indicio" role="note">{aviso}</p>
       ))}
       <Radar radar={resultado.radar} />
+      <Infraestructura infraestructura={resultado.infraestructura} />
 
       <table className="comparacion" aria-label="Escenas comparadas">
         <thead>

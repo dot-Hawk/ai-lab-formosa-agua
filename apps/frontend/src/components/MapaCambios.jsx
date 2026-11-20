@@ -1,6 +1,6 @@
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from "react";
-import { ImageOverlay, MapContainer, Polyline, Rectangle, TileLayer, useMap } from "react-leaflet";
+import { CircleMarker, ImageOverlay, MapContainer, Polyline, Rectangle, TileLayer, Tooltip, useMap } from "react-leaflet";
 import { formatearFecha } from "../lib/vista.js";
 
 const CENTRO_FORMOSA = [-26.183, -58.183]; // Puerto Formosa (K3)
@@ -20,6 +20,11 @@ export function longitudDeCorte(bounds, corte) {
 }
 
 const recorte = (corte) => `inset(0 0 0 ${corte}%)`;
+
+/** Establecimientos a marcar en el mapa: los cercanos al agua nueva, si el usuario quiere verlos. */
+export function marcadores(resultado, visibles) {
+  return visibles ? (resultado?.infraestructura?.establecimientos ?? []) : [];
+}
 
 /** Imagen de la fecha "después" recortada desde la izquierda: deja ver la de "antes" debajo. */
 function ImagenRecortada({ url, bounds, corte }) {
@@ -46,6 +51,7 @@ export default function MapaCambios({ resultado }) {
   const [verSiempre, setVerSiempre] = useState(false);
   const [modo, setModo] = useState("cambios");
   const [corte, setCorte] = useState(50);
+  const [verInfra, setVerInfra] = useState(true);
 
   const simulado = resultado && [resultado.escena_a, resultado.escena_b].some((e) => e.categoria === "Simulado");
   const habitual = resultado?.agua_habitual ?? null;
@@ -85,6 +91,12 @@ export default function MapaCambios({ resultado }) {
                 />
               </>
             )}
+            {marcadores(resultado, verInfra).map((e) => (
+              <CircleMarker key={`${e.tipo}-${e.nombre}-${e.lat}`} center={[e.lat, e.lon]} radius={7}
+                pathOptions={{ className: `marcador marcador-${e.tipo}` }}>
+                <Tooltip>{e.nombre}{e.en_agua ? " (dentro del agua)" : ""}</Tooltip>
+              </CircleMarker>
+            ))}
             <Encuadre bounds={resultado.bounds} />
           </>
         )}
@@ -163,6 +175,12 @@ export default function MapaCambios({ resultado }) {
                       Ver agua de siempre
                     </label>
                   </>
+                )}
+                {resultado.infraestructura?.establecimientos?.length > 0 && (
+                  <label>
+                    <input type="checkbox" checked={verInfra} onChange={(e) => setVerInfra(e.target.checked)} />
+                    Establecimientos cerca del agua nueva
+                  </label>
                 )}
                 <label>
                   Opacidad
