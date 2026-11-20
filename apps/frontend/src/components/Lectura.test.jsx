@@ -91,3 +91,17 @@ describe("Lectura con región y lluvia", () => {
     expect(screen.getByText("Estimado")).toBeInTheDocument();
   });
 });
+
+describe("Lectura con agua de siempre", () => {
+  it("separa el agua nueva inusual de la habitual y cita la fuente", () => {
+    render(<Lectura resultado={resultado} />);
+    expect(screen.getByText("30,5 ha")).toBeInTheDocument();
+    expect(screen.getByText("49,5 ha")).toBeInTheDocument();
+    expect(screen.getByText(/al menos el 50 % del tiempo entre 1984 y 2021/)).toBeInTheDocument();
+  });
+
+  it("no muestra el bloque si el backend no tiene la capa", () => {
+    render(<Lectura resultado={{ ...resultado, agua_habitual: null }} />);
+    expect(screen.queryByText(/normalmente no hay agua/)).not.toBeInTheDocument();
+  });
+});

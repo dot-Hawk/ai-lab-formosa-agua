@@ -42,6 +42,18 @@ export const resultado = {
     criterios: "Reglas definidas por el equipo.",
   },
   avisos: [],
+  agua_habitual: {
+    umbral_pct: 50,
+    area_agua_nueva_inusual_ha: 30.5,
+    area_agua_nueva_habitual_ha: 49.5,
+    overlay_inusual_png: "data:image/png;base64,BBBB",
+    agua_de_siempre_png: "data:image/png;base64,CCCC",
+    fuente: "Global Surface Water (JRC)",
+    periodo: "1984-2021",
+    resolucion_original_m: 30,
+    categoria: "Observado (derivado de Landsat)",
+    nota: "Los bordes son aproximados.",
+  },
   region: {
     estaciones: [
       { nombre: "Puerto Pilcomayo", rio: "Paraguay", altura_a: 1.73, altura_b: 4.93,

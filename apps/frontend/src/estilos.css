@@ -532,3 +532,18 @@ button:disabled {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* ---------- Agua de siempre (Global Surface Water) ---------- */
+
+.muestra-siempre { background: rgb(70 90 110 / 0.55); }
+
+.habitual {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: #fff;
+  border-left: 3px solid var(--capa-nueva);
+  font-size: var(--t-1);
+}
+
+.habitual p { margin: 0; }
+.habitual .ayuda { margin-top: 0.4rem; }

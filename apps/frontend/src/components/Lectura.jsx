@@ -77,6 +77,22 @@ export default function Lectura({ resultado }) {
       </dl>
       <p className="ayuda">Calculado con un umbral NDWI de {resultado.umbral_agua.toLocaleString("es-AR")}.</p>
 
+      {resultado.agua_habitual && (
+        <div className="habitual">
+          <p>
+            De ese agua nueva, <strong className="cifra">{formatearHectareas(resultado.agua_habitual.area_agua_nueva_inusual_ha)}</strong>{" "}
+            están donde normalmente no hay agua, y{" "}
+            <span className="cifra">{formatearHectareas(resultado.agua_habitual.area_agua_nueva_habitual_ha)}</span>{" "}
+            donde el agua suele estar (el río o lagunas que vuelven a su lugar).
+          </p>
+          <p className="ayuda">
+            Agua de siempre: píxeles con agua al menos el {resultado.agua_habitual.umbral_pct} % del tiempo entre{" "}
+            {resultado.agua_habitual.periodo.replace("-", " y ")} ({resultado.agua_habitual.fuente},{" "}
+            {resultado.agua_habitual.resolucion_original_m} m). {resultado.agua_habitual.nota}
+          </p>
+        </div>
+      )}
+
       <Confianza confianza={resultado.confianza} />
       {(resultado.avisos ?? []).map((aviso) => (
         <p key={aviso} className="aviso aviso-indicio" role="note">{aviso}</p>
