@@ -15,7 +15,7 @@ from fastapi.responses import JSONResponse
 from PIL import Image
 from pydantic import BaseModel, Field
 
-from app import datos
+from app import confianza, datos
 from app.cambio import AGUA_NUEVA, AGUA_PERDIDA, area_hectareas, detectar_cambio, ndwi
 
 LEYENDA = "PROTOTIPO · AI LAB Misión: Código Formosa · no es una herramienta oficial"
@@ -108,6 +108,8 @@ def comparar(pedido: PedidoComparar):
             "umbrales": {"aguas_bajas": k3["aguas_bajas"], "alerta": k3["alerta"], "evacuacion": k3["evacuacion"]},
             "fuente": "INA · K1 (serie limpiada por el equipo) y K3 · Dato observado",
         },
+        "confianza": confianza.evaluar(a, b),
+        "avisos": confianza.avisos(a, b),
         "advertencia": ADVERTENCIA,
         "leyenda": LEYENDA,
     }
