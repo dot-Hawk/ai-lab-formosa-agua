@@ -12,3 +12,6 @@ export const ESTACION_FORMOSA = {
 export const MAXIMO_HISTORICO = { altura: 9.81, fecha: "2016-01-06", contexto: "Niño 2015-16" };
 
 export const ESCALA_MAX_M = 10;
+
+/** Recorte de las escenas Sentinel-2 (apps/backend/data/escenas/catalogo.json) */
+export const ZONA_ESTUDIO = [[-26.24, -58.18], [-26.17, -58.11]];

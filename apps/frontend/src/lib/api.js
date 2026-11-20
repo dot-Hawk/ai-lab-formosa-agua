@@ -21,3 +21,5 @@ export const comparar = (escenaA, escenaB, umbralAgua) =>
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ escena_a: escenaA, escena_b: escenaB, umbral_agua: umbralAgua }),
   });
+
+export const obtenerRio = (desde) => pedir(`/api/rio${desde ? `?desde=${desde}` : ""}`);
