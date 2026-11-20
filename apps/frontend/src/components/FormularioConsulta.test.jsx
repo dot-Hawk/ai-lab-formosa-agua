@@ -15,7 +15,41 @@ describe("FormularioConsulta", () => {
       escenaA: "demo-2026-10-01",
       escenaB: "demo-2026-10-31",
       umbral: 0,
+      indice: "ndwi",
     });
+  });
+
+  it("permite elegir MNDWI y lo explica", async () => {
+    const onComparar = vi.fn();
+    render(<FormularioConsulta escenas={escenas} cargando={false} onComparar={onComparar} />);
+    await userEvent.selectOptions(screen.getByLabelText("Índice de agua"), "mndwi");
+    expect(screen.getByText(/techos y calles/)).toBeInTheDocument();
+    expect(screen.getByLabelText("Umbral de agua (MNDWI)")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Comparar fechas" }));
+    expect(onComparar).toHaveBeenCalledWith(expect.objectContaining({ indice: "mndwi" }));
+  });
+
+  it("con varias zonas, elige la zona y muestra solo sus fechas", async () => {
+    const conZonas = [
+      { ...escenas[0], zona: "formosa" },
+      { ...escenas[1], zona: "formosa" },
+      { ...escenas[0], id: "s2-clorinda-1", zona: "clorinda", fecha: "2025-04-10" },
+      { ...escenas[1], id: "s2-clorinda-2", zona: "clorinda", fecha: "2026-10-20" },
+    ];
+    const zonas = [{ id: "formosa", nombre: "Formosa" }, { id: "clorinda", nombre: "Clorinda" }];
+    const onComparar = vi.fn();
+    const onZona = vi.fn();
+    render(<FormularioConsulta escenas={conZonas} zonas={zonas} cargando={false} onComparar={onComparar} onZona={onZona} />);
+    await userEvent.selectOptions(screen.getByLabelText("Zona"), "clorinda");
+    expect(onZona).toHaveBeenCalledWith("clorinda");
+    expect(screen.getAllByRole("option", { name: /10\/04\/2025/ })).toHaveLength(2);
+    await userEvent.click(screen.getByRole("button", { name: "Comparar fechas" }));
+    expect(onComparar).toHaveBeenCalledWith(expect.objectContaining({ escenaA: "s2-clorinda-1", escenaB: "s2-clorinda-2" }));
+  });
+
+  it("sin zonas en las escenas no muestra el selector de zona", () => {
+    render(<FormularioConsulta escenas={escenas} cargando={false} onComparar={() => {}} />);
+    expect(screen.queryByLabelText("Zona")).not.toBeInTheDocument();
   });
 
   it("marca las escenas simuladas en las opciones", () => {

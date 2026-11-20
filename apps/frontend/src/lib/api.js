@@ -15,9 +15,9 @@ async function pedir(ruta, opciones) {
 
 export const listarEscenas = () => pedir("/api/escenas");
 
-export const comparar = (escenaA, escenaB, umbralAgua) =>
+export const comparar = (escenaA, escenaB, umbralAgua, indiceAgua = "ndwi") =>
   pedir("/api/comparar", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ escena_a: escenaA, escena_b: escenaB, umbral_agua: umbralAgua }),
+    body: JSON.stringify({ escena_a: escenaA, escena_b: escenaB, umbral_agua: umbralAgua, indice_agua: indiceAgua }),
   });

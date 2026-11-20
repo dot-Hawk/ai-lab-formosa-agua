@@ -19,11 +19,11 @@ export default function App() {
     listarEscenas().then(setEscenas, (err) => setErrorCarga(err.message));
   }, []);
 
-  async function alComparar({ escenaA, escenaB, umbral }) {
+  async function alComparar({ escenaA, escenaB, umbral, indice }) {
     setComparando(true);
     setErrorComparar(null);
     try {
-      setResultado(await comparar(escenaA, escenaB, umbral));
+      setResultado(await comparar(escenaA, escenaB, umbral, indice));
     } catch (err) {
       setErrorComparar(err.message);
     } finally {

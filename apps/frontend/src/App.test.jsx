@@ -26,7 +26,7 @@ describe("App", () => {
 
     await userEvent.click(await screen.findByRole("button", { name: "Comparar fechas" }));
 
-    expect(api.comparar).toHaveBeenCalledWith("demo-2026-10-01", "demo-2026-10-31", 0);
+    expect(api.comparar).toHaveBeenCalledWith("demo-2026-10-01", "demo-2026-10-31", 0, "ndwi");
     expect(await screen.findByText("80,0 ha")).toBeInTheDocument();
   });
 

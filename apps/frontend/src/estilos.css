@@ -619,3 +619,14 @@ button:disabled {
 .punto-salud, .marcador-salud { background: var(--evacuacion); fill: var(--evacuacion); }
 .punto-educacion, .marcador-educacion { background: var(--sedimento); fill: var(--sedimento); }
 .marcador { stroke: #fff; stroke-width: 2; fill-opacity: 0.95; }
+
+/* ---------- Escala NDVI ---------- */
+
+.escala-ndvi {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.3rem;
+  padding-top: 0.9rem;
+  font-size: var(--t-1);
+  background: linear-gradient(90deg, rgb(140 100 60), rgb(215 195 110), rgb(120 175 70), rgb(25 110 45)) top / 100% 0.6rem no-repeat;
+}

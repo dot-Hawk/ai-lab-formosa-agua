@@ -53,6 +53,13 @@ export default function Lectura({ resultado }) {
         <Nivel altura={e.altura_b} umbrales={umbrales} />,
       ];
     }),
+    ...(resultado.ndvi_medio?.a != null
+      ? [[
+          "NDVI medio de la zona",
+          resultado.ndvi_medio.a.toLocaleString("es-AR"),
+          resultado.ndvi_medio.b.toLocaleString("es-AR"),
+        ]]
+      : []),
     ...(resultado.lluvia
       ? [[
           `Lluvia ${resultado.lluvia.dias_previos} días antes (estimada)`,

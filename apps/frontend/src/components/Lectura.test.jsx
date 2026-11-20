@@ -105,3 +105,12 @@ describe("Lectura con agua de siempre", () => {
     expect(screen.queryByText(/normalmente no hay agua/)).not.toBeInTheDocument();
   });
 });
+
+describe("Lectura con NDVI", () => {
+  it("muestra el NDVI medio de cada fecha", () => {
+    render(<Lectura resultado={{ ...resultado, ndvi_medio: { a: 0.518, b: 0.419 } }} />);
+    const fila = screen.getByRole("row", { name: /NDVI medio/ });
+    expect(within(fila).getByText("0,518")).toBeInTheDocument();
+    expect(within(fila).getByText("0,419")).toBeInTheDocument();
+  });
+});

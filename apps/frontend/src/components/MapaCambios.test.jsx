@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { resultado } from "../test/fixtures.js";
-import MapaCambios, { longitudDeCorte } from "./MapaCambios.jsx";
+import MapaCambios, { capasDeslizador, longitudDeCorte } from "./MapaCambios.jsx";
 
 const capas = (c) => [...c.querySelectorAll("img.leaflet-image-layer")].map((i) => i.getAttribute("src"));
 
@@ -60,5 +60,30 @@ describe("longitudDeCorte", () => {
     expect(longitudDeCorte(b, 0)).toBeCloseTo(-58.18);
     expect(longitudDeCorte(b, 50)).toBeCloseTo(-58.145);
     expect(longitudDeCorte(b, 100)).toBeCloseTo(-58.11);
+  });
+});
+
+describe("Deslizador con color real y NDVI", () => {
+  const completo = {
+    ...resultado,
+    agua_a_png: "data:image/png;base64,AGUA_A", agua_b_png: "data:image/png;base64,AGUA_B",
+    color_a_jpg: "data:image/jpeg;base64,COLOR_A", color_b_jpg: "data:image/jpeg;base64,COLOR_B",
+    ndvi_a_png: "data:image/png;base64,NDVI_A", ndvi_b_png: "data:image/png;base64,NDVI_B",
+  };
+
+  it("ofrece solo las capas que mandó la API", () => {
+    expect(capasDeslizador(completo).map((c) => c.id)).toEqual(["agua", "color", "ndvi"]);
+    expect(capasDeslizador({ ...completo, color_a_jpg: null }).map((c) => c.id)).toEqual(["agua", "ndvi"]);
+    expect(capasDeslizador(null)).toEqual([]);
+  });
+
+  it("cambia la capa de las dos fechas", async () => {
+    const { container } = render(<MapaCambios resultado={completo} />);
+    await userEvent.click(screen.getByLabelText("Antes / después"));
+    await userEvent.click(screen.getByLabelText("Color real"));
+    expect(capas(container)).toEqual([completo.color_a_jpg, completo.color_b_jpg]);
+    await userEvent.click(screen.getByLabelText("NDVI"));
+    expect(capas(container)).toEqual([completo.ndvi_a_png, completo.ndvi_b_png]);
+    expect(screen.getByText("NDVI: vegetación en cada fecha")).toBeInTheDocument();
   });
 });

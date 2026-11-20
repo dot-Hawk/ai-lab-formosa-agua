@@ -21,6 +21,17 @@ export function longitudDeCorte(bounds, corte) {
 
 const recorte = (corte) => `inset(0 0 0 ${corte}%)`;
 
+/** Capas por fecha que ofrece el deslizador, según lo que mandó la API. */
+export function capasDeslizador(resultado) {
+  if (!resultado) return [];
+  const capas = [
+    { id: "agua", nombre: "Agua", a: resultado.agua_a_png, b: resultado.agua_b_png },
+    { id: "color", nombre: "Color real", a: resultado.color_a_jpg, b: resultado.color_b_jpg },
+    { id: "ndvi", nombre: "NDVI", a: resultado.ndvi_a_png, b: resultado.ndvi_b_png },
+  ];
+  return capas.filter((c) => c.a && c.b);
+}
+
 /** Establecimientos a marcar en el mapa: los cercanos al agua nueva, si el usuario quiere verlos. */
 export function marcadores(resultado, visibles) {
   return visibles ? (resultado?.infraestructura?.establecimientos ?? []) : [];
@@ -52,11 +63,14 @@ export default function MapaCambios({ resultado }) {
   const [modo, setModo] = useState("cambios");
   const [corte, setCorte] = useState(50);
   const [verInfra, setVerInfra] = useState(true);
+  const [capaFecha, setCapaFecha] = useState("agua");
 
   const simulado = resultado && [resultado.escena_a, resultado.escena_b].some((e) => e.categoria === "Simulado");
   const habitual = resultado?.agua_habitual ?? null;
   const capa = habitual && soloInusual ? habitual.overlay_inusual_png : resultado?.overlay_png;
-  const hayDeslizador = Boolean(resultado?.agua_a_png && resultado?.agua_b_png);
+  const capasFecha = capasDeslizador(resultado);
+  const hayDeslizador = capasFecha.length > 0;
+  const capaElegida = capasFecha.find((c) => c.id === capaFecha) ?? capasFecha[0];
   const hayRadar = Boolean(resultado?.radar?.usado);
   const deslizador = hayDeslizador && modo === "deslizador";
   const radar = hayRadar && modo === "radar";
@@ -83,8 +97,8 @@ export default function MapaCambios({ resultado }) {
             )}
             {deslizador && (
               <>
-                <ImageOverlay key={resultado.agua_a_png} url={resultado.agua_a_png} bounds={resultado.bounds} opacity={1} />
-                <ImagenRecortada key={resultado.agua_b_png} url={resultado.agua_b_png} bounds={resultado.bounds} corte={corte} />
+                <ImageOverlay key={capaElegida.a} url={capaElegida.a} bounds={resultado.bounds} opacity={1} />
+                <ImagenRecortada key={capaElegida.b} url={capaElegida.b} bounds={resultado.bounds} corte={corte} />
                 <Polyline
                   positions={[[resultado.bounds[0][0], lonCorte], [resultado.bounds[1][0], lonCorte]]}
                   pathOptions={{ className: "linea-corte", weight: 3 }}
@@ -127,14 +141,40 @@ export default function MapaCambios({ resultado }) {
 
         {deslizador ? (
           <>
-            <p className="leyenda-titulo">Agua en cada fecha</p>
-            <ul>
-              <li>
-                <span className="muestra muestra-nueva" aria-hidden="true" /> Agua (NDWI mayor que{" "}
-                {resultado.umbral_agua.toLocaleString("es-AR")})
-              </li>
-              <li><span className="muestra muestra-sin-dato" aria-hidden="true" /> Sin dato (nube o borde)</li>
-            </ul>
+            {capasFecha.length > 1 && (
+              <div className="modos" role="radiogroup" aria-label="Capa de cada fecha">
+                {capasFecha.map((c) => (
+                  <label key={c.id}>
+                    <input type="radio" name="capa-fecha" value={c.id} checked={capaElegida.id === c.id}
+                      onChange={() => setCapaFecha(c.id)} />
+                    {c.nombre}
+                  </label>
+                ))}
+              </div>
+            )}
+            {capaElegida.id === "agua" && (
+              <>
+                <p className="leyenda-titulo">Agua en cada fecha</p>
+                <ul>
+                  <li>
+                    <span className="muestra muestra-nueva" aria-hidden="true" /> Agua (
+                    {(resultado.indice_agua ?? "ndwi").toUpperCase()} mayor que {resultado.umbral_agua.toLocaleString("es-AR")})
+                  </li>
+                  <li><span className="muestra muestra-sin-dato" aria-hidden="true" /> Sin dato (nube o borde)</li>
+                </ul>
+              </>
+            )}
+            {capaElegida.id === "color" && (
+              <p className="leyenda-titulo">Color real (bandas roja, verde y azul de Sentinel-2)</p>
+            )}
+            {capaElegida.id === "ndvi" && (
+              <>
+                <p className="leyenda-titulo">NDVI: vegetación en cada fecha</p>
+                <div className="escala-ndvi" aria-label="Escala de NDVI de -0,2 a 0,8">
+                  <span>Suelo o agua</span><span>Vegetación densa</span>
+                </div>
+              </>
+            )}
             <label className="corte">
               <span className="corte-fechas">
                 <span>Antes ({formatearFecha(resultado.escena_a.fecha)})</span>
