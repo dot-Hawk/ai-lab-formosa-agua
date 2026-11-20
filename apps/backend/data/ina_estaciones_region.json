@@ -1,0 +1,38 @@
+{
+  "fuente": "https://alerta.ina.gob.ar/pub/datos/estaciones&format=json",
+  "estaciones": [
+    {
+      "sitecode": 55,
+      "nombre": "Puerto Pilcomayo",
+      "rio": "PARAGUAY",
+      "lat": -25.3666666666667,
+      "lon": -57.65,
+      "propietario": "PNA",
+      "nivel_de_aguas_bajas": 1.4,
+      "nivel_de_alerta": 5.35,
+      "nivel_de_evacuacion": 6
+    },
+    {
+      "sitecode": 57,
+      "nombre": "Puerto Formosa",
+      "rio": "PARAGUAY",
+      "lat": -26.1833333333333,
+      "lon": -58.1833333333333,
+      "propietario": "PNA",
+      "nivel_de_aguas_bajas": 1.6,
+      "nivel_de_alerta": 7.8,
+      "nivel_de_evacuacion": 8.3
+    },
+    {
+      "sitecode": 58,
+      "nombre": "Bermejo",
+      "rio": "PARAGUAY",
+      "lat": -26.92629,
+      "lon": -58.506205,
+      "propietario": null,
+      "nivel_de_aguas_bajas": null,
+      "nivel_de_alerta": 6.5,
+      "nivel_de_evacuacion": 7
+    }
+  ]
+}
