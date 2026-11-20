@@ -38,6 +38,16 @@ No son datos observados: son estimaciones que la herramienta calcula a partir de
 | Semáforo de confianza | Alta / media / baja (02/10 → 26/10/2026: baja, por nubes y zona sin dato) | Reglas propuestas por el equipo en `docs/PLAN_DATOS_REALES.md`, aplicadas en `apps/backend/app/confianza.py` | Criterio del equipo (no es un dato ni un umbral oficial) | 20/11/2026 |
 | Aviso de nubes > 20 % | Umbral de 20 % sobre la zona | Criterio del equipo, en `apps/backend/app/confianza.py` | Criterio del equipo | 20/11/2026 |
 
+## Agua de siempre
+
+| Qué muestra la herramienta | Valor o rango | Fuente | Categoría | Fecha del dato |
+|---|---|---|---|---|
+| Agua de siempre (capa gris del mapa) | Píxeles con agua al menos el 50 % del tiempo (umbral configurable): 19,8 % de la zona | Global Surface Water v1.4, capa `occurrence`, mosaico 60W_20S (JRC, Comisión Europea; Pekel et al. 2016, *Nature* 540). https://storage.googleapis.com/global-surface-water/downloads2021/occurrence/occurrence_60W_20Sv1_4_2021.tif · `gsw_zona.npz` · licencia CC BY 4.0 | Observado (derivado de Landsat, 30 m) | 1984 a 2021; consulta del 20/11/2026 |
+| Agua nueva donde normalmente no hay / donde suele haber, 18/01 → 07/02/2021 | 86,1 ha / 136,8 ha | Agua nueva de la herramienta cruzada con la capa anterior | Estimado (cálculo) | Consulta del 20/11/2026 |
+| Ídem, 02/10 → 26/10/2026 | 49,8 ha / 60,9 ha | Ídem | Estimado (cálculo) | Consulta del 20/11/2026 |
+
+La capa se reproyectó de 30 m a la grilla de 10 m de las escenas por vecino más cercano: los bordes son aproximados. El umbral del 50 % es una decisión del equipo.
+
 ## Río Paraguay en Puerto Formosa
 
 | Qué muestra la herramienta | Valor o rango | Fuente (archivo del kit o URL) | Categoría | Fecha del dato |
@@ -77,6 +87,7 @@ La lluvia es una estimación y puede diferir de una medición: por ejemplo, para
 - Programa Copernicus, Sentinel-2 (ESA, Unión Europea): https://browser.dataspace.copernicus.eu, citado en la guía del desafío (relevamiento del CITF del 16/11/2026).
 - INA, Sistema de Información y Alerta Hidrológico, catálogo de estaciones: https://alerta.ina.gob.ar/pub/datos/estaciones&format=json, consultado el 29/10/2026 (kit K3).
 - El Monterizo, 17/9/2026: esquema preventivo provincial por El Niño con inspección satelital de riachos (citado en la guía del desafío).
+- Global Surface Water (JRC), descargas v1.4: https://global-surface-water.appspot.com/download, consultado el 20/11/2026.
 - INA, API pública del Sistema de Alerta Hidrológico: https://alerta.ina.gob.ar/pub/datos/datos y /estaciones, consultada el 20/11/2026.
 - Open-Meteo, API de datos históricos (reanálisis ERA5): https://archive-api.open-meteo.com/v1/archive, consultada el 20/11/2026.
 - OpenStreetMap, teselas del mapa de fondo: https://tile.openstreetmap.org, consulta en vivo al usar la herramienta.

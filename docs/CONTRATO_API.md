@@ -49,7 +49,7 @@ Entrada:
 ```json
 {"escena_a": "s2-2026-10-02", "escena_b": "s2-2026-10-26", "umbral_agua": 0.0}
 ```
-`umbral_agua` es opcional (NDWI entre -1 y 1, por defecto 0).
+`umbral_agua` es opcional (NDWI entre -1 y 1, por defecto 0). `umbral_habitual_pct` también (1 a 100, por defecto 50): % del tiempo con agua entre 1984 y 2021 desde el que un píxel cuenta como "agua de siempre".
 
 Salida `200`:
 ```json
@@ -67,6 +67,16 @@ Salida `200`:
     "fecha_b": "2026-10-26", "altura_b": 5.44,
     "umbrales": {"aguas_bajas": 1.6, "alerta": 7.8, "evacuacion": 8.3},
     "fuente": "INA · K1 (serie limpiada por el equipo) y K3 · Dato observado"
+  },
+  "agua_habitual": {                       // null si no está la capa de Global Surface Water
+    "umbral_pct": 50,
+    "area_agua_nueva_inusual_ha": 86.1,     // agua nueva donde normalmente no hay agua
+    "area_agua_nueva_habitual_ha": 136.8,   // agua nueva donde el agua suele estar
+    "overlay_inusual_png": "data:image/png;base64,...",   // como overlay_png, sin el agua nueva habitual
+    "agua_de_siempre_png": "data:image/png;base64,...",   // gris = agua de siempre
+    "fuente": "Global Surface Water v1.4 (JRC, Comisión Europea), Pekel et al. 2016, Nature 540",
+    "periodo": "1984-2021", "resolucion_original_m": 30,
+    "categoria": "Observado (derivado de Landsat)", "nota": "..."
   },
   "region": {
     "estaciones": [

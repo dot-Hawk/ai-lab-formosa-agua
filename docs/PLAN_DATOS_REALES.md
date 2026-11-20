@@ -9,7 +9,7 @@ Regla del documento base (p. 4): los datos del kit quedan **congelados al 31/10/
 | 1 | Comparador antes/después con deslizador, capa NDWI y capa de diferencias | Base | Parcial: hay capa de diferencias y opacidad; faltan el deslizador y la capa NDWI |
 | 2 | Elección automática entre óptico y radar si hay más de 20 % de nubes | Base | **Versión mínima hecha:** aviso de nubes > 20 %. Sin radar |
 | 3 | Ficha de confianza: sensor, fecha y hora, resolución, % de nubes sobre la zona y semáforo | Base | **Hecha** (commits `d6ebf2a`, `f6c9a1a`, `58a8741`). Las reglas son una propuesta a confirmar |
-| 4 | Agua nueva contra agua de siempre (Global Surface Water) | Diferenciación | Pendiente |
+| 4 | Agua nueva contra agua de siempre (Global Surface Water) | Diferenciación | **Hecha** (commits `4ffe421`, `0a90e95`). Umbral 50 % a confirmar |
 | 5 | Exposición de infraestructura (capas del IGN) | Diferenciación | Pendiente |
 
 ## Pasos
@@ -61,6 +61,7 @@ Por cada fuente nueva: fila en la ficha de fuentes (URL, fecha de consulta, lice
 | 4 escenas nuevas: crecida 18/01 → 07/02/2021 y bajante 24/11 → 14/12/2022 | Earth Search (Sentinel-2 L2A), elegidas con `scripts/buscar_pares.py` | Observado | Pares a 20 días, sin nubes: confianza alta y media |
 | Alturas diarias de Puerto Formosa, Puerto Pilcomayo y Puerto Bermejo (2017 al 31/10/2026) | INA, `alerta.ina.gob.ar/pub/datos` | Observado | Río en la región en cada comparación; control cruzado con K1 |
 | Lluvia diaria sobre la zona (12/2016 al 31/10/2026) | Open-Meteo, reanálisis ERA5 | Estimado | Lluvia de los 30 días previos y entre fechas |
+| Agua de siempre (1984–2021), recorte de la zona | Global Surface Water v1.4 (JRC), `occurrence` y `seasonality` | Observado (Landsat, 30 m) | Separar el agua nueva inusual de la habitual |
 
 ## Reglas del semáforo de confianza (propuesta, a confirmar)
 Se evalúa cada criterio y el resultado es el **peor** de todos.

@@ -17,6 +17,7 @@ Lo usan los técnicos de la mesa interinstitucional por El Niño que siguen el r
 - Elegir dos de las ocho escenas Sentinel-2 reales (21/06/2019, 18/01/2021, 07/02/2021, 24/11/2022, 14/12/2022, 13/11/2024, 02/10/2026 y 26/10/2026) y compararlas. Incluye una crecida (2021, confianza alta) y una bajante (2022), a 20 días cada una.
 - Mapa con el agua nueva en azul y el agua que ya no está en naranja, con opacidad regulable, sobre un recorte de 7 × 7,8 km (Formosa, Alberdi y bañados del sur).
 - Superficie de cada cambio en hectáreas, con un umbral NDWI que se puede ajustar (por defecto 0).
+- Agua nueva contra agua de siempre: cuántas hectáreas de agua nueva caen donde normalmente no hay agua (Global Surface Water, 1984–2021). El mapa puede mostrar solo ese agua inusual y el agua de siempre en gris.
 - Tabla antes/después con fecha y hora de captura, satélite, producto, resolución, cobertura de nubes, fuente y categoría de cada escena.
 - Semáforo de confianza del resultado (alta, media o baja) con el motivo de cada criterio: nubes y zona sin dato sobre el recorte, días entre fechas y altura del sol. Las reglas están escritas en pantalla.
 - Aviso cuando una escena supera el 20 % de nubes sobre la zona: lo de abajo no se analiza y haría falta radar (Sentinel-1), que no está integrado.
@@ -31,7 +32,6 @@ Lo usan los técnicos de la mesa interinstitucional por El Niño que siguen el r
 - **Zonas:** hoy hay un solo recorte. Para elegir cualquier sector de la provincia hay que dibujar el área en el mapa y descargar las escenas al momento (el script ya existe; falta conectarlo a la interfaz). Estimado: 1 a 2 semanas.
 - **Fechas:** solo hay cuatro escenas cargadas. Hay que automatizar la descarga de cada pasada nueva de Sentinel-2 (cada 5 días aproximadamente).
 - **Nubes:** integrar Sentinel-1 (radar), que ve a través de las nubes, para los días de lluvia. Hoy la herramienta solo avisa cuando hay más de 20 % de nubes. Estimado: 2 a 4 semanas.
-- **Agua de siempre:** restar el agua permanente y estacional (Global Surface Water, JRC) para mostrar solo el agua donde normalmente no hay.
 - **Infraestructura:** cruzar el agua nueva con rutas, escuelas y centros de salud (capas del IGN).
 - **Semáforo:** validar con la mesa las reglas, que hoy son una propuesta del equipo.
 - Plan detallado: [PLAN_DATOS_REALES.md](../PLAN_DATOS_REALES.md).
@@ -42,7 +42,7 @@ Lo usan los técnicos de la mesa interinstitucional por El Niño que siguen el r
 ## Cómo está hecha
 - **Backend:** Python 3.14, FastAPI, NumPy y Pillow. Calcula NDWI = (verde − NIR) / (verde + NIR) píxel por píxel, marca agua donde NDWI > umbral, compara las dos fechas y genera la capa PNG.
 - **Frontend:** React 19, Vite 6 y Leaflet 1.9.4 (react-leaflet), con pruebas en Vitest y Testing Library.
-- **Datos:** Sentinel-2 L2A vía Earth Search (STAC, AWS Open Data), descargado con `pystac-client` y `rasterio`. Kits K1 y K3 del INA. API pública del INA (alturas de la región). Open-Meteo (lluvia ERA5, estimada).
+- **Datos:** Sentinel-2 L2A vía Earth Search (STAC, AWS Open Data), descargado con `pystac-client` y `rasterio`. Kits K1 y K3 del INA. API pública del INA (alturas de la región). Open-Meteo (lluvia ERA5, estimada). Global Surface Water del JRC (agua de siempre, 1984–2021).
 - **Gestores:** uv (Python) y npm (Node), con lockfiles en el repositorio.
 - **Herramientas de IA:** asistentes de programación (Antigravity CLI con Claude, Codex y Claude Code) para escribir código, pruebas y documentación. Todo lo que generaron fue revisado y probado por el equipo. La herramienta no usa IA para calcular ni decidir: el NDWI es una fórmula fija.
 
