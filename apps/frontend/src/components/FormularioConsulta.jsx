@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { formatearFecha, validarSeleccion } from "../lib/vista.js";
+import { formatearFecha, formatearPorcentaje, validarSeleccion } from "../lib/vista.js";
 
 function etiquetaEscena(e) {
   const simulada = e.categoria === "Simulado" ? " (simulada)" : "";
-  return `${formatearFecha(e.fecha)}, nubes ${e.nubes_pct} %${simulada}`;
+  return `${formatearFecha(e.fecha)}, nubes ${formatearPorcentaje(e.nubes_pct)}${simulada}`;
 }
 
 export default function FormularioConsulta({ escenas, cargando, onComparar }) {

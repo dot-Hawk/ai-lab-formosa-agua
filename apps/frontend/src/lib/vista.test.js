@@ -4,6 +4,7 @@ import {
   formatearFecha,
   formatearHectareas,
   formatearMetros,
+  formatearPorcentaje,
   posicionEnEscala,
   validarSeleccion,
 } from "./vista.js";
@@ -74,5 +75,12 @@ describe("posicionEnEscala", () => {
   it("recorta valores fuera de la escala", () => {
     expect(posicionEnEscala(-1, { max: 10, alto: 400 })).toBe(400);
     expect(posicionEnEscala(12, { max: 10, alto: 400 })).toBe(0);
+  });
+});
+
+describe("formatearPorcentaje", () => {
+  it("usa coma decimal y omite decimales en enteros", () => {
+    expect(formatearPorcentaje(20.1)).toBe("20,1 %");
+    expect(formatearPorcentaje(0)).toBe("0 %");
   });
 });

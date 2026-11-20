@@ -38,3 +38,7 @@ export function posicionEnEscala(altura, { max, alto }) {
   const recortada = Math.min(Math.max(altura, 0), max);
   return alto - (recortada / max) * alto;
 }
+
+/** 20.1 -> "20,1 %" · 0 -> "0 %" */
+export const formatearPorcentaje = (v) =>
+  `${v.toLocaleString("es-AR", { maximumFractionDigits: 1 })} %`;

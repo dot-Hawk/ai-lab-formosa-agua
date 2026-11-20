@@ -1,4 +1,10 @@
-import { estadoNivel, formatearFecha, formatearHectareas, formatearMetros } from "../lib/vista.js";
+import {
+  estadoNivel,
+  formatearFecha,
+  formatearHectareas,
+  formatearMetros,
+  formatearPorcentaje,
+} from "../lib/vista.js";
 
 function Categoria({ valor }) {
   return <span className={`categoria categoria-${valor.toLowerCase()}`}>{valor}</span>;
@@ -24,7 +30,7 @@ export default function Lectura({ resultado }) {
     ["Satélite", a.satelite, b.satelite],
     ["Producto", a.producto, b.producto],
     ["Resolución", `${a.resolucion_m} m`, `${b.resolucion_m} m`],
-    ["Cobertura de nubes", `${a.nubes_pct} %`, `${b.nubes_pct} %`],
+    ["Cobertura de nubes", formatearPorcentaje(a.nubes_pct), formatearPorcentaje(b.nubes_pct)],
     ["Fuente", a.fuente, b.fuente],
     ["Categoría", <Categoria valor={a.categoria} />, <Categoria valor={b.categoria} />],
     [

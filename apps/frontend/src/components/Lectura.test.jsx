@@ -32,3 +32,11 @@ describe("Lectura", () => {
     expect(screen.getByText(/indicio, no una afectación comprobada/)).toBeInTheDocument();
   });
 });
+
+describe("Lectura con decimales", () => {
+  it("muestra la cobertura de nubes con coma decimal", () => {
+    const nublado = { ...resultado, escena_b: { ...resultado.escena_b, nubes_pct: 20.1 } };
+    render(<Lectura resultado={nublado} />);
+    expect(screen.getByText("20,1 %")).toBeInTheDocument();
+  });
+});
