@@ -1,6 +1,6 @@
 ---
 name: protocolo-equipo-multiagente
-version: 0.3.0
+version: 0.4.0
 description: Reglas compartidas para coordinar cuatro agentes de desarrollo que trabajan desde equipos distintos sobre un mismo monorepo y ramas separadas.
 language: es
 ---
@@ -75,6 +75,23 @@ Estos datos se definirán en el futuro documento de asignaciones. Hasta entonces
 - Los archivos compartidos no pertenecen unilateralmente a ningún agente.
 - Si una tarea requiere modificar archivos fuera del ámbito asignado, el agente debe pedir coordinación antes de hacerlo.
 - La colaboración de otro agente debe acordarse y quedar registrada; no debe generar dos responsables principales para la misma tarea.
+
+### 4.2 Ficha personal del agente
+
+Cada integrante debe mantener una ficha individual vinculada a su skill personal. La ficha debe aportar, como mínimo, estos datos para que el protocolo general pueda aplicarse sin depender del historial de conversación del agente:
+
+- identidad: identificador del integrante, alias, nombre real e identificador del agente;
+- runtime y capacidades: herramienta/modelo utilizado y disponibilidad real de subagentes;
+- Git: rama personal, rama base, remoto y rama de integración cuando esté definida;
+- responsabilidades: módulos, directorios autorizados, archivos compartidos y límites;
+- tareas: identificador, objetivo, estado, dependencias y criterios de aceptación;
+- coordinación: canal persistente, responsables de revisión e integración y protocolo VCPD;
+- desarrollo: gestor de paquetes y comandos reales de instalación, ejecución, pruebas y compilación;
+- integración: estrategia aprobada y aprobaciones necesarias.
+
+La ficha puede implementarse en YAML u otro formato estructurado aceptado por el repositorio. Los datos que todavía no hayan sido definidos deben indicarse explícitamente como `PENDIENTE`, `NO DEFINIDO` o un estado equivalente. No se deben inventar nombres, tareas, permisos, comandos ni responsabilidades.
+
+La skill personal complementa esta skill general: no puede sustituirla ni establecer reglas que la contradigan. Cuando exista una diferencia, prevalece el orden de autoridad definido en la sección 2.
 
 ## 5. Protocolo de inicio de sesión de trabajo
 
@@ -173,23 +190,36 @@ Por eso, antes de modificar una zona compartida o una dependencia directa de otr
 
 Nunca debe interpretar la ausencia de commits remotos como prueba de que nadie está trabajando en esos archivos.
 
-#### E. Cuándo repetir la comprobación
+#### E. Cuándo repetir la comprobación: regla permanente
 
-La revisión cruzada debe repetirse:
+La VCPD no es una comprobación que se realiza una sola vez al iniciar la sesión. Debe repetirse **antes de cada nuevo bloque de desarrollo o modificación** durante todo el ciclo de trabajo.
 
-- antes de modificar por primera vez una tarea nueva;
-- antes de tocar un contrato, configuración raíz, paquete compartido o archivo que otro agente haya modificado;
-- cuando el agente recibe aviso de nuevos commits o cambios de alcance;
+Se considera un bloque de desarrollo o modificación una unidad de trabajo identificable, por ejemplo: implementar una funcionalidad, corregir un defecto, refactorizar un componente, agregar o modificar pruebas, cambiar documentación técnica, alterar configuración, actualizar dependencias o tocar un contrato compartido.
+
+La revisión debe repetirse:
+
+- antes de comenzar cada tarea;
+- antes de comenzar cada nueva funcionalidad, corrección, refactor o unidad independiente de cambios;
+- antes de modificar un archivo que no estuvo contemplado en la última revisión;
+- antes de modificar contratos, tipos, APIs, esquemas, configuraciones raíz, dependencias o recursos compartidos;
+- cuando el agente recibe aviso de commits nuevos, cambios de alcance o trabajo de otro integrante;
+- cuando retoma una tarea después de una interrupción relevante o de una sesión anterior;
 - antes de incorporar cambios de otra rama;
-- inmediatamente antes de solicitar la integración de su propia rama.
+- antes de solicitar revisión o integración de su rama.
 
-Si la revisión detecta cambios nuevos que alteran el plan o la compatibilidad, el agente debe pausar la parte afectada, actualizar su análisis y coordinar antes de continuar.
+No es necesario ejecutar una revisión completa por cada línea editada dentro de un mismo bloque continuo de trabajo que ya fue revisado. Sí es obligatorio volver a revisar antes de iniciar otro bloque de cambios, cuando aparezca información nueva o cuando cambie el alcance, los archivos afectados o las dependencias.
 
-#### F. Registro obligatorio de la revisión
+Si durante el bloque actual aparece un cambio externo que pueda afectar lo que se está modificando, el agente debe inspeccionarlo antes de continuar sobre la parte afectada. Debe actualizar el registro de revisión y el plan.
 
-Cada tarea debe dejar un registro breve de esta comprobación, usando la plantilla de revisión cruzada incluida en `plantillas/PLANTILLAS.md`. El registro debe indicar la fecha, la rama propia, la referencia de integración consultada, las ramas inspeccionadas, los commits o archivos relevantes, los subagentes consultados (si hubo) y la decisión tomada sobre incorporar o no cambios.
+Si la revisión detecta cambios nuevos que alteran el plan o la compatibilidad, el agente debe pausar únicamente la parte afectada, actualizar su análisis y coordinar antes de continuar. Debe avanzar con las partes independientes siempre que sea seguro.
 
-Si no fue posible actualizar las referencias remotas o consultar el estado de un compañero, debe quedar señalado como una limitación; no se debe registrar la revisión como completa.
+#### F. Registro obligatorio de cada revisión
+
+Cada bloque de desarrollo o modificación debe dejar un registro breve de la VCPD, usando la plantilla de revisión cruzada incluida en `plantillas/PLANTILLAS.md`. El registro debe indicar la fecha, identificador de tarea o bloque, rama propia, commit propio, referencia de integración consultada (si está definida), ramas inspeccionadas, commits o archivos relevantes, subagentes consultados (si hubo), limitaciones de visibilidad y decisión tomada sobre incorporar, coordinar, esperar o no incorporar cambios.
+
+Si no fue posible actualizar las referencias remotas o consultar el estado de un compañero, debe quedar señalado como una limitación; no se debe registrar la revisión como completa. El agente debe indicar qué parte del trabajo puede realizarse sin riesgo y qué parte requiere confirmación.
+
+La VCPD puede registrarse en una bitácora compartida o en el mecanismo de seguimiento que acuerde el equipo. No se debe crear un commit por cada comprobación, salvo que el equipo decida expresamente que ese es su mecanismo de auditoría.
 
 ## 6. Gestión de tareas
 
@@ -232,14 +262,32 @@ Antes de dividir o reasignar una tarea que ya está en curso, se debe preservar 
 
 ### 7.1 Ramas de trabajo
 
-- Cada integrante trabaja en la rama que el equipo le haya asignado.
+Cada integrante trabaja en una rama individual con la siguiente nomenclatura obligatoria:
+
+`dev-[Nombre Real]`
+
+Reglas:
+
+1. El prefijo literal `dev-` es obligatorio.
+2. Se utiliza el nombre real del integrante, no su alias, nombre de usuario ni identificador del agente.
+3. Los espacios del nombre real se reemplazan por guiones.
+4. Los corchetes son únicamente un marcador de la plantilla y no forman parte del nombre efectivo de la rama.
+5. No se agrega ni se elimina parte del nombre real sin confirmación del integrante.
+6. Cada integrante debe tener una rama personal distinta.
+7. Ningún agente puede crear, modificar, eliminar o utilizar la rama personal de otro integrante sin autorización.
+
+Ejemplo: para el nombre real `Diego`, la rama es `dev-Diego`. Para el nombre real `Diego García`, la rama es `dev-Diego-García` (si las herramientas del repositorio requieren normalizar caracteres, el equipo debe acordar una regla uniforme y documentarla).
+
+Además:
+
 - Ningún agente debe trabajar directamente sobre `main` ni sobre la rama estable de integración.
 - Un agente no debe cambiar a la rama de otro integrante para continuar su trabajo, salvo autorización explícita.
 - No se debe hacer `push --force` ni reescribir el historial de una rama compartida.
 - No se deben borrar ramas ajenas.
 - Antes de cambiar de rama, el agente debe comprobar que no deja cambios sin guardar.
+- Antes de crear una rama personal, debe comprobar si ya existe local o remotamente. Nunca debe reiniciarla, sobrescribirla ni cambiar su base automáticamente si ya contiene trabajo.
 
-El nombre real de la rama de cada integrante se documentará en el archivo de asignaciones. Como convención propuesta —pendiente de aprobación del equipo— puede utilizarse `dev/<integrante>` o `feature/<integrante>/<tema>`.
+La rama `main` puede contener la skill principal y servir como base de creación de una rama personal, pero eso **no significa que `main` sea automáticamente la rama de integración**. La rama de integración debe definirse y registrarse por separado.
 
 ### 7.2 Rama de integración
 
@@ -552,7 +600,7 @@ El agente sí puede inspeccionar, proponer, documentar y preparar cambios dentro
 Esta versión es un protocolo general. Antes de considerar la configuración del equipo completa, se deben definir y registrar:
 
 1. integrantes y nombres de sus agentes;
-2. rama asignada a cada integrante;
+2. rama asignada a cada integrante, respetando la nomenclatura obligatoria `dev-[Nombre Real]`;
 3. rama de integración;
 4. responsable de integración y revisión;
 5. distribución de módulos y responsabilidades;
