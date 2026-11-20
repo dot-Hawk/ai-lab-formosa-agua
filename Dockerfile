@@ -30,10 +30,10 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY --from=dependencias /app/.venv ./.venv
 
-# Código y solo los datos que usa la API en tiempo de ejecución
+# Código y datos. Se copia la carpeta completa para que los archivos nuevos entren solos;
+# lo que la API no usa (crudo de K1, observaciones) se excluye en .dockerignore.
 COPY apps/backend/app ./app
-COPY apps/backend/data/escenas ./data/escenas
-COPY apps/backend/data/K3_estaciones_umbrales.json apps/backend/data/niveles_formosa_limpio.csv ./data/
+COPY apps/backend/data ./data
 COPY --from=frontend /src/dist ./static
 
 ENV STATIC_DIR=/app/static \
