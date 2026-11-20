@@ -1,0 +1,91 @@
+integrante:
+  id: "PENDIENTE"
+  alias: "Selena"
+  alias_confirmado_en_registro: false
+  nombre_real: "Selena Milagros Britez"
+  nombre_en_registro: "Selena Brítez"
+
+agente:
+  id: "PENDIENTE"
+  skill: "skill_base_agente_selena"
+  runtime: "PENDIENTE"
+  runtime_sesion_alta: "Codex con PowerShell y Git"
+  soporte_subagentes: "PENDIENTE"
+
+git:
+  rama_desarrollo: "dev-Selena-Milagros-Britez"
+  rama_base: "main"
+  commit_base: "f1ca354def7dbe707a22f1920e48c5037da068d2"
+  remoto: "origin"
+  referencia_base: "origin/main"
+  upstream_alta: "SIN CONFIGURAR"
+  rama_integracion: "PENDIENTE"
+
+skill_general:
+  archivo: "SKILL_BASE.md"
+  version: "0.4.0"
+  commit_referencia: "f1ca354def7dbe707a22f1920e48c5037da068d2"
+  ultimo_commit_del_archivo: "0f21eb62870ff76cb49db419b638a8177205a5f4"
+  plantillas: "PLANTILLAS.md"
+
+responsabilidades:
+  modulos: []
+  directorios_autorizados:
+    - "skills/skill_base_agente_selena/"
+  alcance_autorizacion: "Alta de la skill personal"
+  archivos_compartidos:
+    - "SKILL_BASE.md"
+    - "PLANTILLAS.md"
+    - "docs/CONTRATO_API.md"
+    - "apps/backend/tests/test_api.py"
+  limites:
+    - "Coordinar y obtener aprobación antes de cambiar recursos compartidos según el protocolo general"
+    - "Preservar trabajo local y ramas ajenas"
+    - "Solicitar autorización para operaciones sensibles y cambios de alcance"
+
+tareas: []
+
+coordinacion:
+  protocolo_revision: "VCPD"
+  revision_antes_de_cada_bloque_de_cambios: true
+  responsable_revision: "PENDIENTE"
+  responsable_integracion: "PENDIENTE"
+  canal_comunicacion: "PENDIENTE"
+  mecanismo_trabajo_no_publicado: "PENDIENTE"
+  registro_roles: "docs/ROLES.md"
+
+desarrollo:
+  gestor_paquetes:
+    backend: "uv"
+    frontend: "npm"
+  versiones_tecnologicas:
+    python: ">=3.11"
+    node: ">=20 según README"
+    fastapi: ">=0.115"
+    numpy: ">=2.0"
+    leaflet: "1.9.4"
+    vite: "^6.0.0"
+  directorios:
+    backend: "apps/backend"
+    frontend: "apps/frontend"
+  comandos:
+    instalacion:
+      backend: "uv sync"
+      frontend: "npm install"
+    desarrollo:
+      backend: "uv run uvicorn app.main:app --reload --port 8000"
+      frontend: "npm run dev"
+    pruebas:
+      backend: "uv run pytest"
+      frontend: "PENDIENTE"
+    lint: "PENDIENTE"
+    tipos: "PENDIENTE"
+    compilacion:
+      backend: "PENDIENTE"
+      frontend: "npm run build"
+
+integracion:
+  estrategia: "PENDIENTE"
+  aprobaciones_requeridas:
+    - "Aprobación de cambios compartidos según SKILL_BASE.md §§9–10"
+    - "Revisión y aprobación antes de integrar según SKILL_BASE.md §§17–18"
