@@ -1,6 +1,8 @@
+import Confianza from "./Confianza.jsx";
 import {
   estadoNivel,
   formatearFecha,
+  formatearHoraArgentina,
   formatearHectareas,
   formatearMetros,
   formatearPorcentaje,
@@ -27,6 +29,7 @@ export default function Lectura({ resultado }) {
 
   const filas = [
     ["Fecha de captura", formatearFecha(a.fecha), formatearFecha(b.fecha)],
+    ["Hora (Argentina)", formatearHoraArgentina(a.captura_utc), formatearHoraArgentina(b.captura_utc)],
     ["Satélite", a.satelite, b.satelite],
     ["Producto", a.producto, b.producto],
     ["Resolución", `${a.resolucion_m} m`, `${b.resolucion_m} m`],
@@ -55,6 +58,11 @@ export default function Lectura({ resultado }) {
         </div>
       </dl>
       <p className="ayuda">Calculado con un umbral NDWI de {resultado.umbral_agua.toLocaleString("es-AR")}.</p>
+
+      <Confianza confianza={resultado.confianza} />
+      {(resultado.avisos ?? []).map((aviso) => (
+        <p key={aviso} className="aviso aviso-indicio" role="note">{aviso}</p>
+      ))}
 
       <table className="comparacion" aria-label="Escenas comparadas">
         <thead>

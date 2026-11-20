@@ -5,10 +5,12 @@ export const escenas = [
   {
     id: "demo-2026-10-01", fecha: "2026-10-01", fuente: "SIMULADO · demo", satelite: "Sentinel-2",
     producto: "L2A (simulado)", resolucion_m: 10, nubes_pct: 4, categoria: "Simulado", bounds: BOUNDS,
+    captura_utc: "2026-10-01T14:09:44Z",
   },
   {
     id: "demo-2026-10-31", fecha: "2026-10-31", fuente: "SIMULADO · demo", satelite: "Sentinel-2",
     producto: "L2A (simulado)", resolucion_m: 10, nubes_pct: 12, categoria: "Simulado", bounds: BOUNDS,
+    captura_utc: "2026-10-31T13:59:57Z",
   },
 ];
 
@@ -30,6 +32,16 @@ export const resultado = {
     umbrales: { aguas_bajas: 1.6, alerta: 7.8, evacuacion: 8.3 },
     fuente: "INA · K1 y K3 · Dato observado",
   },
+  confianza: {
+    nivel: "media",
+    dias_entre_fechas: 30,
+    motivos: [
+      { nivel: "media", texto: "Nubes sobre la zona: hasta 12 %" },
+      { nivel: "alta", texto: "30 días entre las fechas" },
+    ],
+    criterios: "Reglas definidas por el equipo.",
+  },
+  avisos: [],
   advertencia: "Un cambio detectado es un indicio, no una afectación comprobada.",
   leyenda: "PROTOTIPO",
 };

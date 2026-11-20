@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   estadoNivel,
   formatearFecha,
+  formatearHoraArgentina,
   formatearHectareas,
   formatearMetros,
   formatearPorcentaje,
@@ -82,5 +83,16 @@ describe("formatearPorcentaje", () => {
   it("usa coma decimal y omite decimales en enteros", () => {
     expect(formatearPorcentaje(20.1)).toBe("20,1 %");
     expect(formatearPorcentaje(0)).toBe("0 %");
+  });
+});
+
+describe("formatearHoraArgentina", () => {
+  it("pasa de UTC a la hora de Argentina", () => {
+    expect(formatearHoraArgentina("2026-10-26T13:59:57Z")).toBe("10:59");
+    expect(formatearHoraArgentina("2026-10-26T01:05:00Z")).toBe("22:05");
+  });
+
+  it("indica cuando falta el dato", () => {
+    expect(formatearHoraArgentina(undefined)).toBe("sin dato");
   });
 });

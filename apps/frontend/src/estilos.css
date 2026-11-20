@@ -466,3 +466,69 @@ button:disabled {
 @media (prefers-reduced-motion: reduce) {
   .leaflet-zoom-anim .leaflet-zoom-animated { transition: none !important; }
 }
+
+/* ---------- Confianza ---------- */
+
+.confianza {
+  margin-top: 1rem;
+  padding: 0.7rem 0.8rem;
+  background: #fff;
+  border: 1px solid var(--rejilla-suave);
+  border-radius: 6px;
+}
+
+.confianza-titulo {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--t0);
+  font-weight: 600;
+}
+
+.semaforo {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  flex: none;
+}
+
+.semaforo-alta { background: #3f8f5a; }
+.semaforo-media { background: var(--alerta); }
+.semaforo-baja { background: var(--evacuacion); }
+
+.confianza ul {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.25rem;
+  font-size: var(--t-1);
+}
+
+.confianza li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.confianza li .semaforo {
+  width: 0.55rem;
+  height: 0.55rem;
+}
+
+.confianza .ayuda {
+  margin-top: 0.5rem;
+}
+
+/* Texto solo para lectores de pantalla */
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

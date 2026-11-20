@@ -42,3 +42,14 @@ export function posicionEnEscala(altura, { max, alto }) {
 /** 20.1 -> "20,1 %" · 0 -> "0 %" */
 export const formatearPorcentaje = (v) =>
   `${v.toLocaleString("es-AR", { maximumFractionDigits: 1 })} %`;
+
+/** "2026-10-26T13:59:57Z" -> "10:59" en hora de Argentina (UTC−3, sin horario de verano). */
+export function formatearHoraArgentina(iso) {
+  if (!iso) return "sin dato";
+  const [hh, mm] = String(iso).slice(11, 16).split(":").map(Number);
+  const h = (hh - 3 + 24) % 24;
+  return `${String(h).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+}
+
+/** Nivel del semáforo de confianza -> texto para mostrar. */
+export const TEXTO_CONFIANZA = { alta: "Alta", media: "Media", baja: "Baja" };

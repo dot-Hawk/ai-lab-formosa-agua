@@ -40,3 +40,33 @@ describe("Lectura con decimales", () => {
     expect(screen.getByText("20,1 %")).toBeInTheDocument();
   });
 });
+
+describe("Lectura con ficha de confianza", () => {
+  it("muestra la hora de captura en hora de Argentina", () => {
+    render(<Lectura resultado={resultado} />);
+    const fila = screen.getByRole("row", { name: /Hora/ });
+    expect(within(fila).getByText("11:09")).toBeInTheDocument();
+    expect(within(fila).getByText("10:59")).toBeInTheDocument();
+  });
+
+  it("muestra el semáforo con su nivel, los motivos y los criterios", () => {
+    render(<Lectura resultado={resultado} />);
+    expect(screen.getByRole("heading", { name: /Confianza del resultado: Media/ })).toBeInTheDocument();
+    expect(screen.getByText("Nubes sobre la zona: hasta 12 %")).toBeInTheDocument();
+    expect(screen.getByText("Reglas definidas por el equipo.")).toBeInTheDocument();
+  });
+
+  it("muestra los avisos del backend", () => {
+    const conAviso = { ...resultado, avisos: ["Haría falta radar (Sentinel-1)."] };
+    render(<Lectura resultado={conAviso} />);
+    expect(screen.getByText("Haría falta radar (Sentinel-1).")).toBeInTheDocument();
+  });
+
+  it("funciona con un backend sin confianza ni avisos", () => {
+    const viejo = { ...resultado };
+    delete viejo.confianza;
+    delete viejo.avisos;
+    render(<Lectura resultado={viejo} />);
+    expect(screen.queryByText(/Confianza del resultado/)).not.toBeInTheDocument();
+  });
+});
