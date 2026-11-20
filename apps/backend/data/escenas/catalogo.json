@@ -1,0 +1,44 @@
+[
+  {
+    "id": "demo-2026-10-01",
+    "fecha": "2026-10-01",
+    "fuente": "SIMULADO · generado por scripts/generar_demo.py (reemplazar por Sentinel-2 L2A)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A (simulado)",
+    "resolucion_m": 10,
+    "nubes_pct": 4.0,
+    "categoria": "Simulado",
+    "bounds": [
+      [
+        -26.2,
+        -58.18
+      ],
+      [
+        -26.182,
+        -58.16
+      ]
+    ],
+    "archivo": "demo-2026-10-01.npz"
+  },
+  {
+    "id": "demo-2026-10-31",
+    "fecha": "2026-10-31",
+    "fuente": "SIMULADO · generado por scripts/generar_demo.py (reemplazar por Sentinel-2 L2A)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A (simulado)",
+    "resolucion_m": 10,
+    "nubes_pct": 12.0,
+    "categoria": "Simulado",
+    "bounds": [
+      [
+        -26.2,
+        -58.18
+      ],
+      [
+        -26.182,
+        -58.16
+      ]
+    ],
+    "archivo": "demo-2026-10-31.npz"
+  }
+]

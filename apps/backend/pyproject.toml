@@ -1,0 +1,24 @@
+[project]
+name = "operacion-agua-backend"
+version = "0.1.0"
+description = "API de comparación de imágenes satelitales (NDWI) · AI LAB Misión: Código Formosa · Equipo 1"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "numpy>=2.0",
+    "pillow>=10.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "httpx>=0.27",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.uv]
+package = false
