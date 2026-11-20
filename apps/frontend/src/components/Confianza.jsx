@@ -3,7 +3,7 @@ import { TEXTO_CONFIANZA } from "../lib/vista.js";
 /** Semáforo de confianza de la comparación, con el motivo de cada criterio. */
 export default function Confianza({ confianza }) {
   if (!confianza) return null;
-  const { nivel, motivos, criterios } = confianza;
+  const { nivel, motivos } = confianza;
 
   return (
     <section className="confianza" aria-labelledby="confianza-titulo">
@@ -21,7 +21,6 @@ export default function Confianza({ confianza }) {
           </li>
         ))}
       </ul>
-      <p className="ayuda">{criterios}</p>
     </section>
   );
 }

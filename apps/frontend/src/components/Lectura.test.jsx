@@ -49,11 +49,11 @@ describe("Lectura con ficha de confianza", () => {
     expect(within(fila).getByText("10:59")).toBeInTheDocument();
   });
 
-  it("muestra el semáforo con su nivel, los motivos y los criterios", () => {
+  it("muestra el semáforo con su nivel y los motivos, sin describir los criterios", () => {
     render(<Lectura resultado={resultado} />);
     expect(screen.getByRole("heading", { name: /Confianza del resultado: Media/ })).toBeInTheDocument();
     expect(screen.getByText("Nubes sobre la zona: hasta 12 %")).toBeInTheDocument();
-    expect(screen.getByText("Reglas definidas por el equipo.")).toBeInTheDocument();
+    expect(screen.queryByText("Reglas definidas por el equipo.")).not.toBeInTheDocument();
   });
 
   it("muestra los avisos del backend", () => {
@@ -97,7 +97,7 @@ describe("Lectura con agua de siempre", () => {
     render(<Lectura resultado={resultado} />);
     expect(screen.getByText("30,5 ha")).toBeInTheDocument();
     expect(screen.getByText("49,5 ha")).toBeInTheDocument();
-    expect(screen.getByText(/al menos el 50 % del tiempo entre 1984 y 2021/)).toBeInTheDocument();
+    expect(screen.getByText("Global Surface Water (JRC), 1984-2021")).toBeInTheDocument();
   });
 
   it("no muestra el bloque si el backend no tiene la capa", () => {

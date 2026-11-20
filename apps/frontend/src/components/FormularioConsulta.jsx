@@ -50,11 +50,7 @@ export default function FormularioConsulta({ escenas, cargando, onComparar }) {
           max="1"
           value={umbralTexto}
           onChange={(e) => setUmbralTexto(e.target.value)}
-          aria-describedby="umbral-ayuda"
         />
-        <p id="umbral-ayuda" className="ayuda">
-          Un píxel cuenta como agua si su NDWI supera este valor. 0 es el criterio habitual.
-        </p>
       </div>
       {error && (
         <p className="aviso aviso-error" role="alert">

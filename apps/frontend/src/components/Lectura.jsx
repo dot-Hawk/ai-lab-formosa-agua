@@ -77,7 +77,6 @@ export default function Lectura({ resultado }) {
           <dd className="cifra">{formatearHectareas(resultado.area_agua_perdida_ha)}</dd>
         </div>
       </dl>
-      <p className="ayuda">Calculado con un umbral NDWI de {resultado.umbral_agua.toLocaleString("es-AR")}.</p>
 
       {resultado.agua_habitual && (
         <div className="habitual">
@@ -87,11 +86,7 @@ export default function Lectura({ resultado }) {
             <span className="cifra">{formatearHectareas(resultado.agua_habitual.area_agua_nueva_habitual_ha)}</span>{" "}
             donde el agua suele estar (el río o lagunas que vuelven a su lugar).
           </p>
-          <p className="ayuda">
-            Agua de siempre: píxeles con agua al menos el {resultado.agua_habitual.umbral_pct} % del tiempo entre{" "}
-            {resultado.agua_habitual.periodo.replace("-", " y ")} ({resultado.agua_habitual.fuente},{" "}
-            {resultado.agua_habitual.resolucion_original_m} m). {resultado.agua_habitual.nota}
-          </p>
+          <p className="fuente">{`${resultado.agua_habitual.fuente}, ${resultado.agua_habitual.periodo}`}</p>
         </div>
       )}
 

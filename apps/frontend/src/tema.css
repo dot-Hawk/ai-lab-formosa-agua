@@ -1,0 +1,704 @@
+/* Operación Agua · tema "centro de control".
+   Fondo de espacio profundo, paneles de vidrio, un único acento (azul hielo) para lo
+   interactivo y los datos de agua. Ámbar y rojo quedan reservados a alerta y evacuación.
+   Se carga después de estilos.css y redefine sus tokens. */
+
+:root {
+  --espacio: #070b11;
+  --orbita: #0c121b;
+  --vidrio: rgb(9 14 21 / 0.8);
+  --linea: #1d2836;
+  --linea-suave: #141d29;
+  --texto-1: #e8edf3;
+  --texto-2: #8a97a8;
+  --texto-3: #5d6a7b;
+  --hielo: #8cc8ec;
+  --hielo-fuerte: #b9e0f7;
+  --verde-dato: #5fb98a;
+
+  /* tokens de estilos.css, en oscuro */
+  --papel: var(--espacio);
+  --panel: var(--orbita);
+  --tinta: var(--texto-1);
+  --tinta-suave: var(--texto-2);
+  --rejilla: var(--linea);
+  --rejilla-suave: var(--linea-suave);
+  --rio: var(--hielo);
+  --rio-oscuro: var(--hielo-fuerte);
+  --alerta: #e0a23a;
+  --evacuacion: #e5634c;
+
+  color-scheme: dark;
+}
+
+body {
+  background: var(--espacio);
+  color: var(--texto-1);
+}
+
+::selection { background: rgb(140 200 236 / 0.35); }
+
+/* ---------- Estructura de la aplicación ---------- */
+
+.app {
+  display: grid;
+  grid-template-rows: 52px 1fr auto;
+  height: 100vh;
+  min-height: 0;
+}
+
+.vista {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.barra {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1.25rem;
+  background: var(--espacio);
+  border-bottom: 1px solid var(--linea);
+  position: relative;
+  z-index: 1000;
+}
+
+.marca {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  color: var(--texto-1);
+  text-decoration: none;
+}
+
+.marca-simbolo {
+  align-self: center;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--hielo);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 60%, var(--hielo) 0 28%, transparent 30%);
+}
+
+.marca-nombre {
+  font-family: var(--cifras);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.marca-lugar {
+  color: var(--texto-3);
+  font-size: var(--t-1);
+  letter-spacing: 0.08em;
+}
+
+.navegacion {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.navegacion a {
+  position: relative;
+  padding: 0.95rem 1rem;
+  color: var(--texto-2);
+  text-decoration: none;
+  font-family: var(--cifras);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.navegacion a:hover { color: var(--texto-1); }
+
+.navegacion a[aria-current="page"] { color: var(--texto-1); }
+
+.navegacion a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: -1px;
+  height: 2px;
+  background: var(--hielo);
+}
+
+.reloj {
+  justify-self: end;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  color: var(--texto-1);
+}
+
+.reloj span { color: var(--texto-3); font-size: 0.75rem; }
+
+.pie {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.3rem 1.25rem;
+  font-size: 0.6875rem;
+  color: var(--texto-3);
+  border-top: 1px solid var(--linea-suave);
+  background: var(--espacio);
+}
+
+/* ---------- Piezas comunes ---------- */
+
+.flotante {
+  position: absolute;
+  z-index: 500;
+  background: var(--vidrio);
+  backdrop-filter: blur(14px) saturate(1.2);
+  border: 1px solid rgb(140 200 236 / 0.12);
+  border-radius: 6px;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.45);
+}
+
+button { border-radius: 4px; }
+
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid var(--hielo);
+  outline-offset: 2px;
+}
+
+select, input[type="number"] {
+  background: var(--espacio);
+  border-color: var(--linea);
+  color: var(--texto-1);
+}
+
+select:hover, input[type="number"]:hover { border-color: var(--texto-3); }
+
+input[type="range"] { accent-color: var(--hielo); }
+
+.consulta button[type="submit"], .boton-texto {
+  background: var(--hielo);
+  color: #04121d;
+  font-weight: 600;
+}
+
+.consulta button[type="submit"]:hover:not(:disabled) { background: var(--hielo-fuerte); }
+
+.consulta button:disabled {
+  background: var(--linea);
+  color: var(--texto-3);
+}
+
+.boton-texto { border: 0; padding: 0.35rem 0.8rem; cursor: pointer; font-family: var(--cifras); }
+
+.aviso, .confianza, .habitual, .radar, .infraestructura {
+  background: var(--orbita);
+  border-color: var(--linea);
+  color: var(--texto-1);
+}
+
+.aviso-error { color: #f08a78; border-left-color: var(--evacuacion); }
+
+.estado-carga, .vacio { color: var(--texto-2); }
+
+.vista-centrada {
+  display: grid;
+  place-items: center;
+  height: 100%;
+}
+
+.categoria-simulado { background: rgb(224 162 58 / 0.16); color: #f0c47a; }
+.categoria-observado { background: rgb(140 200 236 / 0.14); color: var(--hielo-fuerte); }
+
+.nivel-normal { background: rgb(95 185 138 / 0.16); color: #8fd6ae; }
+.nivel-aguas-bajas { background: rgb(140 200 236 / 0.14); color: var(--hielo-fuerte); }
+.nivel-alerta { background: rgb(224 162 58 / 0.18); color: #f0c47a; }
+.nivel-evacuacion { background: rgb(229 99 76 / 0.2); color: #f39a88; }
+.nivel-sin-dato { background: var(--linea-suave); color: var(--texto-3); }
+
+.leyenda-simulado { background: rgb(224 162 58 / 0.16); color: #f0c47a; }
+
+/* Escala hidrométrica en oscuro */
+.regla { stroke: var(--texto-2); }
+.franja-evacuacion { fill: rgb(229 99 76 / 0.26); }
+.franja-alerta { fill: rgb(224 162 58 / 0.24); }
+.franja-bajas { fill: rgb(140 200 236 / 0.14); }
+.graduacion { stroke: var(--texto-3); }
+.graduacion-num { fill: var(--texto-3); }
+.umbral-alerta text { fill: #f0c47a; }
+.umbral-evacuacion text { fill: #f39a88; }
+.umbral-aguas_bajas text { fill: var(--hielo); }
+.maximo line { stroke: var(--texto-2); }
+.marca path { fill: var(--hielo); }
+.marca line { stroke: var(--hielo); }
+.marca text { fill: var(--hielo-fuerte); }
+
+/* Leaflet en oscuro */
+.leaflet-container { background: var(--espacio); }
+
+.leaflet-control-attribution {
+  background: rgb(7 11 17 / 0.7) !important;
+  color: var(--texto-3) !important;
+  font-size: 10px;
+}
+
+.leaflet-control-attribution a { color: var(--texto-2) !important; }
+
+.leaflet-bar a {
+  background: var(--vidrio);
+  color: var(--texto-1);
+  border-color: var(--linea) !important;
+}
+
+.leaflet-tooltip {
+  background: var(--vidrio);
+  color: var(--texto-1);
+  border: 1px solid var(--linea);
+  box-shadow: none;
+}
+
+.leaflet-tooltip-top::before, .leaflet-tooltip-right::before { display: none; }
+
+/* El filtro gris de estilos.css solo aplica al mapa base de "Comparar" (OpenStreetMap). */
+.vista .leaflet-tile-pane { filter: none; }
+.comparar .leaflet-tile-pane { filter: invert(1) hue-rotate(185deg) grayscale(0.85) brightness(0.78) contrast(0.92); }
+
+/* ---------- Vista "En vivo" ---------- */
+
+.envivo { position: absolute; inset: 0; }
+
+.mapa-envivo { position: absolute; inset: 0; }
+
+.capa-cuadro { transition: opacity 0.35s ease; }
+
+.zona-estudio {
+  stroke: var(--hielo);
+  stroke-width: 1.5;
+  fill: var(--hielo);
+  fill-opacity: 0.08;
+  cursor: pointer;
+}
+
+.punto-estacion {
+  stroke: var(--espacio);
+  stroke-width: 2;
+  fill: var(--hielo);
+  fill-opacity: 1;
+}
+
+.etiqueta-estacion {
+  font-family: var(--cifras);
+  font-size: 12px;
+  padding: 2px 6px;
+}
+
+.etiqueta-estacion .cifra { color: var(--hielo-fuerte); }
+
+.panel-capas {
+  top: 16px;
+  left: 16px;
+  width: 232px;
+  padding: 0.5rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.lista-capas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.boton-capa {
+  width: 100%;
+  display: grid;
+  gap: 1px;
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--texto-2);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.boton-capa:hover { background: rgb(140 200 236 / 0.06); color: var(--texto-1); }
+
+.boton-capa[aria-pressed="true"] {
+  background: rgb(140 200 236 / 0.1);
+  border-color: rgb(140 200 236 / 0.35);
+  color: var(--texto-1);
+}
+
+.boton-capa-nombre {
+  font-family: var(--cifras);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+}
+
+.boton-capa-detalle { font-size: 0.75rem; color: var(--texto-3); }
+
+.escala-color { display: grid; gap: 4px; padding: 0 0.7rem; }
+
+.escala-barra { height: 6px; border-radius: 3px; }
+
+.escala-ir { background: linear-gradient(90deg, #1b1b1b, #6b6b6b, #e8e8e8, #4fb3ff, #36d17a, #f4e04d, #f08a2c, #d7263d, #7a1fa2); }
+.escala-lluvia { background: linear-gradient(90deg, #2d77c8, #33b3c5, #5ccf6b, #f2e34a, #f39a2c, #e0402e, #b3207c); }
+.escala-radar { background: linear-gradient(90deg, #6fd3ff, #2c9be6, #2fbf71, #f6d33c, #f08a2c, #e0402e, #c2185b, #f2f2f2); }
+
+.escala-extremos {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: var(--texto-3);
+}
+
+.control-opacidad {
+  display: grid;
+  gap: 2px;
+  padding: 0 0.7rem;
+  font-size: 0.75rem;
+  color: var(--texto-3);
+}
+
+.fuente-capa {
+  margin: 0;
+  padding: 0.35rem 0.7rem 0.25rem;
+  font-size: 0.6875rem;
+  color: var(--texto-3);
+  border-top: 1px solid var(--linea);
+}
+
+.linea-tiempo {
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  width: min(720px, calc(100% - 300px));
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 1rem 0.6rem 0.6rem;
+}
+
+.linea-tiempo-estado, .linea-tiempo-error {
+  grid-column: 1 / -1;
+  padding: 0.4rem;
+  color: var(--texto-2);
+  font-size: var(--t-1);
+}
+
+.linea-tiempo-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #f08a78;
+}
+
+.boton-reproducir {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(140 200 236 / 0.4);
+  border-radius: 50%;
+  background: rgb(140 200 236 / 0.08);
+  cursor: pointer;
+}
+
+.boton-reproducir:hover { background: rgb(140 200 236 / 0.18); }
+
+.icono-play {
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  border-left: 11px solid var(--hielo-fuerte);
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+}
+
+.icono-pausa {
+  width: 10px;
+  height: 13px;
+  border-left: 3.5px solid var(--hielo-fuerte);
+  border-right: 3.5px solid var(--hielo-fuerte);
+}
+
+.linea-tiempo-pista { position: relative; display: grid; gap: 4px; }
+
+.linea-tiempo-pista input { width: 100%; margin: 0; }
+
+.marcas-tiempo {
+  list-style: none;
+  margin: 0;
+  padding: 0 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.marcas-tiempo li { width: 1px; height: 5px; background: var(--texto-3); }
+.marcas-tiempo li.activa { background: var(--hielo); height: 7px; }
+
+.linea-tiempo-hora { display: grid; justify-items: end; min-width: 11.5rem; }
+
+.hora-actual { font-size: 1.05rem; font-weight: 600; letter-spacing: 0.02em; }
+
+.hora-relativa {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--texto-3);
+}
+
+.punto-vivo {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5a4f;
+  box-shadow: 0 0 0 0 rgb(255 90 79 / 0.6);
+  animation: latido 1.8s ease-out infinite;
+}
+
+@keyframes latido {
+  70% { box-shadow: 0 0 0 7px rgb(255 90 79 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(255 90 79 / 0); }
+}
+
+.lectura-cursor {
+  right: 16px;
+  bottom: 28px;
+  margin: 0;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8125rem;
+  color: var(--texto-2);
+}
+
+/* ---------- Vista "Comparar" ---------- */
+
+.comparar {
+  display: grid;
+  grid-template-columns: minmax(300px, 370px) 1fr minmax(240px, 280px);
+  height: 100%;
+  min-height: 0;
+}
+
+.comparar .panel { background: var(--orbita); }
+.comparar .panel-consulta { border-right: 1px solid var(--linea); }
+.comparar .panel-escala { border-left: 1px solid var(--linea); }
+
+.comparar .mapa-leyenda {
+  background: var(--vidrio);
+  backdrop-filter: blur(14px);
+  border-color: rgb(140 200 236 / 0.12);
+  color: var(--texto-1);
+}
+
+.comparar .mapa-lienzo { background: var(--espacio); }
+
+.comparar h2, .rio h2 {
+  font-family: var(--cifras);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.superficies { border-top-color: var(--hielo); }
+.superficie dd { color: var(--texto-1); }
+
+/* ---------- Vista "Río" ---------- */
+
+.rio {
+  display: grid;
+  grid-template-columns: 250px 1fr 280px;
+  height: 100%;
+  min-height: 0;
+}
+
+.rio-estaciones {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border-right: 1px solid var(--linea);
+  background: var(--orbita);
+  overflow-y: auto;
+}
+
+.tarjeta-estacion {
+  display: grid;
+  justify-items: start;
+  gap: 0.2rem;
+  padding: 0.85rem 0.9rem;
+  text-align: left;
+  background: transparent;
+  border: 1px solid var(--linea);
+  color: var(--texto-1);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.tarjeta-estacion:hover { border-color: var(--texto-3); }
+
+.tarjeta-estacion[aria-pressed="true"] {
+  border-color: var(--hielo);
+  background: rgb(140 200 236 / 0.07);
+}
+
+.tarjeta-nombre { font-size: var(--t-1); color: var(--texto-2); }
+
+.tarjeta-altura {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.tarjeta-fecha { font-size: 0.6875rem; color: var(--texto-3); }
+
+.rio-grafico {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+.rio-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.rio-cabecera h2 { margin: 0; font-size: 1.6rem; }
+
+.selector-periodo {
+  display: flex;
+  border: 1px solid var(--linea);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.selector-periodo button {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--texto-2);
+  padding: 0.4rem 0.8rem;
+  font-family: var(--cifras);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.selector-periodo button + button { border-left: 1px solid var(--linea); }
+
+.selector-periodo button[aria-pressed="true"] {
+  background: rgb(140 200 236 / 0.14);
+  color: var(--texto-1);
+}
+
+.grafico-nivel { margin: 0; }
+
+.grafico-nivel svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--cifras);
+  cursor: crosshair;
+}
+
+.grilla line { stroke: var(--linea-suave); }
+.grilla text { fill: var(--texto-3); font-size: 12px; }
+.grilla-tiempo line { stroke-dasharray: 2 4; }
+
+.zona-alerta { fill: rgb(224 162 58 / 0.07); }
+.zona-evacuacion { fill: rgb(229 99 76 / 0.08); }
+
+.linea-umbral line { stroke-width: 1; stroke-dasharray: 5 4; }
+.linea-umbral text { font-size: 12px; font-weight: 600; }
+.linea-umbral.umbral-evacuacion line { stroke: var(--evacuacion); }
+.linea-umbral.umbral-evacuacion text { fill: #f39a88; }
+.linea-umbral.umbral-alerta line { stroke: var(--alerta); }
+.linea-umbral.umbral-alerta text { fill: #f0c47a; }
+.linea-umbral.umbral-aguas_bajas line { stroke: var(--hielo); opacity: 0.6; }
+.linea-umbral.umbral-aguas_bajas text { fill: var(--hielo); }
+
+.linea-serie {
+  fill: none;
+  stroke: var(--hielo);
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+}
+
+.foco line { stroke: var(--texto-2); stroke-dasharray: 3 3; }
+.foco circle { fill: var(--espacio); stroke: var(--hielo-fuerte); stroke-width: 2; }
+
+.grafico-lectura {
+  min-height: 1.4em;
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
+  color: var(--texto-1);
+}
+
+.rio-escala {
+  padding: 1.25rem;
+  border-left: 1px solid var(--linea);
+  background: var(--orbita);
+  overflow-y: auto;
+}
+
+/* ---------- Pantallas angostas ---------- */
+
+@media (max-width: 1100px) {
+  .comparar { grid-template-columns: minmax(280px, 340px) 1fr; overflow-y: auto; }
+  .comparar .panel-escala { display: none; }
+  .rio { grid-template-columns: 220px 1fr; }
+  .rio-escala { display: none; }
+}
+
+@media (max-width: 760px) {
+  .app { grid-template-rows: auto 1fr auto; }
+  .barra { grid-template-columns: 1fr auto; padding: 0 0.75rem; }
+  .navegacion { grid-column: 1 / -1; grid-row: 2; justify-content: center; }
+  .navegacion a { padding: 0.6rem 0.75rem; }
+  .marca-lugar { display: none; }
+  .pie { flex-direction: column; gap: 0; padding: 0.3rem 0.75rem; }
+
+  .panel-capas { left: 8px; right: 8px; top: 8px; width: auto; padding: 0.35rem; }
+  .lista-capas { grid-template-columns: repeat(4, 1fr); }
+  .boton-capa { padding: 0.4rem; text-align: center; }
+  .boton-capa-detalle, .control-opacidad, .fuente-capa { display: none; }
+  .linea-tiempo { width: calc(100% - 16px); bottom: 24px; grid-template-columns: auto 1fr; }
+  .linea-tiempo-hora { grid-column: 1 / -1; justify-items: start; }
+  .lectura-cursor { display: none; }
+
+  .vista-comparar, .vista-rio { overflow-y: auto; }
+  .comparar { display: block; height: auto; }
+  .comparar .mapa { height: 60vh; }
+  .rio { display: block; height: auto; }
+  .rio-estaciones { grid-template-columns: repeat(3, 1fr); border-right: 0; border-bottom: 1px solid var(--linea); padding: 0.75rem; }
+  .tarjeta-altura { font-size: 1.25rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .capa-cuadro, .navegacion a, .boton-capa { transition: none; }
+  .punto-vivo { animation: none; }
+}
+
+/* Infrarrojo: lo negro (suelo despejado) se vuelve transparente sobre el fondo nocturno */
+.mezcla-screen { mix-blend-mode: screen; }
+
+/* estilos.css pinta el hover de todos los botones con un color sólido; en los controles
+   del tema se mantiene el vidrio translúcido (misma especificidad, cargado después). */
+.boton-capa:hover:not(:disabled) { background: rgb(140 200 236 / 0.06); }
+.boton-capa[aria-pressed="true"]:hover:not(:disabled) { background: rgb(140 200 236 / 0.14); }
+.tarjeta-estacion:hover:not(:disabled) { background: rgb(140 200 236 / 0.05); }
+.tarjeta-estacion[aria-pressed="true"]:hover:not(:disabled) { background: rgb(140 200 236 / 0.1); }
+.selector-periodo button:hover:not(:disabled) { background: rgb(140 200 236 / 0.08); }
+.selector-periodo button[aria-pressed="true"]:hover:not(:disabled) { background: rgb(140 200 236 / 0.18); }
+.boton-reproducir:hover:not(:disabled) { background: rgb(140 200 236 / 0.18); }

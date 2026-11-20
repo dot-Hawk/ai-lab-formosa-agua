@@ -151,3 +151,27 @@ curl -X POST localhost:8000/api/comparar -H 'Content-Type: application/json' \
   -d '{"escena_a":"s2-2026-10-02","escena_b":"s2-2026-10-02"}'   # → 400 "Elegí dos escenas distintas para comparar."
 ```
 Documentación interactiva: http://localhost:8000/docs
+
+## `GET /api/rio`
+Series diarias de altura de las escalas del río Paraguay en la región, hasta el 31/10/2026. Parámetro opcional `desde` (`AAAA-MM-DD`).
+
+`200` →
+```json
+{
+  "unidad": "m",
+  "estaciones": [
+    {
+      "nombre": "Puerto Formosa", "lat": -26.183, "lon": -58.183,
+      "umbrales": {"aguas_bajas": 1.6, "alerta": 7.8, "evacuacion": 8.3},
+      "fuente": "INA, kit K1 limpiado por el equipo",
+      "serie": [["2026-10-30", 5.5], ["2026-10-31", 5.6]]
+    }
+  ]
+}
+```
+Puerto Formosa sale de la serie K1 limpia; Puerto Pilcomayo y Puerto Bermejo, de la API pública del INA. Los días sin medición no aparecen (no se interpolan). `desde` con formato inválido → `422`.
+
+## Capas en tiempo real (solo frontend)
+La vista "En vivo" consulta directamente, sin pasar por el backend:
+- NASA GIBS (WMTS, `epsg3857/best`): `GOES-East_ABI_Band13_Clean_Infrared`, `GOES-East_ABI_GeoColor`, `IMERG_Precipitation_Rate_30min` y `VIIRS_Black_Marble` como fondo. Los instantes disponibles se leen con DescribeDomains.
+- RainViewer: `https://api.rainviewer.com/public/weather-maps.json` (radar de las últimas 2 horas).
