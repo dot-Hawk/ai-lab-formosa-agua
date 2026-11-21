@@ -29,7 +29,7 @@ Operación Agua · Comparador de imágenes satelitales · Sábado 21/11/2026 des
 
 ## 2 · El usuario (0:35–0:55) · Persona 2
 
-> Pensamos en quienes deciden con esa información: los técnicos de la mesa interinstitucional por El Niño, como Defensa Civil. Necesitan responder una pregunta concreta: entre dos fechas, ¿dónde llegó el agua, cuánta es, y cuánto podemos confiar en lo que vemos?
+> ¿Quién la usaría? Quienes salen al terreno cuando el río sube: los técnicos de Defensa Civil y de la mesa provincial por El Niño. Ellos tienen que decidir a dónde ir primero: qué barrio, qué camino, qué escuela. Para eso necesitan saber dónde llegó el agua y cuánto pueden confiar en ese dato.
 
 ## 3 · Cómo funciona (0:55–1:50) · Persona 1 y Persona 2
 *Señalar en el póster las imágenes de antes y después.*
