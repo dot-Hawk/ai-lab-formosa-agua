@@ -1,70 +1,59 @@
 # Guion del pitch · 3 minutos · Equipo 1
 Operación Agua · Comparador de imágenes satelitales · Sábado 21/11/2026 desde las 10:00
 
-**Duración objetivo:** 2 min 55 s (unas 450 palabras a ritmo ágil). Quedan 5 segundos de margen.
-**Quién habla:** dos voces que se alternan. Se propone Selena como Persona 1 y Diego como Persona 2; el equipo lo confirma en el ensayo.
-**Cómo está armado:** primero, el problema que plantea el desafío y cómo lo resolvemos. Después, lo que el equipo propone sumar. Cubre lo que pide el documento base: problema vinculado a El Niño, usuario, función principal, evidencia usada y límites.
+**Duración objetivo:** 2 min 50 s (unas 410 palabras a ritmo tranquilo). Quedan 10 segundos de margen.
+**Quién habla:** se reparte entre los dos integrantes, Selena y Diego. El reparto de cada bloque lo confirma el equipo.
+**Qué cubre (según el documento base):** problema vinculado a El Niño, usuario, función principal, evidencia usada y límites.
 
 | Tiempo | Bloque | Quién | Qué se muestra |
 |---|---|---|---|
-| 0:00–0:40 | 1 · El problema del desafío | Persona 1 y Persona 2 | Póster: escala de Puerto Formosa |
-| 0:40–1:20 | 2 · Lo que pide el desafío, resuelto | Persona 1 | La herramienta en la notebook |
-| 1:20–2:10 | 3 · Lo que proponemos sumar | Persona 1 y Persona 2 | La herramienta en la notebook |
-| 2:10–2:35 | 4 · Cuánto confiar | Persona 2 | Semáforo de confianza en pantalla |
-| 2:35–2:55 | 5 · Cierre | Persona 1 y Persona 2 | Póster: QR al repositorio |
-
-*Tener la herramienta abierta antes de empezar, con el backend y el frontend andando. Si algo falla, pasar al video de respaldo.*
+| 0:00–0:30 | 1 · Problema | PENDIENTE | Póster: escala de Puerto Formosa |
+| 0:30–0:50 | 2 · Usuario | PENDIENTE | Póster: sección Usuario |
+| 0:50–2:10 | 3 · Demostración en vivo | PENDIENTE | La herramienta en la notebook |
+| 2:10–2:35 | 4 · Límites | PENDIENTE | Póster: sección Límites |
+| 2:35–2:50 | 5 · Cierre | PENDIENTE | Póster: enlace al repositorio |
 
 ---
 
-## 1 · El problema del desafío (0:00–0:40)
+## 1 · Problema (0:00–0:30)
 
-**Persona 1**
-> Imagínense esto: por El Niño, el río Paraguay no para de subir. En Puerto Formosa pasó de 2,37 metros el 1 de octubre a 5,60 el 31. Al crecer llena bañados y riachos, y la provincia ya los inspecciona con imágenes satelitales. ¿El problema? Compararlas a ojo lleva horas, depende de quién mira y no deja registro. Y cuando llueve, las nubes tapan el suelo.
+> El 1 de octubre el río Paraguay en Puerto Formosa marcaba 2,37 metros. El 31 de octubre, 5,60. El Servicio Meteorológico Nacional confirmó El Niño, y el último Niño fuerte llevó esta misma escala a 9,81 metros en enero de 2016, por encima del nivel de evacuación.
+>
+> Cuando el río sube, llena bañados y riachos. La provincia ya revisa esos cursos de agua con imágenes satelitales, pero comparar dos imágenes a ojo lleva tiempo y no deja registro.
 
-**Persona 2**
-> El desafío pidió comparar imágenes de distintas fechas e identificar cambios en el agua de un sector de Formosa. Así nació **Operación Agua**, para los técnicos de la mesa interinstitucional por El Niño, como Defensa Civil.
+## 2 · Usuario (0:30–0:50)
 
-## 2 · Lo que pide el desafío, resuelto (0:40–1:20)
+> Nuestra herramienta es para los técnicos de la mesa interinstitucional por El Niño. Les responde una pregunta concreta: entre dos fechas, ¿dónde apareció o desapareció agua, cuánta, y cuánto podemos confiar en ese resultado?
 
-**Persona 1**
-> Miren qué simple es. Elijo la zona y dos fechas: la crecida de enero de 2021.
+## 3 · Demostración en vivo (0:50–2:10)
+
+*Tener la herramienta abierta antes de empezar, con el backend y el frontend andando. Si algo falla, pasar al video de respaldo.*
+
+> Tomamos una crecida real, sin nubes: imágenes Sentinel-2 del 18 de enero y del 7 de febrero de 2021, sobre Formosa, Alberdi y los bañados del sur.
 >
 > *(Elegir 18/01/2021 y 07/02/2021 y presionar Comparar.)*
 >
-> En segundos, el mapa marca en azul el agua nueva: 223 hectáreas. En naranja, el agua que ya no está. Con el deslizador comparo las dos fechas lado a lado.
+> En azul, el agua nueva: 223 hectáreas. Y la herramienta dice cuánto confiar: sin nubes y con 20 días entre fechas, la confianza es **alta**.
 >
-> *(Mover el deslizador y señalar la tabla.)*
+> *(Señalar la tabla.)*
 >
-> Cada imagen trae su ficha: fecha, fuente, resolución y nubes. Y al lado, la altura del río según el INA esos mismos días, frente a los niveles de alerta.
-
-## 3 · Lo que proponemos sumar (1:20–2:10)
-
-**Persona 2**
-> Sobre esa base, el equipo propuso ir más allá. Primero, las nubes.
+> Cada imagen trae su ficha: fecha, hora, satélite, resolución y nubes. Debajo, el río según el INA: en Puerto Formosa pasó de 2,16 a 5,37 metros, y en Puerto Pilcomayo, de 1,73 a 4,93. También la lluvia estimada del mes previo.
 >
 > *(Cambiar a 02/10/2026 → 26/10/2026 y comparar.)*
 >
-> Esta imagen de octubre tiene un 20 % tapado. La herramienta lo detecta, lo avisa y suma sola el radar Sentinel-1, que ve a través de las nubes: 221 hectáreas de agua nueva.
+> Ahora, octubre de 2026. La segunda imagen tiene un 20 % del sector tapado por nubes. La herramienta no lo esconde: marca la confianza como **baja** y avisa que para días nublados haría falta radar.
+>
+> *(Elegir la misma fecha en los dos campos.)*
+>
+> Y si alguien elige la misma fecha dos veces, la herramienta lo avisa y deja seguir trabajando.
 
-**Persona 1**
-> Segundo, no alarmar por la laguna de siempre. Cruzamos con Global Surface Water, el registro de dónde hubo agua desde 1984: de las 223 hectáreas de 2021, 86 están donde normalmente no hay agua.
+## 4 · Límites (2:10–2:35)
 
-**Persona 2**
-> Tercero, qué hay cerca: escuelas y centros de salud del IGN a menos de 500 metros del agua fuera de lo normal. En octubre, 4 escuelas y ningún centro de salud. Y no es solo la capital: el mapa muestra toda la provincia y 7 zonas clave, de Clorinda a Ingeniero Juárez.
+> Un cambio detectado es un indicio, no una afectación comprobada: hay que verificarlo en terreno. No ve debajo de las nubes, no detecta cursos de menos de diez metros y el índice puede confundir agua con sombras. La lluvia que muestra es una estimación de un modelo, y lo dice. No pronostica ni decide: la decisión es de la mesa.
 
-## 4 · Cuánto confiar (2:10–2:35)
+## 5 · Cierre (2:35–2:50)
 
-**Persona 2**
-> En una emergencia hay que saber cuánto confiar. Cada resultado trae un semáforo, alta, media o baja, con el motivo escrito: nubes, días entre fechas y altura del sol. La crecida de 2021 da alta; octubre, con nubes, da baja. Y cada dato dice si es observado o estimado, como la lluvia de un modelo.
-
-## 5 · Cierre (2:35–2:55)
-
-**Persona 1**
-> Siempre con una regla, que está en pantalla: **un cambio detectado es un indicio, no una afectación comprobada.** Hay que verificarlo en terreno. La herramienta no pronostica ni decide: le da a la mesa información más rápida y con fuente.
-
-**Persona 2**
-> Cada número tiene su fuente: Copernicus, INA e IGN. El código y las pruebas están en GitHub, en el QR del póster. Con Operación Agua, la mesa deja de comparar a ojo y empieza a medir. ¡Muchas gracias!
+> Cada número que vieron tiene su fuente: imágenes de Copernicus, alturas del INA y la serie del kit, que limpiamos y comparamos contra la API del INA. Coinciden en el 98 % de los días. El código está en el repositorio del póster. Gracias.
 
 ---
 
@@ -83,7 +72,7 @@ Operación Agua · Comparador de imágenes satelitales · Sábado 21/11/2026 des
 - **¿Cómo saben que no es el río de siempre?** Con Global Surface Water, el registro de dónde hubo agua entre 1984 y 2021: en la crecida de 2021, 86 de las 223 hectáreas nuevas están donde normalmente no hay agua.
 
 ## Ensayo
-- [ ] Cronometrar dos ensayos completos (objetivo: 2:55).
+- [ ] Cronometrar dos ensayos completos (objetivo: 2:50).
 - [ ] Probar la demo en la notebook del evento con el backend y el frontend levantados.
 - [ ] Tener el video de respaldo descargado en la notebook (sin depender de internet).
-- [ ] Confirmar quién es Persona 1 y Persona 2.
+- [ ] Confirmar quién dice cada bloque.
