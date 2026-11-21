@@ -107,11 +107,11 @@ La limpieza de K1 se repite con `uv run python scripts/limpiar_k1.py`. Fuentes y
 **Versión evaluable:** PENDIENTE (commit o tag en `main`, a definir por el equipo).
 
 ## Límites
-- La cobertura de nubes oculta el suelo en las imágenes ópticas. Los píxeles con nube o sombra se excluyen del cálculo (en el recorte del 26/10/2026 son el 20 %), pero algunos bordes de nube que la clasificación de Sentinel-2 no detecta pueden aparecer como cambio. Sentinel-1 (radar) no está integrado.
+- La cobertura de nubes oculta el suelo en las imágenes ópticas. Los píxeles con nube o sombra se excluyen del cálculo (en el recorte del 26/10/2026 son el 20 %), pero algunos bordes de nube que la clasificación de Sentinel-2 no detecta pueden aparecer como cambio. Si una escena supera el 20 % de nubes, la herramienta suma el radar Sentinel-1, pero solo en la zona de Formosa capital.
 - Con 10 m de resolución no se detectan cursos de agua angostos.
 - El NDWI puede confundir agua con sombras o suelo muy húmedo.
 - No usa datos posteriores al 31/10/2026. No pronostica ni decide.
-- Un solo sector (7 × 7,8 km) y cuatro fechas cargadas. Para otra zona hay que volver a correr la descarga.
+- 7 zonas clave con fechas fijas (8 escenas en Formosa capital y 2 en cada una de las demás). Fuera de ellas solo hay contexto provincial, sin detección de cambios. Para otra zona hay que agregarla a `data/zonas.json` y correr la descarga.
 
 ## Uso de IA
 El equipo usó asistentes de programación (Antigravity CLI con Claude, Codex y Claude Code) para escribir código, pruebas y documentación, con revisión y pruebas del equipo. La herramienta en sí no usa IA: el NDWI es una fórmula fija y los umbrales vienen del INA.

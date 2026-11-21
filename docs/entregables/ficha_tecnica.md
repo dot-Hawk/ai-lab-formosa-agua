@@ -3,8 +3,17 @@ PROTOTIPO · no es una herramienta oficial · Entrega: viernes 20/11/2026, 18 h
 
 **Nombre de la herramienta:** Operación Agua · Comparador de imágenes satelitales
 **Equipo · institución · integrantes y rol de cada uno:** Equipo 1 · Instituto Politécnico Formosa · Desafío 7 (Imágenes satelitales)
-- Selena Brítez: rol D, entregables (7 preguntas, fichas, póster, pitch, video, README y prueba desde un clon limpio)
-- Diego García: roles A, B y C, imágenes y NDWI, backend y limpieza de K1, frontend (`dev-Diego`)
+
+
+| | Selena Brítez (`dev-Selena-Milagros-Britez`) | Diego García (`dev-Diego`) |
+|---|---|---|
+| **Rol** | D · Entregables | A · Imágenes y NDWI · B · Backend y K1 · C · Frontend |
+| **Base del prototipo** | Contrato de API con los ejemplos reales | Monorepo, primeras escenas Sentinel-2 reales y su script de descarga, cálculo del NDWI, limpieza de K1 con su registro, app en React (mapa, formulario, tabla antes/después y escala hidrométrica) |
+| **Funciones con datos reales** | Semáforo de confianza y aviso de nubes, crecida 2021 y bajante 2022, río en la región (INA) y lluvia estimada (ERA5), agua de siempre (Global Surface Water), deslizador antes/después, radar Sentinel-1, infraestructura del IGN, MNDWI, NDVI y color real, 7 zonas clave y vista provincial | Ruta `/api/rio`, vista *Río* con el gráfico de alturas y umbrales, vista *En vivo* con nubes, lluvia y radar meteorológico en tiempo real, navegación por vistas y tema oscuro |
+| **Puesta en marcha** | Dos pruebas desde un clon limpio | Python 3.14 fijado, imagen Docker con frontend y backend, guía de despliegue (Docker y Kubernetes) |
+| **Entregables** | 7 preguntas, ficha técnica, ficha de fuentes, póster, guiones del pitch y del video, README | Registro de limpieza de K1, skill base de los agentes |
+
+Las vistas *Río* y *En vivo* de Diego están terminadas y probadas en `dev-Diego`; se suman a la versión evaluable cuando el equipo integre las ramas en `main`.
 
 **Reto:** 4 · Mapa (propuesta; confirmar con el CITF)
 
@@ -31,6 +40,7 @@ Lo usan los técnicos de la mesa interinstitucional por El Niño que siguen el r
 - 82 pruebas del backend y 66 del frontend, todas pasando (20/11/2026).
 
 ## Qué falta para que la mesa la use
+- **Integración:** unir `dev-Diego` y `dev-Selena-Milagros-Britez` en `main`, para que las vistas *Río* y *En vivo* convivan con las zonas, los índices y la vista provincial.
 - **Zonas:** hay 7 zonas clave fijas (Bañado La Estrella pendiente: el 20/11 no había escenas limpias de 2025 y el servidor de imágenes falló). Para analizar cualquier punto de la provincia hay que permitir dibujar el área y descargarla al momento (`scripts/descargar_zonas.py` ya lo hace por línea de comandos). Estimado: 1 a 2 semanas.
 - **Fechas:** hay ocho escenas ópticas y tres pasadas de radar cargadas. Hay que automatizar la descarga de cada pasada nueva (Sentinel-2 cada 5 días, Sentinel-1 cada 6 a 12).
 - **Radar e infraestructura:** validar el umbral del radar con más fechas y sumar más capas del IGN (puentes, defensas, localidades) y datos de Paraguay para Alberdi.
