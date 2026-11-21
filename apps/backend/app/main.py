@@ -284,8 +284,11 @@ DIAS_LLUVIA_PREVIA = 30
 MAX_DIAS_LLUVIA_ENTRE = 90  # con más días, el acumulado entre fechas deja de explicar el cambio
 
 
-def _region(a: dict, b: dict) -> dict:
-    """Altura observada en otras escalas del río Paraguay (INA) en las dos fechas."""
+def _region(a: dict, b: dict, excluir: int | None = None) -> dict:
+    """Altura observada en otras escalas del río Paraguay (INA) en las dos fechas.
+
+    `excluir` es el siteCode de la escala que ya usa la zona, para no mostrarla dos veces.
+    """
     return {
         "estaciones": [
             {
@@ -297,6 +300,7 @@ def _region(a: dict, b: dict) -> dict:
                              "evacuacion": e["nivel_de_evacuacion"]},
             }
             for e in datos.estaciones_region()
+            if e["sitecode"] != excluir
         ],
         "fuente": "INA, API pública del Sistema de Alerta (escalas de Prefectura Naval) · Dato observado",
     }
@@ -315,6 +319,13 @@ def _lluvia(a: dict, b: dict) -> dict:
         "categoria": "Estimado",
         "nota": "Es una estimación de un modelo, no una medición: puede diferir de los pluviómetros.",
     }
+
+
+def _site_de(estacion: str | None) -> int | None:
+    """siteCode del INA de la escala de una zona (k1_formosa es Puerto Formosa, 57)."""
+    if estacion == "k1_formosa":
+        return 57
+    return int(estacion.split("_")[1]) if estacion and estacion.startswith("ina_") else None
 
 
 def _nivel_rio(estacion: str | None, a: dict, b: dict) -> dict | None:
@@ -386,7 +397,7 @@ def comparar(pedido: PedidoComparar):
         "nivel_rio": _nivel_rio(zona.get("estacion"), a, b),
         "agua_habitual": _agua_habitual(mascara, pedido.umbral_habitual_pct, res, a["zona"]),
         "infraestructura": _infraestructura(mascara, a, pedido.umbral_habitual_pct, pedido.radio_infraestructura_m),
-        "region": _region(a, b) if zona.get("estacion") else None,
+        "region": _region(a, b, _site_de(zona.get("estacion"))) if zona.get("estacion") else None,
         "lluvia": _lluvia(a, b) if a["zona"] == datos.ZONA_ORIGINAL else None,
         "confianza": confianza.evaluar(a, b),
         "radar": radar,

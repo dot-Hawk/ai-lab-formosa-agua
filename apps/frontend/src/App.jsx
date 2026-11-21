@@ -87,7 +87,7 @@ export default function App() {
         </aside>
 
         <MapaCambios resultado={resultado} provincia={provincia} zonas={zonas}
-          zonaActual={zonaActual ?? zonas[0]?.id ?? null} />
+          zonaActual={zonaActual} />
 
         <aside className="panel panel-escala">
           {escalaFormosa ? (

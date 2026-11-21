@@ -64,3 +64,12 @@ def test_vista_provincial():
     assert p["agua_siempre"]["png"].startswith("data:image/png;base64,")
     (s, o), (n, e) = p["bounds"]
     assert -27 < s < n < -22 and -62.5 < o < e < -57.4
+
+
+def test_la_region_no_repite_la_escala_de_la_zona():
+    if not any(e["zona"] == "clorinda" for e in datos.catalogo()):
+        return
+    propias = [e for e in datos.catalogo() if e["zona"] == "clorinda"]
+    r = cliente.post("/api/comparar", json={"escena_a": propias[0]["id"], "escena_b": propias[-1]["id"]}).json()
+    nombres = [e["nombre"] for e in r["region"]["estaciones"]]
+    assert "Puerto Pilcomayo" not in nombres and r["nivel_rio"]["estacion"] == "Puerto Pilcomayo"
