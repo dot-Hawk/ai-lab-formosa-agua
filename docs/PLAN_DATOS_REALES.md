@@ -55,6 +55,10 @@ La crecida de junio de 2019 (9,08 m el 21/06/2019) contra la bajante de noviembr
 ### 8 · Documentación
 Por cada fuente nueva: fila en la ficha de fuentes (URL, fecha de consulta, licencia, resolución, categoría, transformación), un script reproducible en `apps/backend/scripts/` y datos recortados chicos en el repo.
 
+## Ampliación (20/11/2026, tarde)
+- **Índices:** MNDWI (B03 y B11), NDVI (B08 y B04) y color real (B04, B03 y B02). Las escenas guardan 5 bandas.
+- **Provincia:** analizar toda Formosa a 10 m no es viable (unos 720 millones de píxeles por imagen). Se eligió *zonas clave + vista provincial*: 7 zonas a 10 m (Bañado La Estrella definido pero pendiente) (`data/zonas.json`) y una capa de contexto de toda la provincia a unos 270 m (contorno del IGN y agua de siempre).
+
 ## Datos reales ya incorporados (20/11/2026)
 | Dato | Fuente (API pública, sin cuenta) | Categoría | Uso |
 |---|---|---|---|

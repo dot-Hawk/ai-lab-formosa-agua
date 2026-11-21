@@ -34,6 +34,8 @@ Técnicos de la mesa interinstitucional por El Niño (Defensa Civil, Producción
 6. Separa el agua nueva **donde normalmente no hay agua** del río que vuelve a su cauce (Global Surface Water, 1984–2021).
 7. Si hay muchas nubes, **pasa sola al radar Sentinel-1**, que ve a través de ellas.
 8. Marca las **escuelas y centros de salud** (IGN) a menos de 500 m del agua nueva.
+9. Cubre **toda la provincia**: un mapa de contexto con el agua de siempre de Formosa y **7 zonas clave** analizadas a 10 m, de Clorinda a Ingeniero Juárez.
+10. Además del índice de agua, muestra **color real** y **NDVI** (vegetación) de cada fecha, y permite usar **MNDWI**, que confunde menos el agua con la ciudad.
 
 *[Captura grande del mapa con la comparación 18/01/2021 → 07/02/2021 y el semáforo en verde]*
 
@@ -70,7 +72,7 @@ Sector de 7 × 7,8 km entre Formosa, Alberdi y los bañados del sur.
 - Sin datos posteriores al 31/10/2026. No pronostica ni decide: **la decisión es de la mesa.**
 
 ## Qué sigue
-Elegir cualquier zona en el mapa · descarga automática de cada pasada nueva · validar el radar con más fechas · datos de Paraguay para Alberdi · validación con relevamientos en terreno.
+Analizar cualquier punto de la provincia a pedido (hoy: 7 zonas clave) · descarga automática de cada pasada nueva · validar el radar con más fechas · datos de Paraguay para Alberdi · validación con relevamientos en terreno.
 
 ## Cómo está hecha
 Python (FastAPI, NumPy) · React (Vite, Leaflet) · 148 pruebas automáticas · Asistentes de IA para programar y documentar, con revisión del equipo.

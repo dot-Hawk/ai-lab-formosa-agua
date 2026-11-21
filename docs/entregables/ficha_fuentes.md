@@ -30,7 +30,7 @@ No son datos observados: son estimaciones que la herramienta calcula a partir de
 |---|---|---|---|---|
 | Índice de agua NDWI | −1 a 1 | (B03 − B08) / (B03 + B08), en `apps/backend/app/cambio.py` | Estimado (cálculo) | Igual que cada escena |
 | Umbral de agua | 0 por defecto; ajustable de −1 a 1 | Valor habitual para NDWI (McFeeters, 1996). Lo elige el usuario | Referencia metodológica | — |
-| Agua nueva / agua que ya no está, 02/10/2026 → 26/10/2026 | 110,64 ha / 43,25 ha | Píxeles que cambian de clase × 0,01 ha (10 m × 10 m) | Estimado (cálculo) | Consulta del 20/11/2026 |
+| Agua nueva / agua que ya no está, 02/10/2026 → 26/10/2026 | 110,63 ha / 43,25 ha | Píxeles que cambian de clase × 0,01 ha (10 m × 10 m) | Estimado (cálculo) | Consulta del 20/11/2026 |
 | Agua nueva / agua que ya no está, 13/11/2024 → 21/06/2019 | 1.097,89 ha / 11,47 ha | Ídem | Estimado (cálculo) | Consulta del 20/11/2026 |
 | Agua nueva / agua que ya no está, 13/11/2024 → 26/10/2026 | 287,31 ha / 40,58 ha | Ídem | Estimado (cálculo) | Consulta del 20/11/2026 |
 | Agua nueva / agua que ya no está, 18/01/2021 → 07/02/2021 (confianza alta) | 222,88 ha / 15,05 ha | Ídem | Estimado (cálculo) | Consulta del 20/11/2026 |
@@ -68,6 +68,31 @@ La capa se reproyectó de 30 m a la grilla de 10 m de las escenas por vecino má
 | Establecimientos a menos de 500 m del agua nueva inusual | 2 escuelas (crecida 2021) · 4 escuelas (octubre 2026) · 0 centros de salud | Cálculo de la herramienta, con el agua consolidada en manchas de más de la mitad de 50 × 50 m | Estimado (cálculo) | Consulta del 20/11/2026 |
 
 El IGN cubre solo territorio argentino: Alberdi (Paraguay) no tiene datos.
+
+## Zonas clave y vista provincial
+
+| Qué muestra la herramienta | Valor o rango | Fuente | Categoría | Fecha del dato |
+|---|---|---|---|---|
+| Escenas de las 6 zonas nuevas (2 por zona, 5 bandas) | La más limpia de marzo a mayo de 2025 y de agosto a octubre de 2026, con 10 % de nubes y 10 % sin dato como máximo sobre la zona | Earth Search, Sentinel-2 L2A · `data/zonas/<zona>/catalogo.json` (cada escena con su URL) | Observado | Ver cada catálogo |
+| Agua de siempre por zona | Igual método que la zona original | Global Surface Water v1.4, mosaicos 60W_20S y 70W_20S · `data/zonas/<zona>/gsw.npz` | Observado (Landsat, 30 m) | 1984 a 2021 |
+| Escuelas, salud y rutas por zona | Ver cada archivo | IGN, Capas SIG (WFS) · `data/zonas/<zona>/infraestructura.json` | Referencia | Consulta del 20/11/2026 |
+| Altura del río en la zona de Clorinda | Escala de Puerto Pilcomayo | API del INA (siteCode 55) | Observado | Consulta del 20/11/2026 |
+| Contorno de la provincia | 2.458 vértices (1 de cada 20 del original) | IGN, capa `ign:provincia` · `data/provincia/provincia.json` | Referencia (cartografía oficial) | Consulta del 20/11/2026 |
+| Agua de siempre y estacional de toda la provincia | Unos 198 km² de agua de siempre (≥ 50 % del tiempo) y 621 km² estacional (10 a 50 %), a unos 270 m por píxel | Global Surface Water v1.4, promedio por píxel grueso · `data/provincia/agua_siempre.png` | Observado (Landsat), solo contexto | 1984 a 2021 |
+
+| Zona | Fechas (nubes / sin dato sobre la zona) | Escenas | Agua de siempre (≥ 50 %) | Escuelas / salud (IGN) |
+|---|---|---|---|---|
+| Clorinda y desembocadura del Pilcomayo | 30/04/2025 (0,0 % / 0,0 %) · 02/10/2026 (0,4 % / 0,4 %) | S2B_21JVN_20250430_0_L2A · S2B_21JVN_20261002_0_L2A | 14,2 % del recorte | 13 / 0 |
+| Herradura y laguna Herradura | 30/04/2025 (0,0 % / 0,0 %) · 02/10/2026 (0,0 % / 0,0 %) | S2B_21JUL_20250430_0_L2A · S2B_21JUL_20261002_0_L2A | 5,5 % del recorte | 8 / 1 |
+| El Colorado y río Bermejo | 30/04/2025 (0,0 % / 0,0 %) · 03/08/2026 (0,0 % / 0,0 %) | S2B_21JTL_20250430_0_L2A · S2B_21JTL_20260803_0_L2A | 0,0 % del recorte | 34 / 4 |
+| Pirané | 30/04/2025 (0,0 % / 0,0 %) · 02/10/2026 (0,0 % / 0,0 %) | S2B_21JTM_20250430_0_L2A · S2B_21JTM_20261002_0_L2A | 0,0 % del recorte | 23 / 3 |
+| Las Lomitas | 19/03/2025 (0,0 % / 0,0 %) · 21/08/2026 (0,0 % / 0,0 %) | S2C_20JQT_20250319_0_L2A · S2C_20JQT_20260821_0_L2A | 0,0 % del recorte | 36 / 7 |
+| Bañado La Estrella | **Pendiente** (sin escenas: ver `data/zonas.json`) | — | — | — |
+| Ingeniero Juárez | 28/04/2025 (0,0 % / 0,0 %) · 21/08/2026 (0,0 % / 0,0 %) | S2C_20KPU_20250428_0_L2A · S2C_20KPU_20260821_0_L2A | 0,0 % del recorte | 23 / 4 |
+
+En El Colorado, Pirané, Las Lomitas e Ingeniero Juárez casi no hay agua permanente dentro del recorte: el Bermejo pasa casi por fuera del recorte de El Colorado, y las otras tres son zonas del interior sin ríos permanentes en ese sector.
+
+Índices: NDWI (McFeeters, 1996), MNDWI (Xu, 2006: *Modification of normalised difference water index (NDWI) to enhance open water features in remotely sensed imagery*, International Journal of Remote Sensing 27(14)) y NDVI (Rouse et al., 1974).
 
 ## Río Paraguay en Puerto Formosa
 

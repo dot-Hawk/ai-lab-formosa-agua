@@ -44,12 +44,23 @@ Lista de escenas disponibles. `200` →
 
 Escenas cargadas hoy: `s2-2019-06-21`, `s2-2021-01-18`, `s2-2021-02-07`, `s2-2022-11-24`, `s2-2022-12-14`, `s2-2024-11-13`, `s2-2026-10-02` y `s2-2026-10-26`.
 
+## `GET /api/zonas`
+Zonas clave de la provincia que tienen escenas. `200` →
+```json
+[{"id": "formosa", "nombre": "Formosa capital, Alberdi y bañados del sur", "centro": [-58.145, -26.205],
+  "estacion": "k1_formosa", "descripcion": "...", "bounds": [[sur, oeste], [norte, este]], "fechas": 8}]
+```
+`estacion`: `k1_formosa` (kit K1), `ina_<siteCode>` (API del INA) o `null` (sin escala cercana).
+
+## `GET /api/provincia`
+Vista de contexto de toda Formosa. `200` → `{"nombre", "bounds", "contorno": [[lat, lon], ...], "agua_siempre": {"png", "fuente", "resolucion_aprox_m", "clases", "km2_siempre", "km2_estacional"}, "contorno_fuente", "categoria", "consultado"}`. `404` si no se descargó.
+
 ## `POST /api/comparar`
 Entrada:
 ```json
 {"escena_a": "s2-2026-10-02", "escena_b": "s2-2026-10-26", "umbral_agua": 0.0}
 ```
-`umbral_agua` es opcional (NDWI entre -1 y 1, por defecto 0). `radio_infraestructura_m` (50 a 3000, por defecto 500) es la distancia al agua nueva inusual para contar un establecimiento como expuesto. `umbral_habitual_pct` también es opcional (1 a 100, por defecto 50): % del tiempo con agua entre 1984 y 2021 desde el que un píxel cuenta como "agua de siempre".
+`umbral_agua` es opcional (entre -1 y 1, por defecto 0). `indice_agua` es opcional: `"ndwi"` (por defecto, B03 y B08) o `"mndwi"` (B03 y B11). Las dos escenas tienen que ser de la misma zona. `radio_infraestructura_m` (50 a 3000, por defecto 500) es la distancia al agua nueva inusual para contar un establecimiento como expuesto. `umbral_habitual_pct` también es opcional (1 a 100, por defecto 50): % del tiempo con agua entre 1984 y 2021 desde el que un píxel cuenta como "agua de siempre".
 
 Salida `200`:
 ```json
@@ -57,11 +68,16 @@ Salida `200`:
   "escena_a": { ...metadatos },
   "escena_b": { ...metadatos },
   "umbral_agua": 0.0,
-  "area_agua_nueva_ha": 110.64,
+  "area_agua_nueva_ha": 110.63,
   "area_agua_perdida_ha": 43.25,
   "overlay_png": "data:image/png;base64,...",   // azul = agua nueva, naranja = agua perdida
   "agua_a_png": "data:image/png;base64,...",    // deslizador: agua en la fecha A (azul) y sin dato (gris)
   "agua_b_png": "data:image/png;base64,...",    // ídem, fecha B
+  "indice_agua": "ndwi",
+  "color_a_jpg": "data:image/jpeg;base64,...",  // color real (B04, B03, B02); null si la escena no tiene esas bandas
+  "color_b_jpg": "...", "ndvi_a_png": "...", "ndvi_b_png": "...",   // NDVI (B08, B04) con escala de colores
+  "ndvi_medio": {"a": 0.518, "b": 0.419},
+  "zona": {"id": "formosa", "nombre": "...", "descripcion": "..."},
   "bounds": [[-26.24, -58.18], [-26.17, -58.11]],
   "nivel_rio": {
     "estacion": "FORMOSA (Puerto Formosa)", "unidad": "m",
@@ -137,7 +153,7 @@ Salida `200`:
 Errores:
 | Código | Cuándo |
 |---|---|
-| 400 | Misma escena en A y B · escenas de distinto satélite o resolución |
+| 400 | Misma escena en A y B · escenas de zonas distintas · de distinto satélite o resolución · MNDWI pedido para una escena sin B11 |
 | 404 | Algún `id` no existe en el catálogo |
 | 422 | Cuerpo inválido (faltan campos, tipos incorrectos, umbral fuera de rango) |
 
@@ -145,7 +161,7 @@ Errores:
 ```bash
 curl -X POST localhost:8000/api/comparar -H 'Content-Type: application/json' \
   -d '{"escena_a":"s2-2026-10-02","escena_b":"s2-2026-10-26"}'
-# → 200 · area_agua_nueva_ha 110.64 · area_agua_perdida_ha 43.25
+# → 200 · area_agua_nueva_ha 110.63 · area_agua_perdida_ha 43.25
 # Caso inválido:
 curl -X POST localhost:8000/api/comparar -H 'Content-Type: application/json' \
   -d '{"escena_a":"s2-2026-10-02","escena_b":"s2-2026-10-02"}'   # → 400 "Elegí dos escenas distintas para comparar."
