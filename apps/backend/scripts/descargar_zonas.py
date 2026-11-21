@@ -38,7 +38,11 @@ PERIODOS = [
 ]
 MAX_NUBES = 10
 MAX_SIN_DATO = 10
-MAX_INTENTOS = 6
+MAX_INTENTOS = int(os.environ.get("MAX_INTENTOS", 6))
+# Para zonas muy nubladas se puede ampliar el primer período, por ejemplo:
+#   PERIODO_LLUVIAS="2024-12-01T00:00:00Z/2025-07-31T23:59:59Z" MAX_INTENTOS=12 uv run python scripts/descargar_zonas.py banado_la_estrella
+if os.environ.get("PERIODO_LLUVIAS"):
+    PERIODOS[0] = (os.environ["PERIODO_LLUVIAS"], "temporada de lluvias 2024-2025 (ventana ampliada)")
 
 
 def bbox_de(centro: list[float]) -> tuple[float, float, float, float]:
@@ -72,7 +76,15 @@ def descargar_zona(zona: dict, client) -> dict:
         for item in candidatas(client, bbox, periodo)[:MAX_INTENTOS]:
             fecha = item.datetime.date().isoformat()
             id_escena = f"s2-{zona['id']}-{fecha}"
-            e = de.descargar(item, transform, ancho, alto, bounds, carpeta, id_escena, zona["id"])
+            e = None
+            for intento in range(3):  # la lectura remota a veces devuelve un bloque incompleto
+                try:
+                    e = de.descargar(item, transform, ancho, alto, bounds, carpeta, id_escena, zona["id"])
+                    break
+                except Exception as error:  # noqa: BLE001
+                    print(f"  {item.id}: error de lectura ({type(error).__name__}), intento {intento + 1} de 3", flush=True)
+            if e is None:
+                continue
             print(f"  {item.id}: nubes {e['nubes_pct']} %, sin dato {e['sin_dato_pct']} %", flush=True)
             if e["nubes_pct"] <= MAX_NUBES and e["sin_dato_pct"] <= MAX_SIN_DATO:
                 elegida = e | {"periodo": etiqueta}

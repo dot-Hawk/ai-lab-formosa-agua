@@ -1,0 +1,76 @@
+[
+  {
+    "id": "s2-las_lomitas-2025-03-19",
+    "zona": "las_lomitas",
+    "fecha": "2025-03-19",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2C_20JQT_20250319_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2C, tile 20JQT",
+    "resolucion_m": 10,
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.0,
+    "captura_utc": "2025-03-19T14:19:55Z",
+    "sol_elevacion_grados": 53.9,
+    "incidencia_grados": 7.1,
+    "bandas": [
+      "verde",
+      "nir",
+      "rojo",
+      "azul",
+      "swir"
+    ],
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2C_20JQT_20250319_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -24.74506856665322,
+        -60.62499999999999
+      ],
+      [
+        -24.674999999999994,
+        -60.554988710403975
+      ]
+    ],
+    "archivo": "s2-las_lomitas-2025-03-19.npz",
+    "periodo": "fin de la temporada de lluvias 2025"
+  },
+  {
+    "id": "s2-las_lomitas-2026-08-21",
+    "zona": "las_lomitas",
+    "fecha": "2026-08-21",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2C_20JQT_20260821_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2C, tile 20JQT",
+    "resolucion_m": 10,
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.0,
+    "captura_utc": "2026-08-21T14:19:29Z",
+    "sol_elevacion_grados": 45.0,
+    "incidencia_grados": 7.0,
+    "bandas": [
+      "verde",
+      "nir",
+      "rojo",
+      "azul",
+      "swir"
+    ],
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2C_20JQT_20260821_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -24.74506856665322,
+        -60.62499999999999
+      ],
+      [
+        -24.674999999999994,
+        -60.554988710403975
+      ]
+    ],
+    "archivo": "s2-las_lomitas-2026-08-21.npz",
+    "periodo": "antes del corte (agosto a octubre de 2026)"
+  }
+]

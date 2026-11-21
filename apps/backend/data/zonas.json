@@ -46,7 +46,7 @@
     "nombre": "Bañado La Estrella",
     "centro": [-60.95, -24.40],
     "estacion": null,
-    "descripcion": "Gran humedal alimentado por el río Pilcomayo."
+    "descripcion": "Gran humedal alimentado por el río Pilcomayo. PENDIENTE: el 20/11/2026 no se pudieron bajar escenas (sin escenas limpias en marzo-mayo de 2025 y errores de lectura del servidor); reintentar con scripts/descargar_zonas.py banado_la_estrella."
   },
   {
     "id": "ingeniero_juarez",

@@ -1,0 +1,76 @@
+[
+  {
+    "id": "s2-clorinda-2025-04-30",
+    "zona": "clorinda",
+    "fecha": "2025-04-30",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2B_21JVN_20250430_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2B, tile 21JVN",
+    "resolucion_m": 10,
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.0,
+    "captura_utc": "2025-04-30T14:09:28Z",
+    "sol_elevacion_grados": 43.6,
+    "incidencia_grados": 9.4,
+    "bandas": [
+      "verde",
+      "nir",
+      "rojo",
+      "azul",
+      "swir"
+    ],
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_21JVN_20250430_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -25.34506856601491,
+        -57.714999999999996
+      ],
+      [
+        -25.275000000000006,
+        -57.644943948303315
+      ]
+    ],
+    "archivo": "s2-clorinda-2025-04-30.npz",
+    "periodo": "fin de la temporada de lluvias 2025"
+  },
+  {
+    "id": "s2-clorinda-2026-10-02",
+    "zona": "clorinda",
+    "fecha": "2026-10-02",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2B_21JVN_20261002_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2B, tile 21JVN",
+    "resolucion_m": 10,
+    "nubes_pct": 0.4,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.4,
+    "captura_utc": "2026-10-02T14:09:26Z",
+    "sol_elevacion_grados": 59.8,
+    "incidencia_grados": 9.4,
+    "bandas": [
+      "verde",
+      "nir",
+      "rojo",
+      "azul",
+      "swir"
+    ],
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_21JVN_20261002_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -25.34506856601491,
+        -57.714999999999996
+      ],
+      [
+        -25.275000000000006,
+        -57.644943948303315
+      ]
+    ],
+    "archivo": "s2-clorinda-2026-10-02.npz",
+    "periodo": "antes del corte (agosto a octubre de 2026)"
+  }
+]

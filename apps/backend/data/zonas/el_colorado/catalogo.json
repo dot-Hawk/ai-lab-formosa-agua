@@ -1,0 +1,76 @@
+[
+  {
+    "id": "s2-el_colorado-2025-04-30",
+    "zona": "el_colorado",
+    "fecha": "2025-04-30",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2B_21JTL_20250430_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2B, tile 21JTL",
+    "resolucion_m": 10,
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.0,
+    "captura_utc": "2025-04-30T14:10:04Z",
+    "sol_elevacion_grados": 41.2,
+    "incidencia_grados": 2.9,
+    "bandas": [
+      "verde",
+      "nir",
+      "rojo",
+      "azul",
+      "swir"
+    ],
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_21JTL_20250430_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -26.345068564930354,
+        -59.40500000000001
+      ],
+      [
+        -26.274999999999995,
+        -59.33495135889927
+      ]
+    ],
+    "archivo": "s2-el_colorado-2025-04-30.npz",
+    "periodo": "fin de la temporada de lluvias 2025"
+  },
+  {
+    "id": "s2-el_colorado-2026-08-03",
+    "zona": "el_colorado",
+    "fecha": "2026-08-03",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2B_21JTL_20260803_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2B, tile 21JTL",
+    "resolucion_m": 10,
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.0,
+    "captura_utc": "2026-08-03T14:10:02Z",
+    "sol_elevacion_grados": 37.9,
+    "incidencia_grados": 2.9,
+    "bandas": [
+      "verde",
+      "nir",
+      "rojo",
+      "azul",
+      "swir"
+    ],
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_21JTL_20260803_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -26.345068564930354,
+        -59.40500000000001
+      ],
+      [
+        -26.274999999999995,
+        -59.33495135889927
+      ]
+    ],
+    "archivo": "s2-el_colorado-2026-08-03.npz",
+    "periodo": "antes del corte (agosto a octubre de 2026)"
+  }
+]

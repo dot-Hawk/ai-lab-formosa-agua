@@ -1,0 +1,76 @@
+[
+  {
+    "id": "s2-ingeniero_juarez-2025-04-28",
+    "zona": "ingeniero_juarez",
+    "fecha": "2025-04-28",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2C_20KPU_20250428_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2C, tile 20KPU",
+    "resolucion_m": 10,
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.0,
+    "captura_utc": "2025-04-28T14:19:43Z",
+    "sol_elevacion_grados": 44.1,
+    "incidencia_grados": 3.5,
+    "bandas": [
+      "verde",
+      "nir",
+      "rojo",
+      "azul",
+      "swir"
+    ],
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2C_20KPU_20250428_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -23.935068567500878,
+        -61.88499999999999
+      ],
+      [
+        -23.86499999999999,
+        -61.81494301048299
+      ]
+    ],
+    "archivo": "s2-ingeniero_juarez-2025-04-28.npz",
+    "periodo": "fin de la temporada de lluvias 2025"
+  },
+  {
+    "id": "s2-ingeniero_juarez-2026-08-21",
+    "zona": "ingeniero_juarez",
+    "fecha": "2026-08-21",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2C_20KPU_20260821_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2C, tile 20KPU",
+    "resolucion_m": 10,
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.0,
+    "captura_utc": "2026-08-21T14:19:18Z",
+    "sol_elevacion_grados": 45.1,
+    "incidencia_grados": 3.6,
+    "bandas": [
+      "verde",
+      "nir",
+      "rojo",
+      "azul",
+      "swir"
+    ],
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2C_20KPU_20260821_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -23.935068567500878,
+        -61.88499999999999
+      ],
+      [
+        -23.86499999999999,
+        -61.81494301048299
+      ]
+    ],
+    "archivo": "s2-ingeniero_juarez-2026-08-21.npz",
+    "periodo": "antes del corte (agosto a octubre de 2026)"
+  }
+]

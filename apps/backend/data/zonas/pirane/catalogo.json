@@ -1,0 +1,76 @@
+[
+  {
+    "id": "s2-pirane-2025-04-30",
+    "zona": "pirane",
+    "fecha": "2025-04-30",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2B_21JTM_20250430_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2B, tile 21JTM",
+    "resolucion_m": 10,
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.0,
+    "captura_utc": "2025-04-30T14:09:49Z",
+    "sol_elevacion_grados": 41.9,
+    "incidencia_grados": 3.6,
+    "bandas": [
+      "verde",
+      "nir",
+      "rojo",
+      "azul",
+      "swir"
+    ],
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_21JTM_20250430_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -25.765068565562583,
+        -59.14500000000001
+      ],
+      [
+        -25.695000000000004,
+        -59.074997508426314
+      ]
+    ],
+    "archivo": "s2-pirane-2025-04-30.npz",
+    "periodo": "fin de la temporada de lluvias 2025"
+  },
+  {
+    "id": "s2-pirane-2026-10-02",
+    "zona": "pirane",
+    "fecha": "2026-10-02",
+    "fuente": "Copernicus Sentinel-2 (ESA), escena S2B_21JTM_20261002_0_L2A, vía Earth Search (AWS Open Data)",
+    "satelite": "Sentinel-2",
+    "producto": "L2A, Sentinel-2B, tile 21JTM",
+    "resolucion_m": 10,
+    "nubes_pct": 0.0,
+    "nubes_escena_pct": 0.0,
+    "sin_dato_pct": 0.0,
+    "captura_utc": "2026-10-02T14:09:47Z",
+    "sol_elevacion_grados": 57.9,
+    "incidencia_grados": 3.6,
+    "bandas": [
+      "verde",
+      "nir",
+      "rojo",
+      "azul",
+      "swir"
+    ],
+    "categoria": "Observado",
+    "url": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a/items/S2B_21JTM_20261002_0_L2A",
+    "consultado": "2026-11-20",
+    "bounds": [
+      [
+        -25.765068565562583,
+        -59.14500000000001
+      ],
+      [
+        -25.695000000000004,
+        -59.074997508426314
+      ]
+    ],
+    "archivo": "s2-pirane-2026-10-02.npz",
+    "periodo": "antes del corte (agosto a octubre de 2026)"
+  }
+]
