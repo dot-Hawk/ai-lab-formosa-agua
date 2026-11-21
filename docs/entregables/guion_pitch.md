@@ -2,7 +2,7 @@
 Operación Agua · Comparador de imágenes satelitales · Sábado 21/11/2026 desde las 10:00
 
 **Duración objetivo:** 2 min 50 s (unas 410 palabras a ritmo tranquilo). Quedan 10 segundos de margen.
-**Quién habla:** se propone dividir en cuatro bloques, uno por integrante. El reparto lo confirma el equipo.
+**Quién habla:** se reparte entre los dos integrantes, Selena y Diego. El reparto de cada bloque lo confirma el equipo.
 **Qué cubre (según el documento base):** problema vinculado a El Niño, usuario, función principal, evidencia usada y límites.
 
 | Tiempo | Bloque | Quién | Qué se muestra |

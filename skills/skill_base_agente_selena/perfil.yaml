@@ -92,7 +92,7 @@ tareas:
       - "Todas las secciones de la plantilla completas"
       - "Funciones listadas solo si se pueden mostrar en vivo"
     commits: ["82edd65"]
-    pendiente: "Roles de Agostina y Matías, reto confirmado con el CITF y commit o tag evaluable"
+    pendiente: "Reto confirmado con el CITF y commit o tag evaluable"
   - id: "TASK-D-03"
     titulo: "Ficha de fuentes"
     responsable: "Selena Milagros Britez"

@@ -3,7 +3,7 @@
 > **PROTOTIPO · AI LAB Misión: Código Formosa · no es una herramienta oficial**
 
 Equipo 1 · Instituto Politécnico Formosa · Desafío 7 · Imágenes satelitales.
-Integrantes: Selena Brítez · Diego García · Agostina González · Matías Agüero (roles en [docs/ROLES.md](docs/ROLES.md)).
+Integrantes: Selena Brítez · Diego García (roles en [docs/ROLES.md](docs/ROLES.md)).
 
 Compara dos escenas satelitales de una misma zona del territorio formoseño, calcula el índice de agua **NDWI** (bandas verde e infrarrojo cercano de Sentinel-2) y marca dónde apareció o desapareció agua. Muestra fecha, fuente, resolución y cobertura de nubes de cada escena, y el nivel del río Paraguay en Puerto Formosa (INA) para esas fechas.
 

@@ -4,9 +4,7 @@ PROTOTIPO · no es una herramienta oficial · Entrega: viernes 20/11/2026, 18 h
 **Nombre de la herramienta:** Operación Agua · Comparador de imágenes satelitales
 **Equipo · institución · integrantes y rol de cada uno:** Equipo 1 · Instituto Politécnico Formosa · Desafío 7 (Imágenes satelitales)
 - Selena Brítez: rol D, entregables (7 preguntas, fichas, póster, pitch, video, README y prueba desde un clon limpio)
-- Diego García: imágenes y NDWI, backend y limpieza de K1, frontend (según el historial de `dev-Diego`; roles A, B y C sin confirmar formalmente)
-- Agostina González: PENDIENTE de confirmar
-- Matías Agüero: PENDIENTE de confirmar
+- Diego García: roles A, B y C, imágenes y NDWI, backend y limpieza de K1, frontend (`dev-Diego`)
 
 **Reto:** 4 · Mapa (propuesta; confirmar con el CITF)
 

@@ -78,7 +78,7 @@ Tomar el rol D de [docs/ROLES.md](../../docs/ROLES.md) y dejar listos los entreg
 - **Póster:** falta el diseño, las capturas, el QR y la impresión.
 - **Pitch:** falta repartir los bloques y ensayar con cronómetro.
 - **Interfaz:** falta una pasada manual con el navegador antes del pitch.
-- **Roles:** faltan los de Agostina y Matías, y la confirmación de A, B y C.
+- **Roles:** el equipo quedó en dos integrantes: Selena (rol D) y Diego (roles A, B y C).
 - **Riesgo:** si alguien clona y corre `uv sync` sin `--python 3.14` con uv 0.13 en Windows, la instalación falla. El README lo advierte, pero conviene fijar la versión en el backend.
 
 ## Bloqueos y ayuda necesaria

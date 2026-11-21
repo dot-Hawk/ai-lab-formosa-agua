@@ -1,16 +1,15 @@
 # Roles y forma de trabajo · Equipo 1
 
-**Integrantes:** Selena Brítez · Diego García · Agostina González · Matías Agüero
+**Integrantes:** Selena Brítez · Diego García
 **Rama de integración propuesta:** `main` (confirmar en el equipo). Cada uno trabaja en `dev-Nombre` y hace merge a `main` seguido, en bloques chicos.
 
 | Rol | Responsable | Qué hace | Archivos que toca |
 |---|---|---|---|
-| A · Imágenes y NDWI | PENDIENTE (el avance está en `dev-Diego`: `8611457`, `3ceabdd`) | Elegir zona, descargar 2–3 escenas Sentinel-2 L2A (B03 y B08, misma zona y producto, pocas nubes) de río bajo y río alto; convertirlas a `.npz` (o adaptar `cargar_bandas` a GeoTIFF); actualizar `catalogo.json` con fecha, tile, nubes y URL | `apps/backend/data/escenas/`, `apps/backend/app/datos.py` (solo `cargar_bandas`), `apps/backend/app/cambio.py` |
-| B · Backend y K1 | PENDIENTE (el avance está en `dev-Diego`: `24bd739`, `7d10a0f`, `7518cc1`) | Limpiar K1 → `apps/backend/data/niveles_formosa_limpio.csv` (`fecha,altura_m`, un valor diario documentado); completar `registro_limpieza.md`; mantener la API y sus tests | `apps/backend/app/`, `apps/backend/tests/`, `docs/entregables/registro_limpieza.md` |
-| C · Frontend | PENDIENTE (el avance está en `dev-Diego`: `c17b250` a `33db98f`) | Mapa, comparación (p. ej. deslizador antes/después), panel de metadatos, estados de carga/vacío/error, leyenda PROTOTIPO | `apps/frontend/` |
+| A · Imágenes y NDWI | Diego García (`dev-Diego`: `8611457`, `3ceabdd`) | Elegir zona, descargar 2–3 escenas Sentinel-2 L2A (B03 y B08, misma zona y producto, pocas nubes) de río bajo y río alto; convertirlas a `.npz` (o adaptar `cargar_bandas` a GeoTIFF); actualizar `catalogo.json` con fecha, tile, nubes y URL | `apps/backend/data/escenas/`, `apps/backend/app/datos.py` (solo `cargar_bandas`), `apps/backend/app/cambio.py` |
+| B · Backend y K1 | Diego García (`dev-Diego`: `24bd739`, `7d10a0f`, `7518cc1`) | Limpiar K1 → `apps/backend/data/niveles_formosa_limpio.csv` (`fecha,altura_m`, un valor diario documentado); completar `registro_limpieza.md`; mantener la API y sus tests | `apps/backend/app/`, `apps/backend/tests/`, `docs/entregables/registro_limpieza.md` |
+| C · Frontend | Diego García (`dev-Diego`: `c17b250` a `33db98f`) | Mapa, comparación (p. ej. deslizador antes/después), panel de metadatos, estados de carga/vacío/error, leyenda PROTOTIPO | `apps/frontend/` |
 | D · Entregables | Selena Brítez (`dev-Selena-Milagros-Britez`) | Las 7 preguntas, póster, guion del pitch (3 min), video ≤120 s, ficha técnica, ficha de fuentes, README final, prueba desde un clon limpio | `docs/`, `README.md` |
 
-> Los roles A, B y C quedan en PENDIENTE hasta que el equipo los confirme. Entre paréntesis figura dónde está el trabajo hecho hasta hoy, según el historial de Git.
 
 ## Las 7 preguntas
 

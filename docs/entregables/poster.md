@@ -15,7 +15,7 @@ PROTOTIPO · AI LAB Misión: Código Formosa · no es una herramienta oficial
 Comparador de imágenes satelitales para seguir el río Paraguay y los bañados de Formosa
 
 Equipo 1 · Instituto Politécnico Formosa · Desafío 7: Imágenes satelitales
-Selena Brítez · Diego García · Agostina González · Matías Agüero
+Selena Brítez · Diego García
 
 ## El problema
 En octubre de 2026 el río Paraguay subió de **2,37 m a 5,60 m** en Puerto Formosa, con El Niño confirmado. En 2016, el último Niño fuerte lo llevó a **9,81 m**.
