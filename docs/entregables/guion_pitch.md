@@ -1,7 +1,7 @@
 # Guion del pitch · 3 minutos · Equipo 1
 Operación Agua · Comparador de imágenes satelitales · Sábado 21/11/2026 desde las 10:00
 
-**Duración objetivo:** 2 min 55 s (unas 440 palabras, sin apuro y con pausas en las frases marcadas). Quedan 5 segundos de margen.
+**Duración objetivo:** 2 min 55 s (unas 460 palabras, sin apuro y con pausas en las frases marcadas). Quedan 5 segundos de margen.
 **Quién habla:** dos voces que se alternan. Se propone Selena como Persona 1 y Diego como Persona 2; el equipo lo confirma en el ensayo.
 **Qué tiene que cumplir (documento base) y dónde está:**
 
@@ -9,12 +9,12 @@ Operación Agua · Comparador de imágenes satelitales · Sábado 21/11/2026 des
 |---|---|---|
 | 1 | El problema vinculado al fenómeno El Niño | 1 · El problema (0:00–0:35) |
 | 2 | El usuario: quién usaría la herramienta | 2 · El usuario (0:35–0:55) |
-| 3 | La función principal del software, funcionando | 3 · La herramienta en vivo (0:55–1:50) |
+| 3 | La función principal del software, funcionando | 3 · Cómo funciona (0:55–1:50), sobre el póster |
 | 4 | La evidencia: de dónde salen los datos | 4 · La evidencia (1:50–2:15) |
 | 5 | Los límites: qué no puede asegurar la solución | 5 · Los límites (2:15–2:35) |
 | + | El impacto para la provincia | 6 · Cierre (2:35–2:55) |
 
-*Tener la herramienta abierta antes de empezar, con el backend y el frontend andando. Si algo falla, pasar al video de respaldo.*
+*No hay demostración en vivo: el pitch se apoya en el póster. Tenerlo a la vista y señalar cada sección cuando se nombra.*
 
 ---
 
@@ -25,30 +25,25 @@ Operación Agua · Comparador de imágenes satelitales · Sábado 21/11/2026 des
 >
 > *(Pausa.)*
 >
-> Cuando el río crece, el agua no avisa. Entra a los bañados y a los riachos, se acerca a las casas, a los caminos, a las escuelas. La provincia ya los mira con imágenes satelitales, pero compararlas a ojo lleva horas, depende de quién mira y no deja registro. Y cuando llueve, las nubes tapan todo.
+> Cuando el río crece, el agua no avisa. Entra a los bañados y a los riachos, se acerca a las casas, a los caminos, a las escuelas. La provincia ya los mira con imágenes satelitales, pero compararlas a ojo lleva horas y no deja registro. Y cuando llueve, las nubes tapan todo.
 
 ## 2 · El usuario (0:35–0:55) · Persona 2
 
-> Por eso pensamos en quienes tienen que decidir con esa información: los técnicos de la mesa interinstitucional por El Niño, como Defensa Civil. Necesitan responder una pregunta concreta: entre dos fechas, ¿dónde llegó el agua, cuánta es, y cuánto podemos confiar en lo que vemos?
+> Pensamos en quienes deciden con esa información: los técnicos de la mesa interinstitucional por El Niño, como Defensa Civil. Necesitan responder una pregunta concreta: entre dos fechas, ¿dónde llegó el agua, cuánta es, y cuánto podemos confiar en lo que vemos?
 
-## 3 · La herramienta en vivo (0:55–1:50) · Persona 1 y Persona 2
+## 3 · Cómo funciona (0:55–1:50) · Persona 1 y Persona 2
+*Señalar en el póster las imágenes de antes y después.*
 
 **Persona 1**
-> Se los mostramos. Elijo la zona y dos fechas: la crecida de enero de 2021.
+> ¿Cómo funciona? Se elige una zona y dos fechas. La herramienta compara las dos imágenes satelitales y marca en azul el agua nueva y en naranja el agua que se fue, con sus hectáreas.
 >
-> *(Elegir 18/01/2021 y 07/02/2021 y presionar Comparar.)*
->
-> En segundos, el mapa marca en azul el agua nueva: 223 hectáreas. Con el deslizador vemos el antes y el después. Al lado, la ficha de cada imagen y la altura del río esos mismos días.
+> Acá lo ven con la crecida de enero de 2021: en veinte días aparecieron 223 hectáreas de agua nueva. Y al lado de cada imagen, su fecha, sus nubes y la altura del río esos mismos días.
 
 **Persona 2**
-> Y no alarma por la laguna de siempre: de esas 223 hectáreas, 86 están donde normalmente no hay agua. Ahora, octubre de este año, con nubes.
->
-> *(Cambiar a 02/10/2026 → 26/10/2026 y comparar.)*
->
-> La herramienta lo detecta, lo avisa y suma el radar, que ve a través de las nubes. Y marca lo que más nos importa: 4 escuelas a menos de 500 metros del agua nueva.
+> Además, separa el agua de siempre del agua nueva: de esas 223 hectáreas, 86 están donde normalmente no hay agua. Si hay nubes, lo avisa y usa radar, que ve a través de ellas. Y marca lo que más nos importa: en octubre de este año, 4 escuelas quedaron a menos de 500 metros del agua nueva.
 
 ## 4 · La evidencia (1:50–2:15) · Persona 2
-*Señalar la tabla de la herramienta o la sección Fuentes del póster.*
+*Señalar la sección Fuentes del póster.*
 
 > Nada de esto es una opinión. Las imágenes son de los satélites Sentinel del programa Copernicus. La altura del río es la del Instituto Nacional del Agua: limpiamos la serie oficial y la cruzamos con la del INA: coinciden en el 98 % de los días. El agua de siempre sale de 37 años de registros satelitales, y las escuelas, del Instituto Geográfico Nacional. Cada número dice si es observado o estimado, y un semáforo indica cuánto confiar.
 
@@ -58,7 +53,7 @@ Operación Agua · Comparador de imágenes satelitales · Sábado 21/11/2026 des
 
 ## 6 · Cierre: el impacto para la provincia (2:35–2:55) · Persona 2
 
-> Lo que hoy lleva horas, con esta herramienta lleva minutos. Eso es llegar antes a una escuela, a un camino, a una familia del bañado. Funciona con datos públicos y gratuitos, y su código es abierto: la provincia puede usarla, revisarla y mejorarla desde Clorinda hasta Ingeniero Juárez.
+> Lo que hoy lleva horas, con esta herramienta lleva minutos. Eso es llegar antes a una escuela, a un camino, a una familia del bañado. Funciona con datos públicos y gratuitos, y su código es abierto: la provincia puede usarla y mejorarla desde Clorinda hasta Ingeniero Juárez.
 >
 > *(Pausa.)*
 >
@@ -82,6 +77,5 @@ Operación Agua · Comparador de imágenes satelitales · Sábado 21/11/2026 des
 
 ## Ensayo
 - [ ] Cronometrar dos ensayos completos (objetivo: 2:55).
-- [ ] Probar la demo en la notebook del evento con el backend y el frontend levantados.
-- [ ] Tener el video de respaldo descargado en la notebook (sin depender de internet).
+- [ ] Practicar en qué momento se señala cada sección del póster.
 - [ ] Confirmar quién es Persona 1 y Persona 2.
