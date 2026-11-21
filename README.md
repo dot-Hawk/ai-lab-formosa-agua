@@ -51,7 +51,7 @@ Variables de entorno opcionales: ver `.env.example`.
 - **Infraestructura:** debajo del resultado, las escuelas y centros de salud del IGN a menos de 500 m del agua nueva inusual, también marcados en el mapa.
 - **Agua de siempre:** en el mapa, *Solo agua nueva donde normalmente no hay* oculta el agua que vuelve a su lugar habitual, y *Ver agua de siempre* la muestra en gris. En la crecida de 2021, 86,1 de las 222,9 ha de agua nueva son inusuales.
 - **Ficha de confianza:** junto al resultado aparece un semáforo (alta, media o baja) con sus motivos: nubes, zona sin dato, días entre fechas y altura del sol. Con las escenas incluidas: la crecida 18/01 → 07/02/2021 da **alta** (222,9 ha de agua nueva); la bajante 24/11 → 14/12/2022 da **media** (132,2 ha de agua que ya no está); 02/10 → 26/10/2026 da **baja** por el 20,1 % de nubes, y lo avisa.
-- **Pruebas automáticas:** `cd apps/backend && uv run pytest` (82 pruebas) y `cd apps/frontend && npm test` (66 pruebas)
+- **Pruebas automáticas:** `cd apps/backend && uv run pytest` (94 pruebas) y `cd apps/frontend && npm test` (75 pruebas)
 - **Compilación del frontend:** `cd apps/frontend && npm run build`
 - Registro de la última prueba desde un clon limpio: [docs/entregables/prueba_clon_limpio.md](docs/entregables/prueba_clon_limpio.md)
 - Ejemplos con `curl`: [docs/CONTRATO_API.md](docs/CONTRATO_API.md)

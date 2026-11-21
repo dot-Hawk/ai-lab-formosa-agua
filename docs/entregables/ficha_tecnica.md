@@ -37,7 +37,7 @@ Lo usan los técnicos de la mesa interinstitucional por El Niño que siguen el r
 - Píxeles con nube o sombra excluidos del cálculo.
 - Mensajes de carga, catálogo vacío y error. El caso inválido (misma escena dos veces) devuelve *"Elegí dos escenas distintas para comparar."* y se puede seguir trabajando.
 - Leyenda PROTOTIPO y advertencia de que un cambio detectado es un indicio, no una afectación comprobada.
-- 82 pruebas del backend y 66 del frontend, todas pasando (20/11/2026).
+- 94 pruebas del backend y 75 del frontend, todas pasando (21/11/2026).
 
 ## Qué falta para que la mesa la use
 - **Integración:** unir `dev-Diego` y `dev-Selena-Milagros-Britez` en `main`, para que las vistas *Río* y *En vivo* convivan con las zonas, los índices y la vista provincial.
